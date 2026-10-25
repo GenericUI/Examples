@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1E1E2E"/>
+      <stop offset="100%" stop-color="#11111B"/>
+    </linearGradient>
+    <linearGradient id="code-grad" x1="36" y1="36" x2="220" y2="220" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="50%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="224" height="224" rx="44" fill="url(#bg-grad)" stroke="url(#code-grad)" stroke-width="8"/>
+  <!-- Left angle bracket -->
+  <path d="M 88 84 L 46 128 L 88 172" fill="none" stroke="#89B4FA" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right angle bracket -->
+  <path d="M 168 84 L 210 128 L 168 172" fill="none" stroke="#CBA6F7" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Regex slash and star -->
+  <line x1="142" y1="74" x2="114" y2="182" stroke="#A6E3A1" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="152" cy="116" r="10" fill="#F9E2AF"/>
+</svg>

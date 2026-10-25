@@ -1,0 +1,24 @@
+$studio-bg: #0b1120;
+$studio-panel: #1e293b;
+$studio-accent: #0ea5e9;
+$studio-text: #f8fafc;
+
+.studio-toolbar {
+  background-color: $studio-panel;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.studio-doc-surface {
+  background-color: #111827;
+  color: $studio-text;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.studio-hud-overlay {
+  background-color: #172554;
+  color: $studio-text;
+  padding: 12px;
+  border-radius: 10px;
+}

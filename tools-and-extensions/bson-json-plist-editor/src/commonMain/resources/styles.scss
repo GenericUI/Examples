@@ -1,0 +1,88 @@
+$bg-primary: #0f172a;
+$bg-surface: #1e293b;
+$bg-elevated: #334155;
+$border-subtle: #475569;
+$text-primary: #f8fafc;
+$text-muted: #94a3b8;
+$accent-json: #38bdf8;
+$accent-bson: #a855f7;
+$accent-plist: #10b981;
+
+html, body, #genericui-app, .genericui-window {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $bg-primary;
+    color: $text-primary;
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+.data-editor-root {
+    width: 100%;
+    height: 100%;
+    background-color: $bg-primary;
+    color: $text-primary;
+    padding: 8px;
+
+    .editor-toolbar {
+        background-color: $bg-surface;
+        border-radius: 8px;
+        padding: 8px 12px;
+        margin-bottom: 8px;
+    }
+
+    .editor-filter-bar {
+        background-color: $bg-surface;
+        border-radius: 8px;
+        padding: 6px 12px;
+    }
+
+    .format-converter-strip {
+        background-color: $bg-elevated;
+        border-radius: 8px;
+        padding: 6px 12px;
+    }
+
+    .document-grid-tree, .lazy-grid-tree {
+        background-color: $bg-surface;
+        border-radius: 8px;
+        padding: 4px;
+    }
+
+    .lazy-grid-tree-header-cell {
+        background-color: $bg-elevated;
+        color: $text-primary;
+        font-weight: 600;
+        padding: 6px 10px;
+    }
+
+    .lazy-grid-tree-cell {
+        background-color: $bg-primary;
+        padding: 4px 8px;
+    }
+
+    .grid-key-input, .grid-value-input {
+        background-color: $bg-surface;
+        color: $text-primary;
+        border-radius: 4px;
+        padding: 2px 6px;
+    }
+
+    .grid-type-select {
+        background-color: $bg-elevated;
+        color: $text-primary;
+        border-radius: 4px;
+    }
+
+    .grid-col-actions {
+        padding: 2px 4px;
+    }
+
+    .status-bar {
+        background-color: $bg-surface;
+        color: $text-muted;
+        padding: 4px 10px;
+        border-radius: 6px;
+    }
+}

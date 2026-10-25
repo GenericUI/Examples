@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="dockGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0369A1"/>
+      <stop offset="100%" stop-color="#0EA5E9"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="22" fill="url(#dockGrad)"/>
+  <rect x="20" y="22" width="20" height="84" rx="4" fill="#BAE6FD"/>
+  <rect x="44" y="22" width="40" height="58" rx="4" fill="#F0F9FF"/>
+  <rect x="88" y="22" width="20" height="58" rx="4" fill="#BAE6FD"/>
+  <rect x="44" y="84" width="64" height="22" rx="4" fill="#7DD3FC"/>
+</svg>

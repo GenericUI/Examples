@@ -1,0 +1,64 @@
+$bg-primary: #090d16;
+$bg-surface: #111827;
+$bg-elevated: #1f2937;
+$text-primary: #f9fafb;
+$text-muted: #9ca3af;
+$accent-emerald: #10b981;
+$accent-cyan: #38bdf8;
+$accent-purple: #a855f7;
+
+html, body, #genericui-app, .genericui-window {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $bg-primary;
+    color: $text-primary;
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+.visualizer-root {
+    width: 100%;
+    height: 100%;
+    background-color: $bg-primary;
+    color: $text-primary;
+    padding: 10px;
+
+    .transport-toolbar {
+        background-color: $bg-surface;
+        border-radius: 8px;
+        padding: 8px 12px;
+        margin-bottom: 8px;
+    }
+
+    .canvas-stage-card {
+        background-color: $bg-surface;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .energy-meters-card {
+        background-color: $bg-surface;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .subtitle-inspector-card {
+        background-color: $bg-elevated;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .codec-capabilities-card {
+        background-color: $bg-surface;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .status-bar {
+        background-color: $bg-surface;
+        color: $text-muted;
+        padding: 4px 10px;
+        border-radius: 6px;
+    }
+}

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="sketch-bg" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="sketch-accent" x1="32" y1="32" x2="224" y2="224" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="50%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="224" height="224" rx="44" fill="url(#sketch-bg)" stroke="url(#sketch-accent)" stroke-width="8"/>
+  <path d="M 56 184 C 72 80, 184 176, 200 72" fill="none" stroke="url(#sketch-accent)" stroke-width="12" stroke-linecap="round"/>
+  <line x1="56" y1="184" x2="72" y2="80" stroke="#94A3B8" stroke-width="4" stroke-dasharray="6 6"/>
+  <line x1="200" y1="72" x2="184" y2="176" stroke="#94A3B8" stroke-width="4" stroke-dasharray="6 6"/>
+  <circle cx="56" cy="184" r="10" fill="#38BDF8"/>
+  <circle cx="72" cy="80" r="8" fill="#F8FAFC" stroke="#38BDF8" stroke-width="4"/>
+  <circle cx="184" cy="176" r="8" fill="#F8FAFC" stroke="#EC4899" stroke-width="4"/>
+  <circle cx="200" cy="72" r="10" fill="#EC4899"/>
+</svg>

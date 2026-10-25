@@ -1,0 +1,28 @@
+$catalog-bg: #111827;
+$catalog-surface: #1f2937;
+$catalog-accent: #7c3aed;
+$catalog-text: #f9fafb;
+
+.catalog-primary-stage {
+  background-color: $catalog-bg;
+  color: $catalog-text;
+  padding: 16px;
+}
+
+.catalog-posture-bar {
+  background-color: $catalog-surface;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.catalog-transport-bar {
+  background-color: #262f3f;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.catalog-channel-row {
+  background-color: $catalog-surface;
+  border-radius: 8px;
+  padding: 8px;
+}

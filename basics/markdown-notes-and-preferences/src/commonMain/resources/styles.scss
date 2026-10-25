@@ -1,0 +1,18 @@
+// Markdown Notes & Preferences SCSS stylesheet
+$notes-accent: #8b5cf6;
+$notes-surface: #1e293b;
+
+.notes-shell {
+  padding: 16px;
+}
+
+.notes-sidebar-card,
+.notes-editor-card,
+.notes-preview-card {
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.notes-Preview {
+  line-height: 1.6;
+}

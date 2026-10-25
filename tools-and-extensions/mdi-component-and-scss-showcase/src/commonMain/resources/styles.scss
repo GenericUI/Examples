@@ -1,0 +1,32 @@
+$shell-bg: #0b0f19;
+$shell-surface: #111827;
+$shell-border: #1e293b;
+$shell-text: #f8fafc;
+$shell-accent: #6366f1;
+
+.mdi-showcase-root {
+  background-color: $shell-bg;
+  color: $shell-text;
+  padding: 8px;
+
+  .outer-shell-topbar {
+    background-color: $shell-surface;
+    border: 1px solid $shell-border;
+    border-radius: 8px;
+    padding: 8px;
+  }
+
+  .scss-editor-toolbar {
+    background-color: $shell-surface;
+    border: 1px solid $shell-border;
+    border-radius: 8px;
+    padding: 8px;
+  }
+
+  .scss-diagnostics-card {
+    background-color: $shell-surface;
+    border: 1px solid $shell-border;
+    border-radius: 8px;
+    padding: 10px;
+  }
+}
