@@ -4,7 +4,8 @@ import com.nexustools.genericui.component.action.Button
 import com.nexustools.genericui.component.form.RangeSlider
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
-import com.nexustools.genericui.component.media.Canvas2DContext
+import com.nexustools.genericui.component.fragment.MainAppFragment
+import com.nexustools.genericui.ext.imageprocessing.context2d.ImageBuffer2DContext
 import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
@@ -40,6 +41,7 @@ import kotlin.math.sqrt
  * [HueSaturationLightnessFilter], [GaussianBlurFilter], [VignetteFilter],
  * [ImageHistogramResult]) rendered onto [Canvas2DExtSurface].
  */
+@MainAppFragment
 class GpuImageFilterLabFragment : Fragment() {
 
     val sourceImage: ImageBuffer = createProceduralTestImage(width = 160, height = 120)
@@ -339,13 +341,13 @@ class GpuImageFilterLabFragment : Fragment() {
         }
     }
 
-    fun renderPreviewToContext(ctx: Canvas2DContext) {
+    fun renderPreviewToContext(ctx: ImageBuffer2DContext) {
         ctx.setFillColor(RgbaColor(11, 17, 30, 255))
         ctx.fillRect(0f, 0f, ctx.width.toFloat(), ctx.height.toFloat())
         Canvas2DExtension.drawImage(ctx, processedImage, dx = 0f, dy = 0f)
     }
 
-    fun renderHistogramToContext(ctx: Canvas2DContext) {
+    fun renderHistogramToContext(ctx: ImageBuffer2DContext) {
         val w = ctx.width.toFloat()
         val h = ctx.height.toFloat()
         ctx.setFillColor(RgbaColor(9, 13, 22, 255))

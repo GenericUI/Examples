@@ -7,6 +7,10 @@ pluginManagement {
     }
 }
 
+plugins {
+    id("com.nexustools.genericui.settings")
+}
+
 dependencyResolutionManagement {
     repositories {
         mavenCentral()

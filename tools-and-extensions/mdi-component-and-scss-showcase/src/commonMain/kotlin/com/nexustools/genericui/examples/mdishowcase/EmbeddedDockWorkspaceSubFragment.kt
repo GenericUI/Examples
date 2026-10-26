@@ -8,6 +8,7 @@ import com.nexustools.genericui.component.dock.DockPanel
 import com.nexustools.genericui.component.dock.StudioDocument
 import com.nexustools.genericui.component.dock.ToolPalette
 import com.nexustools.genericui.component.dock.ToolPaletteItem
+import com.nexustools.genericui.component.fragment.AppFragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
 import com.nexustools.genericui.component.fragment.helper.DockWorkspaceFragment
 import com.nexustools.genericui.component.layout.HStack
@@ -20,7 +21,7 @@ import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.enums.dock.DockPosition
 import com.nexustools.genericui.enums.dock.StudioWindowMode
-import com.nexustools.genericui.style.RgbaColor
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.window.TitleBar
 
 /**
@@ -28,6 +29,7 @@ import com.nexustools.genericui.window.TitleBar
  * demonstrating a full multi-panel studio workspace (`LEFT` tools dock, `RIGHT` categorized inspector dock,
  * `BOTTOM` event console dock, and `CENTER` document tabs) running inside an [com.nexustools.genericui.component.shell.MdiWindow].
  */
+@AppFragment
 class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
     initialMode = StudioWindowMode.SINGLE_WINDOW_MODE
 ) {
@@ -188,8 +190,8 @@ class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
         addDockPanel(consoleDockPanel, DockPosition.BOTTOM)
 
         // Open initial StudioDocuments in the central TabContainer
-        openStudioCanvasDocument("doc-main-canvas", "Main Vector Canvas.hacanvas", activate = true)
-        openStudioCanvasDocument("doc-shared-symbol", "Shared Prism Symbol.hacanvas", activate = false)
+        openStudioCanvasDocument("doc-main-canvas", "Main Vector Canvas.svg", activate = true)
+        openStudioCanvasDocument("doc-shared-symbol", "Shared Prism Symbol.svg", activate = false)
         syncBadges()
 
         toggleModeButton.setOnClick {
@@ -201,7 +203,7 @@ class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
         addTabButton.setOnClick {
             createdTabCounter += 1
             val newDocId = "doc-canvas-$createdTabCounter"
-            val newTitle = "Canvas #$createdTabCounter.hacanvas"
+            val newTitle = "Canvas #$createdTabCounter.svg"
             openStudioCanvasDocument(newDocId, newTitle, activate = true)
             syncBadges()
             consoleLogLabel.text = "Opened studio document '$newTitle' (${documents.size} total)."

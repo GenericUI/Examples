@@ -1,5 +1,6 @@
 package com.nexustools.genericui.examples.dataeditor
 
+import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.component.shell.Menu
 import com.nexustools.genericui.component.shell.MenuBar
@@ -13,6 +14,7 @@ import com.nexustools.genericui.window.TitleBar
  * Multi-platform [FragmentApplication] entry point for the visual BSON / JSON / Binary Plist Editor
  * powered by [com.nexustools.genericui.component.lazy.LazyGridTree].
  */
+@AppApplication
 class DataEditorApp(
     val editorFragment: DataEditorFragment = DataEditorFragment()
 ) : FragmentApplication(
@@ -122,16 +124,4 @@ class DataEditorApp(
             .addMenu(convertMenu)
             .addMenu(samplesMenu)
     }
-
-    companion object {
-        fun start(args: Array<String> = emptyArray()) {
-            DataEditorPlatformBootstrap.initialize(args)
-            val app = DataEditorApp()
-            app.run()
-        }
-    }
-}
-
-fun main(args: Array<String>) {
-    DataEditorApp.start(args)
 }

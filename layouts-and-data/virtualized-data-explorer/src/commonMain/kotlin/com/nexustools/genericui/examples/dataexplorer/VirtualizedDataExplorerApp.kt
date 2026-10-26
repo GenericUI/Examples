@@ -1,10 +1,12 @@
 package com.nexustools.genericui.examples.dataexplorer
 
+import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 
 /**
  * Multiplatform [FragmentApplication] hosting [VirtualizedDataExplorerFragment].
  */
+@AppApplication
 class VirtualizedDataExplorerApp(
     val explorerFragment: VirtualizedDataExplorerFragment = VirtualizedDataExplorerFragment()
 ) : FragmentApplication(
@@ -13,10 +15,3 @@ class VirtualizedDataExplorerApp(
     initialThemeColor = "#2563EB"
 )
 
-fun main(args: Array<String>) {
-    if (args.contains("--visual-test")) {
-        VirtualizedDataExplorerVisualTestMain.runVisualSuite(args)
-        return
-    }
-    VirtualizedDataExplorerApp().run()
-}

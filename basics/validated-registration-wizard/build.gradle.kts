@@ -7,9 +7,21 @@ group = "com.nexustools.genericui.examples.wizard"
 version = "0.1.0-SNAPSHOT"
 
 genericui {
+    app {
+        id = "com.nexustools.genericui.examples.wizard"
+        name = "Validated Registration Wizard"
+        version = "1.0.0"
+        vendor = "NexusTools"
+        description = "Multi-step developer onboarding wizard with live field validation and PreferenceStore profile persistence."
+    }
+    window {
+        title = "Validated Registration Wizard"
+        icon = "src/commonMain/resources/icon.svg"
+    }
+    theme {
+        color = "#10B981"
+    }
     application {
-        entryPoint = "com.nexustools.genericui.examples.wizard.main"
-        mainClass = "com.nexustools.genericui.examples.wizard.RegistrationWizardAppKt"
         baseName = "ValidatedRegistrationWizard"
         androidNamespace = "com.nexustools.genericui.examples.wizard"
         themeColor = "#10B981"

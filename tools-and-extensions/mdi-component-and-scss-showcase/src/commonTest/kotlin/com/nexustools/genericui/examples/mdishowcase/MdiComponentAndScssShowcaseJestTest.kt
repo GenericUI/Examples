@@ -7,7 +7,7 @@ import com.nexustools.genericui.ext.codeeditor.CursorPosition
 import com.nexustools.genericui.ext.codeeditor.ScssLanguageSupport
 import com.nexustools.genericui.ext.codeeditor.SyntaxTokenType
 import com.nexustools.genericui.ext.codeeditor.SyntaxTokenizer
-import com.nexustools.genericui.style.RgbaColor
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
 
@@ -25,10 +25,10 @@ class MdiComponentAndScssShowcaseJestTest {
             describe("MDI Component & Live SCSS Stylesheet Showcase") {
 
                 it("mounts 2 main tabs, 6 category MdiWindows, and preloads Rainbow Prism SCSS scoped strictly to MdiContainer") {
-                    val controller = launchApp(visualOnWindows = false) {
-                        MdiComponentAndScssShowcaseApp()
+                    val controller = launchFragment {
+                        MdiComponentAndScssShowcaseFragment()
                     }
-                    val frag = controller.app.showcaseFragment
+                    val frag = controller.fragment
 
                     // Verify 2 main tabs and 6 MDI windows
                     expect(frag.mainTabContainer.tabs).toHaveLength(2)

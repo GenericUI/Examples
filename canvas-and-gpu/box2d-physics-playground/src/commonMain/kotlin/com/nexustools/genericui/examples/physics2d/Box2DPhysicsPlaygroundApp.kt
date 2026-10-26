@@ -1,7 +1,7 @@
 package com.nexustools.genericui.examples.physics2d
 
+import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
-import com.nexustools.genericui.core.GenericUI
 import com.nexustools.genericui.enums.ui.ThemeMode
 import com.nexustools.genericui.examples.physics2d.styles.StylesPrecompiledStyleSheet
 import com.nexustools.genericui.window.TitleBar
@@ -9,6 +9,7 @@ import com.nexustools.genericui.window.TitleBar
 /**
  * Multi-backend [FragmentApplication] entry point for the Box2D Physics Playground example application.
  */
+@AppApplication
 class Box2DPhysicsPlaygroundApp(
     val physicsFragment: Box2DPhysicsPlaygroundFragment = Box2DPhysicsPlaygroundFragment()
 ) : FragmentApplication(
@@ -28,24 +29,4 @@ class Box2DPhysicsPlaygroundApp(
         mainWindow.setTitleBar(titleBar)
         rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
     }
-
-    companion object {
-        fun start(args: Array<String> = emptyArray()) {
-            if (args.contains("--visual-test")) {
-                Box2DPhysicsPlaygroundVisualTestMain.runVisualSuite(args)
-                return
-            }
-            val app = Box2DPhysicsPlaygroundApp()
-            val factory = GenericUI.activeFactory
-            if (factory != null) {
-                app.run(factory)
-            } else {
-                app.mainWindow.show(null)
-            }
-        }
-    }
-}
-
-fun main(args: Array<String>) {
-    Box2DPhysicsPlaygroundApp.start(args)
 }

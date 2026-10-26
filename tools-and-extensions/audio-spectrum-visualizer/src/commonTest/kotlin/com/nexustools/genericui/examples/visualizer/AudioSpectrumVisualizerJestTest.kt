@@ -21,11 +21,11 @@ class AudioSpectrumVisualizerJestTest {
             describe("MediaCapabilitiesReport, Transport Controls, FFT Energy Bands & WebVTT Subtitles") {
 
                 it("populates MediaCapabilitiesReport hardware/software codec table on launch") {
-                    val controller = launchApp(visualOnWindows = false) {
-                        AudioSpectrumVisualizerApp()
+                    val controller = launchFragment {
+                        AudioSpectrumVisualizerFragment()
                     }
 
-                    val caps = controller.app.visualizerFragment.mediaCapabilities
+                    val caps = controller.fragment.mediaCapabilities
                     expect(caps.isHardwareAccelerated(VideoCodec.H264)).toBe(true)
                     expect(caps.isHardwareAccelerated(VideoCodec.HEVC)).toBe(true)
                     expect(caps.supportsAudio(AudioCodec.AAC)).toBe(true)
@@ -34,7 +34,7 @@ class AudioSpectrumVisualizerJestTest {
                     expect(caps.supportsHdr10).toBe(true)
 
                     expectNode(controller.findById("badge-codec-backend")).toContainText("Vulkan")
-                    expect(controller.app.visualizerFragment.capabilitiesTable.rows.size).toBeGreaterThan(5)
+                    expect(controller.fragment.capabilitiesTable.rows.size).toBeGreaterThan(5)
 
                     controller.destroy()
                 }
@@ -120,17 +120,17 @@ class AudioSpectrumVisualizerJestTest {
                     }
 
                     controller.findById("btn-synth-chord").performClick()
-                    expect(controller.fragment.displayMode).toBe(VisualizerDisplayMode.FFT_SPECTRUM_BARS)
+                    expect(controller.fragment.visualizerMode).toBe(VisualizerDisplayMode.FFT_SPECTRUM_BARS)
 
                     controller.findById("select-viz-mode")
                         .performSelectValue(VisualizerDisplayMode.OSCILLOSCOPE_WAVEFORM.name)
-                    expect(controller.fragment.displayMode).toBe(VisualizerDisplayMode.OSCILLOSCOPE_WAVEFORM)
+                    expect(controller.fragment.visualizerMode).toBe(VisualizerDisplayMode.OSCILLOSCOPE_WAVEFORM)
                     expectNode(controller.findById("badge-active-viz-mode"))
                         .toHaveText(VisualizerDisplayMode.OSCILLOSCOPE_WAVEFORM.displayName)
 
                     controller.findById("select-viz-mode")
                         .performSelectValue(VisualizerDisplayMode.RADIAL_ENERGY_RINGS.name)
-                    expect(controller.fragment.displayMode).toBe(VisualizerDisplayMode.RADIAL_ENERGY_RINGS)
+                    expect(controller.fragment.visualizerMode).toBe(VisualizerDisplayMode.RADIAL_ENERGY_RINGS)
                     expectNode(controller.findById("badge-active-viz-mode"))
                         .toHaveText(VisualizerDisplayMode.RADIAL_ENERGY_RINGS.displayName)
 

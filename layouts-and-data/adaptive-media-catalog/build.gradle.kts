@@ -7,19 +7,32 @@ group = "com.nexustools.genericui.examples.mediacatalog"
 version = "1.0.0"
 
 genericui {
+    app {
+        id = "com.nexustools.genericui.examples.mediacatalog"
+        name = "Adaptive Media Catalog"
+        version = "1.0.0"
+        vendor = "NexusTools"
+        description = "Responsive 3-posture AdaptiveSplitTabFragment media catalog for GenericUI."
+    }
+    window {
+        title = "GenericUI — Adaptive Media Catalog"
+        icon = "src/commonMain/resources/icon.svg"
+    }
+    theme {
+        color = "#7C3AED"
+    }
     application {
-        entryPoint = "com.nexustools.genericui.examples.mediacatalog.main"
-        mainClass = "com.nexustools.genericui.examples.mediacatalog.AdaptiveMediaCatalogAppKt"
         baseName = "AdaptiveMediaCatalog"
         androidNamespace = "com.nexustools.genericui.examples.mediacatalog"
-        appName = "Adaptive Media Catalog"
-        appId = "com.nexustools.genericui.examples.mediacatalog"
-        description = "Responsive 3-posture AdaptiveSplitTabFragment media catalog for GenericUI."
         themeColor = "#7C3AED"
         desktop {
+            appName = "Adaptive Media Catalog"
             windowTitle = "GenericUI — Adaptive Media Catalog"
             windowWidth = 1280
             windowHeight = 800
+            appVersion = "1.0.0"
+            vendor = "NexusTools"
+            description = "Responsive 3-posture AdaptiveSplitTabFragment media catalog for GenericUI."
             icon = "src/commonMain/resources/icon.svg"
             webIcon = "src/commonMain/resources/icon.svg"
             linuxIcon = "src/commonMain/resources/icon.svg"

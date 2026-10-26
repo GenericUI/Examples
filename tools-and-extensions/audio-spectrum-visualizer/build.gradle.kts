@@ -7,14 +7,30 @@ group = "com.nexustools.genericui.examples.visualizer"
 version = "1.0-SNAPSHOT"
 
 genericui {
+    app {
+        id = "com.nexustools.genericui.examples.visualizer"
+        name = "Audio Spectrum Visualizer"
+        version = "1.0.0"
+        vendor = "NexusTools"
+        description = "Cross-platform media player, real-time FFT spectrum & waveform visualizer, WebVTT/SRT subtitle inspector, and codec capability viewer across all 8 backends."
+    }
+    window {
+        title = "GenericUI — Media Player, Codec Inspector & FFT Spectrum Visualizer"
+        icon = "src/commonMain/resources/icon.svg"
+    }
+    theme {
+        color = "#10B981"
+    }
     application {
-        entryPoint = "com.nexustools.genericui.examples.visualizer.main"
         baseName = "AudioSpectrumVisualizer"
         androidNamespace = "com.nexustools.genericui.examples.visualizer"
         themeColor = "#10B981"
         desktop {
             appName = "Audio Spectrum Visualizer"
             windowTitle = "GenericUI — Media Player, Codec Inspector & FFT Spectrum Visualizer"
+            appVersion = "1.0.0"
+            vendor = "NexusTools"
+            description = "Cross-platform media player, real-time FFT spectrum & waveform visualizer, WebVTT/SRT subtitle inspector, and codec capability viewer across all 8 backends."
             icon = "src/commonMain/resources/icon.svg"
             webIcon = "src/commonMain/resources/icon.svg"
             linuxIcon = "src/commonMain/resources/icon.svg"
@@ -28,7 +44,7 @@ genericui {
             display = "standalone"
             backgroundColor = "#090D16"
             themeColor = "#10B981"
-            categories = listOf("multimedia", "music", "entertainment", "utilities")
+            categories("multimedia", "music", "entertainment", "utilities")
         }
     }
     backends {

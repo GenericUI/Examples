@@ -2,6 +2,7 @@ package com.nexustools.genericui.examples.mediacatalog
 
 import com.nexustools.genericui.component.action.Button
 import com.nexustools.genericui.component.fragment.FragmentBundle
+import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.fragment.helper.AdaptiveSplitTabFragment
 import com.nexustools.genericui.component.layout.Container
 import com.nexustools.genericui.component.layout.HStack
@@ -22,6 +23,7 @@ import com.nexustools.genericui.window.WindowConfiguration
  * - **Phone Landscape (`800x390`)**: Immersive 100% fullscreen primary media viewport (`PHONE_LANDSCAPE_FULLSCREEN`).
  * - **Phone Portrait (`390x844`)**: Single vertical flow with primary stage on top and tabbed panes below (`PORTRAIT_SINGLE_FLOW_TABS`).
  */
+@MainAppFragment
 class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
     phoneLandscapeFullscreen = true,
     primaryColumnWeight = 1.8f,
@@ -98,12 +100,12 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
         onClick = { togglePlayPause() }
     }
 
-    val prevTrackButton: Button = Button("Prev Channel", BootstrapType.OUTLINE_SECONDARY, BootstrapSize.SM).apply {
+    val prevTrackButton: Button = Button("Prev Channel", BootstrapType.SECONDARY, BootstrapSize.SM, outline = true).apply {
         id = "btn-transport-prev"
         onClick = { skipToPreviousChannel() }
     }
 
-    val nextTrackButton: Button = Button("Next Channel", BootstrapType.OUTLINE_PRIMARY, BootstrapSize.SM).apply {
+    val nextTrackButton: Button = Button("Next Channel", BootstrapType.PRIMARY, BootstrapSize.SM, outline = true).apply {
         id = "btn-transport-next"
         onClick = { skipToNextChannel() }
     }
@@ -290,8 +292,9 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
             }
             val queueBtn = Button(
                 text = "+ Queue",
-                type = BootstrapType.OUTLINE_INFO,
-                size = BootstrapSize.SM
+                type = BootstrapType.INFO,
+                size = BootstrapSize.SM,
+                outline = true
             ).apply {
                 id = "btn-enqueue-channel-${channel.id}"
                 onClick = { enqueueChannelById(channel.id) }

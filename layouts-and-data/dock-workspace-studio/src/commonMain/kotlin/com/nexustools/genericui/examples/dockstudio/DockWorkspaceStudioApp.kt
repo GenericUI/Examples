@@ -1,10 +1,12 @@
 package com.nexustools.genericui.examples.dockstudio
 
+import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 
 /**
  * Multiplatform [FragmentApplication] hosting [DockWorkspaceStudioFragment].
  */
+@AppApplication
 class DockWorkspaceStudioApp(
     val studioFragment: DockWorkspaceStudioFragment = DockWorkspaceStudioFragment()
 ) : FragmentApplication(
@@ -13,10 +15,3 @@ class DockWorkspaceStudioApp(
     initialThemeColor = "#0EA5E9"
 )
 
-fun main(args: Array<String>) {
-    if (args.contains("--visual-test")) {
-        DockWorkspaceStudioVisualTestMain.runVisualSuite(args)
-        return
-    }
-    DockWorkspaceStudioApp().run()
-}

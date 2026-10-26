@@ -7,15 +7,30 @@ group = "com.nexustools.genericui.examples.sketchpad"
 version = "1.0-SNAPSHOT"
 
 genericui {
+    app {
+        id = "com.nexustools.genericui.examples.sketchpad"
+        name = "Canvas2D Vector Sketchpad"
+        version = "1.0.0"
+        vendor = "NexusTools"
+        description = "Interactive 2D vector drawing and cubic-Bezier curve sketchpad built with GenericUI."
+    }
+    window {
+        title = "Canvas2D Vector & Bezier Sketchpad"
+        icon = "src/commonMain/resources/icon.svg"
+    }
+    theme {
+        color = "#3B82F6"
+    }
     application {
-        entryPoint = "com.nexustools.genericui.examples.sketchpad.main"
-        mainClass = "com.nexustools.genericui.examples.sketchpad.SketchpadAppKt"
         baseName = "Canvas2DVectorSketchpad"
         androidNamespace = "com.nexustools.genericui.examples.sketchpad"
         themeColor = "#3B82F6"
         desktop {
             appName = "Canvas2D Vector Sketchpad"
             windowTitle = "Canvas2D Vector & Bezier Sketchpad"
+            appVersion = "1.0.0"
+            vendor = "NexusTools"
+            description = "Interactive 2D vector drawing and cubic-Bezier curve sketchpad built with GenericUI."
             icon = "src/commonMain/resources/icon.svg"
             webIcon = "src/commonMain/resources/icon.svg"
             linuxIcon = "src/commonMain/resources/icon.svg"

@@ -11,11 +11,12 @@ import com.nexustools.genericui.component.form.Select
 import com.nexustools.genericui.component.form.SelectOption
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
+import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.layout.HStack
 import com.nexustools.genericui.component.layout.ScrollView
 import com.nexustools.genericui.component.layout.VStack
 import com.nexustools.genericui.component.media.AudioEnergyBands
-import com.nexustools.genericui.component.media.Canvas2DContext
+import com.nexustools.genericui.ext.imageprocessing.context2d.ImageBuffer2DContext
 import com.nexustools.genericui.component.media.MediaCapabilitiesReport
 import com.nexustools.genericui.component.media.SubtitleCue
 import com.nexustools.genericui.component.media.WebVttSrtParser
@@ -51,6 +52,7 @@ import kotlin.math.sqrt
  * [WebVttSrtParser], [AudioEnergyBands], [MediaCapabilitiesReport]) paired with a real-time
  * `:extensions:canvas2d` ([Canvas2DExtSurface]) visualizer stage.
  */
+@MainAppFragment
 class AudioSpectrumVisualizerFragment : Fragment() {
 
     private var activeFftSize: Int = 2048
@@ -59,7 +61,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
     private var bandMagnitudes64: FloatArray = FloatArray(64)
     private var latestEnergyBands: AudioEnergyBands = AudioEnergyBands()
 
-    var displayMode: VisualizerDisplayMode = VisualizerDisplayMode.FFT_SPECTRUM_BARS
+    var visualizerMode: VisualizerDisplayMode = VisualizerDisplayMode.FFT_SPECTRUM_BARS
         private set
 
     var isTransportPlaying: Boolean = false
@@ -392,7 +394,8 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         for ((videoCodec, level) in mediaCapabilities.videoCodecs) {
             rows.add(
                 TableRow(
-                    listOf(
+                    id = "video-${videoCodec.wireName}",
+                    cells = listOf(
                         TableCell("Video Codec"),
                         TableCell(videoCodec.wireName.uppercase()),
                         TableCell(level.name),
@@ -404,7 +407,8 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         for ((audioCodec, level) in mediaCapabilities.audioCodecs) {
             rows.add(
                 TableRow(
-                    listOf(
+                    id = "audio-${audioCodec.wireName}",
+                    cells = listOf(
                         TableCell("Audio Codec"),
                         TableCell(audioCodec.wireName.uppercase()),
                         TableCell(level.name),
@@ -415,7 +419,8 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         }
         rows.add(
             TableRow(
-                listOf(
+                id = "containers-summary",
+                cells = listOf(
                     TableCell("Containers"),
                     TableCell(mediaCapabilities.containers.joinToString(", ") { it.wireName.uppercase() }),
                     TableCell("SUPPORTED"),
@@ -513,7 +518,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
      * Switches the active [VisualizerDisplayMode] and triggers a canvas redraw.
      */
     fun switchVisualizerMode(newMode: VisualizerDisplayMode) {
-        displayMode = newMode
+        visualizerMode = newMode
         modeSelect.selectedValue = newMode.name
         activeModeBadge.text = newMode.displayName
         renderVisualizerFrame()
@@ -637,7 +642,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         visualizerCanvas.requestRender()
     }
 
-    private fun drawSpectrumStage(ctx: Canvas2DContext) {
+    private fun drawSpectrumStage(ctx: ImageBuffer2DContext) {
         val w = ctx.width.toFloat().coerceAtLeast(320f)
         val h = ctx.height.toFloat().coerceAtLeast(200f)
 
@@ -655,14 +660,14 @@ class AudioSpectrumVisualizerFragment : Fragment() {
             ctx.stroke()
         }
 
-        when (displayMode) {
+        when (visualizerMode) {
             VisualizerDisplayMode.FFT_SPECTRUM_BARS -> drawFftSpectrumBars(ctx, w, h)
             VisualizerDisplayMode.OSCILLOSCOPE_WAVEFORM -> drawOscilloscopeWaveform(ctx, w, h)
             VisualizerDisplayMode.RADIAL_ENERGY_RINGS -> drawRadialEnergyRings(ctx, w, h)
         }
     }
 
-    private fun drawFftSpectrumBars(ctx: Canvas2DContext, w: Float, h: Float) {
+    private fun drawFftSpectrumBars(ctx: ImageBuffer2DContext, w: Float, h: Float) {
         val barCount = bandMagnitudes64.size
         val slotWidth = (w - 24f) / barCount
         val barWidth = (slotWidth * 0.72f).coerceAtLeast(2f)
@@ -684,7 +689,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         }
     }
 
-    private fun drawOscilloscopeWaveform(ctx: Canvas2DContext, w: Float, h: Float) {
+    private fun drawOscilloscopeWaveform(ctx: ImageBuffer2DContext, w: Float, h: Float) {
         val midY = h * 0.5f
         val samples = pcmRingBuffer
         if (samples.isEmpty()) return
@@ -702,7 +707,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         ctx.stroke()
     }
 
-    private fun drawRadialEnergyRings(ctx: Canvas2DContext, w: Float, h: Float) {
+    private fun drawRadialEnergyRings(ctx: ImageBuffer2DContext, w: Float, h: Float) {
         val cx = w * 0.5f
         val cy = h * 0.5f
         val minDim = minOf(w, h)

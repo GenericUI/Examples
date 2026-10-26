@@ -1,5 +1,6 @@
 package com.nexustools.genericui.examples.counter
 
+import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.component.shell.Menu
 import com.nexustools.genericui.component.shell.MenuBar
@@ -11,6 +12,7 @@ import com.nexustools.genericui.window.TitleBar
 /**
  * Multiplatform [FragmentApplication] entry point for the Counter & Theme Switcher example.
  */
+@AppApplication
 class CounterApp(
     val preferenceStore: PreferenceStore = PreferenceStore(CounterSettings.DEFAULT_STORE_NAME),
     val counterFragment: CounterFragment = CounterFragment(preferenceStore)
@@ -85,16 +87,4 @@ class CounterApp(
             .addMenu(actionsMenu)
             .addMenu(themeMenu)
     }
-
-    companion object {
-        fun start(args: Array<String> = emptyArray()) {
-            CounterPlatformBootstrap.initialize(args)
-            val app = CounterApp()
-            app.run()
-        }
-    }
-}
-
-fun main(args: Array<String>) {
-    CounterApp.start(args)
 }

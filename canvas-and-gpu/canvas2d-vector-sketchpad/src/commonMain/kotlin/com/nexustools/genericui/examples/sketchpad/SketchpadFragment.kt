@@ -7,7 +7,8 @@ import com.nexustools.genericui.component.form.ColorPicker
 import com.nexustools.genericui.component.form.RangeSlider
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
-import com.nexustools.genericui.component.media.Canvas2DContext
+import com.nexustools.genericui.component.fragment.MainAppFragment
+import com.nexustools.genericui.ext.imageprocessing.context2d.ImageBuffer2DContext
 import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
@@ -40,6 +41,7 @@ import kotlin.math.min
  * Interactive 2D vector and cubic-Bezier sketchpad [Fragment] built with `:extensions:canvas2d`
  * ([Canvas2DExtSurface] and [CurveEditorExt]) and hardware VBlank rendering (`registerVBlankRender`).
  */
+@MainAppFragment
 class SketchpadFragment : Fragment() {
 
     private val _commands = mutableListOf<SketchVectorCommand>()
@@ -488,7 +490,7 @@ class SketchpadFragment : Fragment() {
     /**
      * Renders the background grid and all [SketchVectorCommand] shapes onto [ctx].
      */
-    fun renderSketchpadScene(ctx: Canvas2DContext) {
+    fun renderSketchpadScene(ctx: ImageBuffer2DContext) {
         val w = ctx.width.toFloat()
         val h = ctx.height.toFloat()
 
@@ -541,7 +543,7 @@ class SketchpadFragment : Fragment() {
         }
     }
 
-    private fun drawCommand(ctx: Canvas2DContext, cmd: SketchVectorCommand, curveGain: Float) {
+    private fun drawCommand(ctx: ImageBuffer2DContext, cmd: SketchVectorCommand, curveGain: Float) {
         if (cmd.points.isEmpty()) return
         val color = RgbaColor.fromHex(cmd.colorHex)
         val effectiveWidth = (cmd.strokeWidth * (0.5f + curveGain)).coerceAtLeast(1f)

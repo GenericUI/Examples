@@ -40,6 +40,7 @@ import com.nexustools.genericui.component.form.TextField
 import com.nexustools.genericui.component.form.TimePicker
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
+import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.htmlcompat.A
 import com.nexustools.genericui.component.htmlcompat.Article
 import com.nexustools.genericui.component.htmlcompat.Aside
@@ -138,7 +139,7 @@ import com.nexustools.genericui.ext.codeeditor.IdeCodeEditor
 import com.nexustools.genericui.ext.codeeditor.ScssLanguageSupport
 import com.nexustools.genericui.ext.codeeditor.TextRange
 import com.nexustools.genericui.geometry.Rect
-import com.nexustools.genericui.style.RgbaColor
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.style.sass.LiveScssStyleEngine
 import com.nexustools.genericui.style.sass.ScssCompileResult
 
@@ -157,6 +158,7 @@ import com.nexustools.genericui.style.sass.ScssCompileResult
  *    with full-spectrum rainbow gradients and colors while leaving the outer [scssEditor], [outerMenuBar], and
  *    outer shell components completely unaffected.
  */
+@MainAppFragment
 class MdiComponentAndScssShowcaseFragment : Fragment() {
 
     var activePreset: ScssThemePreset = ScssThemePreset.RAINBOW_PRISM

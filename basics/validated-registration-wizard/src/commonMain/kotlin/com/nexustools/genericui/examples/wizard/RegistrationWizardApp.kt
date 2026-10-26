@@ -1,5 +1,6 @@
 package com.nexustools.genericui.examples.wizard
 
+import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.component.shell.Menu
 import com.nexustools.genericui.component.shell.MenuBar
@@ -12,6 +13,7 @@ import com.nexustools.genericui.window.TitleBar
 /**
  * Multiplatform [FragmentApplication] entry point for the Validated Registration Wizard example.
  */
+@AppApplication
 class RegistrationWizardApp(
     val preferenceStore: PreferenceStore = PreferenceStore(RegistrationProfile.DEFAULT_STORE_NAME),
     val wizardFragment: RegistrationWizardFragment = RegistrationWizardFragment(preferenceStore)
@@ -52,16 +54,4 @@ class RegistrationWizardApp(
 
         return MenuBar().addMenu(wizardMenu)
     }
-
-    companion object {
-        fun start(args: Array<String> = emptyArray()) {
-            RegistrationWizardPlatformBootstrap.initialize(args)
-            val app = RegistrationWizardApp()
-            app.run()
-        }
-    }
-}
-
-fun main(args: Array<String>) {
-    RegistrationWizardApp.start(args)
 }

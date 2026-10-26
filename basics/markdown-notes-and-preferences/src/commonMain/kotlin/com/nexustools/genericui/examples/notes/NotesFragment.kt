@@ -9,6 +9,7 @@ import com.nexustools.genericui.component.form.TextArea
 import com.nexustools.genericui.component.form.TextField
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
+import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.layout.HStack
 import com.nexustools.genericui.component.layout.VStack
 import com.nexustools.genericui.component.shell.SplitPane
@@ -36,6 +37,7 @@ import com.nexustools.genericui.enums.ui.Orientation
  * - Live search filtering via [SearchField] (`input-search`).
  * - Native file import/export via [Dialogs.openFile] and [Dialogs.saveFile].
  */
+@MainAppFragment
 class NotesFragment(
     val preferenceStore: PreferenceStore = PreferenceStore(NoteItem.PREFERENCE_NAMESPACE)
 ) : Fragment() {

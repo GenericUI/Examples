@@ -1,10 +1,12 @@
 package com.nexustools.genericui.examples.mediacatalog
 
+import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 
 /**
  * Multiplatform [FragmentApplication] hosting [AdaptiveMediaCatalogFragment].
  */
+@AppApplication
 class AdaptiveMediaCatalogApp(
     val catalogFragment: AdaptiveMediaCatalogFragment = AdaptiveMediaCatalogFragment()
 ) : FragmentApplication(
@@ -13,10 +15,3 @@ class AdaptiveMediaCatalogApp(
     initialThemeColor = "#7C3AED"
 )
 
-fun main(args: Array<String>) {
-    if (args.contains("--visual-test")) {
-        AdaptiveMediaCatalogVisualTestMain.runVisualSuite(args)
-        return
-    }
-    AdaptiveMediaCatalogApp().run()
-}

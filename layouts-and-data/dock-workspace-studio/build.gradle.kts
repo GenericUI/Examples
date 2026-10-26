@@ -7,19 +7,32 @@ group = "com.nexustools.genericui.examples.dockstudio"
 version = "1.0.0"
 
 genericui {
+    app {
+        id = "com.nexustools.genericui.examples.dockstudio"
+        name = "Dock Workspace Studio"
+        version = "1.0.0"
+        vendor = "NexusTools"
+        description = "GIMP-style Single/Multi-Window DockWorkspace and Overlay HUD Studio for GenericUI."
+    }
+    window {
+        title = "GenericUI — Dock Workspace Studio"
+        icon = "src/commonMain/resources/icon.svg"
+    }
+    theme {
+        color = "#0EA5E9"
+    }
     application {
-        entryPoint = "com.nexustools.genericui.examples.dockstudio.main"
-        mainClass = "com.nexustools.genericui.examples.dockstudio.DockWorkspaceStudioAppKt"
         baseName = "DockWorkspaceStudio"
         androidNamespace = "com.nexustools.genericui.examples.dockstudio"
-        appName = "Dock Workspace Studio"
-        appId = "com.nexustools.genericui.examples.dockstudio"
-        description = "GIMP-style Single/Multi-Window DockWorkspace and Overlay HUD Studio for GenericUI."
         themeColor = "#0EA5E9"
         desktop {
+            appName = "Dock Workspace Studio"
             windowTitle = "GenericUI — Dock Workspace Studio"
             windowWidth = 1360
             windowHeight = 860
+            appVersion = "1.0.0"
+            vendor = "NexusTools"
+            description = "GIMP-style Single/Multi-Window DockWorkspace and Overlay HUD Studio for GenericUI."
             icon = "src/commonMain/resources/icon.svg"
             webIcon = "src/commonMain/resources/icon.svg"
             linuxIcon = "src/commonMain/resources/icon.svg"

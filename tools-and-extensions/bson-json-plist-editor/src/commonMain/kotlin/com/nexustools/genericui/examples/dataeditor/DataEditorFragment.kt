@@ -13,6 +13,7 @@ import com.nexustools.genericui.component.form.SelectOption
 import com.nexustools.genericui.component.form.TextField
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
+import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.layout.HStack
 import com.nexustools.genericui.component.layout.VStack
 import com.nexustools.genericui.component.lazy.LazyGridTree
@@ -46,6 +47,7 @@ import com.nexustools.genericui.enums.bootstrap.SpacingScale
  *   a 12-datatype [Select] dropdown, and action buttons to create a new leaf (`+ Leaf`), create a new
  *   nested branch (`+ Branch`), move up (`↑`), move down (`↓`), duplicate (`Dup`), or delete (`Del`).
  */
+@MainAppFragment
 class DataEditorFragment(
     val preferenceStore: PreferenceStore = PreferenceStore.open("BsonJsonPlistEditor")
 ) : Fragment() {

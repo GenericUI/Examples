@@ -7,15 +7,30 @@ group = "com.nexustools.genericui.examples.physics2d"
 version = "1.0-SNAPSHOT"
 
 genericui {
+    app {
+        id = "com.nexustools.genericui.examples.physics2d"
+        name = "Box2D Physics Playground"
+        version = "1.0.0"
+        vendor = "NexusTools"
+        description = "Box2D rigid-body physics sandbox with revolute joints, collision impulse solver, and Canvas2D debug drawer."
+    }
+    window {
+        title = "Box2D Rigid-Body Physics Playground"
+        icon = "src/commonMain/resources/icon.svg"
+    }
+    theme {
+        color = "#10B981"
+    }
     application {
-        entryPoint = "com.nexustools.genericui.examples.physics2d.main"
-        mainClass = "com.nexustools.genericui.examples.physics2d.Box2DPhysicsPlaygroundAppKt"
         baseName = "Box2DPhysicsPlayground"
         androidNamespace = "com.nexustools.genericui.examples.physics2d"
         themeColor = "#10B981"
         desktop {
             appName = "Box2D Physics Playground"
             windowTitle = "Box2D Rigid-Body Physics Playground"
+            appVersion = "1.0.0"
+            vendor = "NexusTools"
+            description = "Box2D rigid-body physics sandbox with revolute joints, collision impulse solver, and Canvas2D debug drawer."
             icon = "src/commonMain/resources/icon.svg"
             webIcon = "src/commonMain/resources/icon.svg"
             linuxIcon = "src/commonMain/resources/icon.svg"

@@ -6,6 +6,7 @@ import com.nexustools.genericui.component.form.SelectOption
 import com.nexustools.genericui.component.form.Switch
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
+import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.layout.HStack
 import com.nexustools.genericui.component.layout.VStack
 import com.nexustools.genericui.component.surface.Card
@@ -26,6 +27,7 @@ import com.nexustools.genericui.enums.ui.ThemeMode
  * - Runtime theme mode switching (`LIGHT`, `DARK`, `SYSTEM`) and accent `themeColor` presets (`#2563EB`, `#10B981`, `#8B5CF6`).
  * - Automatic or manual persistence of [CounterSettings] via [PreferenceStore].
  */
+@MainAppFragment
 class CounterFragment(
     val preferenceStore: PreferenceStore = PreferenceStore(CounterSettings.DEFAULT_STORE_NAME),
     var onThemeUpdated: ((ThemeMode, String) -> Unit)? = null

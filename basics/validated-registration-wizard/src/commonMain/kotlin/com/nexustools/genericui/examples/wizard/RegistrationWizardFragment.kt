@@ -11,6 +11,7 @@ import com.nexustools.genericui.component.form.SelectOption
 import com.nexustools.genericui.component.form.TextField
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
+import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.layout.HStack
 import com.nexustools.genericui.component.layout.VStack
 import com.nexustools.genericui.component.surface.Card
@@ -30,6 +31,7 @@ import kotlin.math.roundToInt
  * Step 2: Developer Profile (`select-role`, `slider-experience`)
  * Step 3: Review & Terms (`check-terms`, `btn-submit`)
  */
+@MainAppFragment
 class RegistrationWizardFragment(
     val preferenceStore: PreferenceStore = PreferenceStore(RegistrationProfile.DEFAULT_STORE_NAME)
 ) : Fragment() {

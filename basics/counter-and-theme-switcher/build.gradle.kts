@@ -7,9 +7,21 @@ group = "com.nexustools.genericui.examples.counter"
 version = "0.1.0-SNAPSHOT"
 
 genericui {
+    app {
+        id = "com.nexustools.genericui.examples.counter"
+        name = "Counter & Theme Switcher"
+        version = "1.0.0"
+        vendor = "NexusTools"
+        description = "Hello GenericUI: Reactive counter, step selector, runtime theme switcher, and PreferenceStore persistence."
+    }
+    window {
+        title = "Counter & Theme Switcher"
+        icon = "src/commonMain/resources/icon.svg"
+    }
+    theme {
+        color = "#2563EB"
+    }
     application {
-        entryPoint = "com.nexustools.genericui.examples.counter.main"
-        mainClass = "com.nexustools.genericui.examples.counter.CounterAppKt"
         baseName = "CounterAndThemeSwitcher"
         androidNamespace = "com.nexustools.genericui.examples.counter"
         themeColor = "#2563EB"

@@ -1,5 +1,6 @@
 package com.nexustools.genericui.examples.mdishowcase
 
+import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.enums.ui.ThemeMode
 import com.nexustools.genericui.examples.mdishowcase.styles.StylesPrecompiledStyleSheet
@@ -8,6 +9,7 @@ import com.nexustools.genericui.window.TitleBar
 /**
  * Multiplatform [FragmentApplication] hosting [MdiComponentAndScssShowcaseFragment].
  */
+@AppApplication
 class MdiComponentAndScssShowcaseApp(
     val showcaseFragment: MdiComponentAndScssShowcaseFragment = MdiComponentAndScssShowcaseFragment()
 ) : FragmentApplication(
@@ -17,7 +19,6 @@ class MdiComponentAndScssShowcaseApp(
 ) {
 
     init {
-        MdiShowcasePlatformBootstrap.initialize()
         setThemeMode(ThemeMode.DARK)
         val titleBar = TitleBar(
             embedMenuBar = true,
@@ -31,20 +32,4 @@ class MdiComponentAndScssShowcaseApp(
         mainWindow.setMenuBar(showcaseFragment.outerMenuBar)
         rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
     }
-
-    companion object {
-        fun start(args: Array<String> = emptyArray()) {
-            MdiShowcasePlatformBootstrap.initialize(args)
-            if (args.contains("--visual-test")) {
-                MdiComponentAndScssShowcaseVisualTestMain.runVisualSuite(args)
-                return
-            }
-            val app = MdiComponentAndScssShowcaseApp()
-            app.run()
-        }
-    }
-}
-
-fun main(args: Array<String>) {
-    MdiComponentAndScssShowcaseApp.start(args)
 }

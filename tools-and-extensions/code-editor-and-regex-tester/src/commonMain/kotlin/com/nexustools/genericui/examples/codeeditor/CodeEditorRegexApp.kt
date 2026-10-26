@@ -1,11 +1,11 @@
 package com.nexustools.genericui.examples.codeeditor
 
+import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.component.shell.Menu
 import com.nexustools.genericui.component.shell.MenuBar
 import com.nexustools.genericui.component.shell.MenuItem
 import com.nexustools.genericui.component.system.PreferenceStore
-import com.nexustools.genericui.core.GenericUI
 import com.nexustools.genericui.enums.ui.ThemeMode
 import com.nexustools.genericui.examples.codeeditor.styles.StylesPrecompiledStyleSheet
 import com.nexustools.genericui.ext.codeeditor.CodeLanguage
@@ -14,6 +14,7 @@ import com.nexustools.genericui.window.TitleBar
 /**
  * Multiplatform [FragmentApplication] hosting [CodeEditorRegexFragment].
  */
+@AppApplication
 class CodeEditorRegexApp(
     preferenceStore: PreferenceStore = PreferenceStore("CodeEditorRegexExample"),
     val regexFragment: CodeEditorRegexFragment = CodeEditorRegexFragment(preferenceStore)
@@ -82,13 +83,4 @@ class CodeEditorRegexApp(
             .addMenu(languageMenu)
             .addMenu(presetsMenu)
     }
-}
-
-fun main(args: Array<String>) {
-    if (args.contains("--visual-test")) {
-        CodeEditorRegexVisualTestMain.runVisualSuite(args)
-        return
-    }
-    val factory = GenericUI.activeFactory ?: return
-    CodeEditorRegexApp().run(factory)
 }

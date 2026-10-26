@@ -12,6 +12,7 @@ import com.nexustools.genericui.component.form.SelectOption
 import com.nexustools.genericui.component.form.TextField
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
+import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.layout.HStack
 import com.nexustools.genericui.component.layout.ScrollView
 import com.nexustools.genericui.component.layout.VStack
@@ -41,6 +42,7 @@ import com.nexustools.genericui.ext.codeeditor.TextRange
  * with an interactive Regular Expression playground, capture-group inspector table,
  * multi-buffer [TabContainer], and [PreferenceStore]-backed snippet library.
  */
+@MainAppFragment
 class CodeEditorRegexFragment(
     val preferenceStore: PreferenceStore = PreferenceStore("CodeEditorRegexExample")
 ) : Fragment() {
@@ -554,7 +556,8 @@ class CodeEditorRegexFragment(
                 rec.groups.mapIndexed { idx, g -> "$${idx + 1}=\"$g\"" }.joinToString(", ")
             }
             TableRow(
-                listOf(
+                id = "match-${rec.matchIndex + 1}",
+                cells = listOf(
                     TableCell("#${rec.matchIndex + 1}"),
                     TableCell(rec.fullMatch),
                     TableCell(rec.rangeText),

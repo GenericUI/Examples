@@ -7,9 +7,21 @@ group = "com.nexustools.genericui.examples.notes"
 version = "0.1.0-SNAPSHOT"
 
 genericui {
+    app {
+        id = "com.nexustools.genericui.examples.notes"
+        name = "Markdown Notes & Preferences"
+        version = "1.0.0"
+        vendor = "NexusTools"
+        description = "Two-pane Markdown note manager storing structured objects in PreferenceStore with live PreferenceChangeListener updates."
+    }
+    window {
+        title = "Markdown Notes & Preferences"
+        icon = "src/commonMain/resources/icon.svg"
+    }
+    theme {
+        color = "#8B5CF6"
+    }
     application {
-        entryPoint = "com.nexustools.genericui.examples.notes.main"
-        mainClass = "com.nexustools.genericui.examples.notes.NotesAppKt"
         baseName = "MarkdownNotesAndPreferences"
         androidNamespace = "com.nexustools.genericui.examples.notes"
         themeColor = "#8B5CF6"

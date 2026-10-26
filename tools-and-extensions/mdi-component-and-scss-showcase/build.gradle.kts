@@ -7,14 +7,30 @@ group = "com.nexustools.genericui.examples.mdishowcase"
 version = "1.0-SNAPSHOT"
 
 genericui {
+    app {
+        id = "com.nexustools.genericui.examples.mdishowcase"
+        name = "MDI Component & Live SCSS Showcase"
+        version = "1.0.0"
+        vendor = "NexusTools"
+        description = "Interactive Multi-Document Interface (MDI) component gallery and live SCSS stylesheet editor powered by GenericUI across all 8 backends."
+    }
+    window {
+        title = "GenericUI — MDI Component & Live SCSS Stylesheet Showcase"
+        icon = "src/commonMain/resources/icon.svg"
+    }
+    theme {
+        color = "#FF2A6D"
+    }
     application {
-        entryPoint = "com.nexustools.genericui.examples.mdishowcase.main"
         baseName = "MdiComponentAndScssShowcase"
         androidNamespace = "com.nexustools.genericui.examples.mdishowcase"
         themeColor = "#FF2A6D"
         desktop {
             appName = "MDI Component & Live SCSS Showcase"
             windowTitle = "GenericUI — MDI Component & Live SCSS Stylesheet Showcase"
+            appVersion = "1.0.0"
+            vendor = "NexusTools"
+            description = "Interactive Multi-Document Interface (MDI) component gallery and live SCSS stylesheet editor powered by GenericUI across all 8 backends."
             icon = "src/commonMain/resources/icon.svg"
             webIcon = "src/commonMain/resources/icon.svg"
             linuxIcon = "src/commonMain/resources/icon.svg"

@@ -7,14 +7,30 @@ group = "com.nexustools.genericui.examples.codeeditor"
 version = "1.0-SNAPSHOT"
 
 genericui {
+    app {
+        id = "com.nexustools.genericui.examples.codeeditor"
+        name = "CodeEditor & Regex Playground"
+        version = "1.0.0"
+        vendor = "NexusTools"
+        description = "Syntax-highlighted multi-language IDE code editor and live regular expression playground powered by GenericUI across all 8 backends."
+    }
+    window {
+        title = "GenericUI — Syntax-Highlighted CodeEditor & Regex Playground"
+        icon = "src/commonMain/resources/icon.svg"
+    }
+    theme {
+        color = "#6366F1"
+    }
     application {
-        entryPoint = "com.nexustools.genericui.examples.codeeditor.main"
         baseName = "CodeEditorAndRegexTester"
         androidNamespace = "com.nexustools.genericui.examples.codeeditor"
         themeColor = "#6366F1"
         desktop {
             appName = "CodeEditor & Regex Playground"
             windowTitle = "GenericUI — Syntax-Highlighted CodeEditor & Regex Playground"
+            appVersion = "1.0.0"
+            vendor = "NexusTools"
+            description = "Syntax-highlighted multi-language IDE code editor and live regular expression playground powered by GenericUI across all 8 backends."
             icon = "src/commonMain/resources/icon.svg"
             webIcon = "src/commonMain/resources/icon.svg"
             linuxIcon = "src/commonMain/resources/icon.svg"
@@ -28,7 +44,7 @@ genericui {
             display = "standalone"
             backgroundColor = "#0F172A"
             themeColor = "#6366F1"
-            categories = listOf("developer", "utilities", "productivity")
+            categories("developer", "utilities", "productivity")
         }
     }
     backends {

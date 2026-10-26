@@ -1,10 +1,10 @@
 package com.nexustools.genericui.examples.visualizer
 
+import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.component.shell.Menu
 import com.nexustools.genericui.component.shell.MenuBar
 import com.nexustools.genericui.component.shell.MenuItem
-import com.nexustools.genericui.core.GenericUI
 import com.nexustools.genericui.enums.ui.ThemeMode
 import com.nexustools.genericui.examples.visualizer.styles.StylesPrecompiledStyleSheet
 import com.nexustools.genericui.window.TitleBar
@@ -12,6 +12,7 @@ import com.nexustools.genericui.window.TitleBar
 /**
  * Multiplatform [FragmentApplication] hosting [AudioSpectrumVisualizerFragment].
  */
+@AppApplication
 class AudioSpectrumVisualizerApp(
     val visualizerFragment: AudioSpectrumVisualizerFragment = AudioSpectrumVisualizerFragment()
 ) : FragmentApplication(
@@ -70,13 +71,4 @@ class AudioSpectrumVisualizerApp(
             .addMenu(transportMenu)
             .addMenu(modeMenu)
     }
-}
-
-fun main(args: Array<String>) {
-    if (args.contains("--visual-test")) {
-        AudioSpectrumVisualizerVisualTestMain.runVisualSuite(args)
-        return
-    }
-    val factory = GenericUI.activeFactory ?: return
-    AudioSpectrumVisualizerApp().run(factory)
 }

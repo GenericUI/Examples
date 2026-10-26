@@ -6,6 +6,7 @@ import com.nexustools.genericui.component.form.SelectOption
 import com.nexustools.genericui.component.form.TextField
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
+import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.layout.HStack
 import com.nexustools.genericui.component.layout.VStack
 import com.nexustools.genericui.component.lazy.LazyGrid
@@ -30,6 +31,7 @@ import com.nexustools.genericui.enums.ui.Orientation
  * and [TreeView] with true viewport window virtualization (`[firstVisible .. lastVisible]`),
  * live recycling counters, search and category filtering, and item selection telemetry.
  */
+@MainAppFragment
 class VirtualizedDataExplorerFragment(
     val totalDatasetSize: Int = DEFAULT_RECORD_COUNT
 ) : Fragment() {
@@ -99,7 +101,7 @@ class VirtualizedDataExplorerFragment(
         }
     }
 
-    val clearFilterButton: Button = Button("Reset Filter", BootstrapType.OUTLINE_SECONDARY, BootstrapSize.SM).apply {
+    val clearFilterButton: Button = Button("Reset Filter", BootstrapType.SECONDARY, BootstrapSize.SM, outline = true).apply {
         id = "btn-clear-filter"
         onClick = {
             filterTextField.value = ""
@@ -375,8 +377,9 @@ class VirtualizedDataExplorerFragment(
         }
         val selectBtn = Button(
             text = "#${record.id} ${record.title}",
-            type = BootstrapType.OUTLINE_PRIMARY,
-            size = BootstrapSize.SM
+            type = BootstrapType.PRIMARY,
+            size = BootstrapSize.SM,
+            outline = true
         ).apply {
             id = "btn-select-record-${record.id}"
             onClick = { selectRecord(record) }

@@ -5,6 +5,7 @@ import com.nexustools.genericui.component.dock.DockHeaderAction
 import com.nexustools.genericui.component.dock.DockPanel
 import com.nexustools.genericui.component.dock.StudioDocument as DockStudioDocument
 import com.nexustools.genericui.component.fragment.FragmentBundle
+import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.fragment.helper.OverlayDockWorkspaceFragment
 import com.nexustools.genericui.component.layout.Container
 import com.nexustools.genericui.component.layout.HStack
@@ -29,6 +30,7 @@ import com.nexustools.genericui.window.TitleBar
  * - Live switching between [StudioWindowMode.SINGLE_WINDOW_MODE] (`SINGLE_WINDOW`) and [StudioWindowMode.MULTI_WINDOW_MODE] (`MULTI_WINDOW`) with [com.nexustools.genericui.component.dock.PanelWindow] detachment.
  * - Floating HUD overlay panel toggled over the workspace canvas.
  */
+@MainAppFragment
 class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
     backgroundComponent = Container("studio-canvas-backdrop"),
     initialMode = StudioWindowMode.SINGLE_WINDOW_MODE
@@ -66,7 +68,7 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
         onClick = { toggleHudOverlay() }
     }
 
-    val closeActiveDocButton: Button = Button("Close Active Tab", BootstrapType.OUTLINE_DANGER, BootstrapSize.SM).apply {
+    val closeActiveDocButton: Button = Button("Close Active Tab", BootstrapType.DANGER, BootstrapSize.SM, outline = true).apply {
         id = "btn-close-active-doc"
         onClick = { closeActiveStudioDocument() }
     }
@@ -114,6 +116,7 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
         addHeaderAction(
             DockHeaderAction(
                 id = "action-reset-zoom",
+                label = "100%",
                 tooltip = "Reset Zoom to 100%",
                 onClick = { updateActiveDocumentZoom(100) }
             )
@@ -353,7 +356,7 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
             "Zoom" to "btn-tool-zoom"
         )
         for ((toolLabel, btnId) in tools) {
-            val btn = Button(toolLabel, BootstrapType.OUTLINE_PRIMARY, BootstrapSize.SM).apply {
+            val btn = Button(toolLabel, BootstrapType.PRIMARY, BootstrapSize.SM, outline = true).apply {
                 id = btnId
                 onClick = { selectTool(toolLabel) }
             }
@@ -370,14 +373,14 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
         propsStack.addChild(propNotesLabel)
 
         val actionRow = HStack(gap = SpacingScale.S2).apply {
-            val zoomInBtn = Button("Zoom +25%", BootstrapType.OUTLINE_INFO, BootstrapSize.SM).apply {
+            val zoomInBtn = Button("Zoom +25%", BootstrapType.INFO, BootstrapSize.SM, outline = true).apply {
                 id = "btn-zoom-in"
                 onClick = {
                     val current = getActiveStudioDocumentModel()?.zoomPercent ?: 100
                     updateActiveDocumentZoom(current + 25)
                 }
             }
-            val zoomOutBtn = Button("Zoom -25%", BootstrapType.OUTLINE_SECONDARY, BootstrapSize.SM).apply {
+            val zoomOutBtn = Button("Zoom -25%", BootstrapType.SECONDARY, BootstrapSize.SM, outline = true).apply {
                 id = "btn-zoom-out"
                 onClick = {
                     val current = getActiveStudioDocumentModel()?.zoomPercent ?: 100
@@ -424,8 +427,9 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
             addChild(Label(model.notes))
             val activateBtn = Button(
                 text = "Focus ${model.title}",
-                type = BootstrapType.OUTLINE_PRIMARY,
-                size = BootstrapSize.SM
+                type = BootstrapType.PRIMARY,
+                size = BootstrapSize.SM,
+                outline = true
             ).apply {
                 id = "btn-focus-${model.id}"
                 onClick = {

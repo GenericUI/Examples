@@ -18,18 +18,18 @@ class CodeEditorRegexJestTest {
         ) {
             describe("Syntax-Highlighted CodeEditor & Regex Evaluation") {
 
-                it("mounts CodeEditorRegexApp and evaluates initial Kotlin regex matches and capture groups") {
+                it("mounts CodeEditorRegexFragment and evaluates initial Kotlin regex matches and capture groups") {
                     val store = PreferenceStore("CodeEditorRegexJestTest_Init")
                     store.clear()
-                    val controller = launchApp(visualOnWindows = false) {
-                        CodeEditorRegexApp(store)
+                    val controller = launchFragment {
+                        CodeEditorRegexFragment(store)
                     }
 
                     expectNode(controller.findById("ide-code-editor")).toBeVisible()
                     expectNode(controller.findById("badge-active-language")).toHaveText("Kotlin")
                     expectNode(controller.findById("badge-match-count")).toHaveText("2 matches")
 
-                    val matches = controller.app.regexFragment.lastRegexMatches
+                    val matches = controller.fragment.lastRegexMatches
                     expect(matches).toHaveLength(2)
                     expect(matches[0].groups).toEqual(
                         listOf("calculateSubtotal", "items: List<InvoiceItem>, discountRate: Double", "Int")
@@ -37,8 +37,8 @@ class CodeEditorRegexJestTest {
                     expect(matches[1].groups).toEqual(
                         listOf("formatCurrency", "amountCents: Int, currencyCode: String", "String")
                     )
-                    expect(controller.app.regexFragment.captureGroupsTable.rows).toHaveLength(2)
-                    expect(controller.app.regexFragment.codeEditor.getDiagnostics()).toHaveLength(2)
+                    expect(controller.fragment.captureGroupsTable.rows).toHaveLength(2)
+                    expect(controller.fragment.codeEditor.getDiagnostics()).toHaveLength(2)
 
                     controller.destroy()
                 }

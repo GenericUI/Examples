@@ -4,7 +4,8 @@ import com.nexustools.genericui.component.action.Button
 import com.nexustools.genericui.component.form.RangeSlider
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
-import com.nexustools.genericui.component.media.Canvas2DContext
+import com.nexustools.genericui.component.fragment.MainAppFragment
+import com.nexustools.genericui.ext.imageprocessing.context2d.ImageBuffer2DContext
 import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
@@ -38,6 +39,7 @@ import kotlin.math.roundToInt
  * ([World2D], [Body2D], [PolygonShape2D], [CircleShape2D], [RevoluteJoint2D],
  * [Box2DDebugDrawer]) and rendered onto [Canvas2DExtSurface].
  */
+@MainAppFragment
 class Box2DPhysicsPlaygroundFragment : Fragment() {
 
     var world: World2D = World2D(gravity = Vec2(0f, -9.81f))
@@ -352,7 +354,7 @@ class Box2DPhysicsPlaygroundFragment : Fragment() {
     fun dynamicBodies(): List<Body2D> =
         world.bodies.filter { it.type == BodyType2D.DYNAMIC }
 
-    fun renderWorldToContext(ctx: Canvas2DContext) {
+    fun renderWorldToContext(ctx: ImageBuffer2DContext) {
         ctx.setFillColor(RgbaColor(12, 17, 29, 255))
         ctx.fillRect(0f, 0f, ctx.width.toFloat(), ctx.height.toFloat())
         debugDrawer.drawWorld(world, ctx)
