@@ -1,9 +1,11 @@
 package com.nexustools.genericui.examples.codeeditor
 
 import com.nexustools.genericui.component.system.PreferenceStore
+import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.ext.codeeditor.CodeLanguage
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
+import kotlin.test.assertTrue
 
 /**
  * Cross-platform [JestElectricRunner] BDD & Robolectric UI test suite for `code-editor-and-regex-tester`.
@@ -18,16 +20,20 @@ class CodeEditorRegexJestTest {
         ) {
             describe("Syntax-Highlighted CodeEditor & Regex Evaluation") {
 
-                it("mounts CodeEditorRegexFragment and evaluates initial Kotlin regex matches and capture groups") {
+                it("mounts CodeEditorRegexFragment, verifies getStyle() and getBootstrap(), and evaluates initial Kotlin regex matches and capture groups") {
                     val store = PreferenceStore("CodeEditorRegexJestTest_Init")
                     store.clear()
                     val controller = launchFragment {
                         CodeEditorRegexFragment(store)
                     }
 
+                    assertTrue(controller.fragment.hasClass("code-regex-root"))
+                    expect(controller.fragment.topToolbar.getStyle().borderRadiusPx).toBe(8f)
+                    expect(controller.fragment.codeEditor.getStyle().borderRadiusPx).toBe(6f)
                     expectNode(controller.findById("ide-code-editor")).toBeVisible()
                     expectNode(controller.findById("badge-active-language")).toHaveText("Kotlin")
                     expectNode(controller.findById("badge-match-count")).toHaveText("2 matches")
+                    expect(controller.fragment.matchCountBadge.getBootstrap().type).toBe(BootstrapType.SUCCESS)
 
                     val matches = controller.fragment.lastRegexMatches
                     expect(matches).toHaveLength(2)

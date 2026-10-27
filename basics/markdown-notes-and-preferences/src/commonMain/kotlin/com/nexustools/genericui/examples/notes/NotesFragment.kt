@@ -22,10 +22,14 @@ import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Heading
 import com.nexustools.genericui.component.typography.MarkdownView
 import com.nexustools.genericui.component.typography.Text
+import com.nexustools.genericui.enums.bootstrap.BorderRadiusStyle
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FontWeight
+import com.nexustools.genericui.enums.bootstrap.ShadowElevation
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.enums.ui.Orientation
+import com.nexustools.genericui.style.color.RgbaColor
 
 /**
  * Primary UI [Fragment] for the Markdown Notes & Preferences example (`1.3`).
@@ -79,6 +83,11 @@ class NotesFragment(
         size = BootstrapSize.SM
     ).apply {
         id = "btn-new-note"
+        getBootstrap().apply {
+            type = BootstrapType.PRIMARY
+            size = BootstrapSize.SM
+            fontWeight = FontWeight.SEMIBOLD
+        }
     }
 
     val deleteNoteButton: Button = Button(
@@ -87,6 +96,10 @@ class NotesFragment(
         size = BootstrapSize.SM
     ).apply {
         id = "btn-delete-note"
+        getBootstrap().apply {
+            type = BootstrapType.DANGER
+            size = BootstrapSize.SM
+        }
     }
 
     val restoreNoteButton: Button = Button(
@@ -96,6 +109,11 @@ class NotesFragment(
         outline = true
     ).apply {
         id = "btn-restore-note"
+        getBootstrap().apply {
+            type = BootstrapType.SECONDARY
+            size = BootstrapSize.SM
+            outline = true
+        }
     }
 
     val noteCountBadge: Badge = Badge(
@@ -103,6 +121,10 @@ class NotesFragment(
         type = BootstrapType.PRIMARY
     ).apply {
         id = "badge-note-count"
+        getBootstrap().apply {
+            type = BootstrapType.PRIMARY
+            fontWeight = FontWeight.SEMIBOLD
+        }
     }
 
     val lastChangeBadge: Badge = Badge(
@@ -110,6 +132,9 @@ class NotesFragment(
         type = BootstrapType.INFO
     ).apply {
         id = "badge-last-change"
+        getBootstrap().apply {
+            type = BootstrapType.INFO
+        }
     }
 
     val noteListGroup: ListGroup = ListGroup().apply {
@@ -136,6 +161,9 @@ class NotesFragment(
         checked = false
     ).apply {
         id = "check-pin-note"
+        getStyle().apply {
+            accentColor = RgbaColor.fromHex("#8B5CF6")
+        }
     }
 
     val exportMarkdownButton: Button = Button(
@@ -233,15 +261,27 @@ class NotesFragment(
         leftSidebar.addChild(searchInput)
         leftSidebar.addChild(sidebarActions)
 
-        val listCard = Card(title = "Saved Notes")
-        listCard.addClass("notes-sidebar-card")
+        val listCard = Card(title = "Saved Notes").apply {
+            addClass("notes-sidebar-card")
+            getBootstrap().apply {
+                borderRadius = BorderRadiusStyle.LARGE
+                shadow = ShadowElevation.SMALL
+                padding = SpacingScale.TWO
+            }
+        }
         listCard.addChild(noteListGroup)
         leftSidebar.addChild(listCard)
 
         // Right Pane: Note Editor + Live MarkdownView Preview
         val rightEditorStack = VStack(gap = SpacingScale.TWO)
-        val editorCard = Card(title = "Note Editor")
-        editorCard.addClass("notes-editor-card")
+        val editorCard = Card(title = "Note Editor").apply {
+            addClass("notes-editor-card")
+            getBootstrap().apply {
+                borderRadius = BorderRadiusStyle.LARGE
+                shadow = ShadowElevation.SMALL
+                padding = SpacingScale.TWO
+            }
+        }
         val editorFields = VStack(gap = SpacingScale.TWO)
 
         val titleAndPinRow = HStack(gap = SpacingScale.TWO)
@@ -255,8 +295,14 @@ class NotesFragment(
         editorCard.addChild(editorFields)
         rightEditorStack.addChild(editorCard)
 
-        val previewCard = Card(title = "Live Markdown Preview")
-        previewCard.addClass("notes-preview-card")
+        val previewCard = Card(title = "Live Markdown Preview").apply {
+            addClass("notes-preview-card")
+            getBootstrap().apply {
+                borderRadius = BorderRadiusStyle.LARGE
+                shadow = ShadowElevation.SMALL
+                padding = SpacingScale.TWO
+            }
+        }
         previewCard.addChild(markdownPreview)
         rightEditorStack.addChild(previewCard)
 

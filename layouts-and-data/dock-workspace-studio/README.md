@@ -6,7 +6,8 @@ Demonstrates a modular creative studio workspace in `GenericUI` built with `Over
 
 ## Key `GenericUI` APIs Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `DockWorkspaceStudioFragment` (`@MainAppFragment` extending `OverlayDockWorkspaceFragment`) and `DockWorkspaceStudioApp` (`@AppApplication` extending `FragmentApplication`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `DockWorkspaceStudioFragment` (`@MainAppFragment` extending `OverlayDockWorkspaceFragment`) and `DockWorkspaceStudioApp` (`@AppApplication` extending `FragmentApplication`) with `ThemeMode.AUTO` (`setTheme(ThemeMode.AUTO)`) and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
+- **`ComponentBootstrap` (`bootstrap { ... }`) & `ComponentStyle` (`style { ... }`)**: Uses `:extensions:dsl` `bootstrap { ... }` and `style { ... }` builders (`BootstrapType`, `BootstrapSize`, `BorderRadiusStyle`, `ShadowElevation`, `SpacingScale`, `FontWeight`, `accentColor`) with strict custom CSS class isolation.
 - **Docking & Workspace Fragments**: `OverlayDockWorkspaceFragment`, `DockWorkspaceFragment`, `DockWorkspace`, `DockArea`, `DockPanel`, `PanelWindow`, `DockPosition`, and `StudioWindowMode` (`SINGLE_WINDOW_MODE` vs. `MULTI_WINDOW_MODE`).
 - **Panel & Window TitleBars**: `DockPanel.setTitleBar(TitleBar)`, `TitleBar.addTrailing(...)`, and `DockHeaderAction`.
 - **Document Tabs**: `TabContainer`, `CloseableTab`, `StudioDocument`, `openDocument`, `closeDocument`, and `activateDocument`.
@@ -61,6 +62,7 @@ genericui {
         icon = "src/commonMain/resources/icon.svg"
     }
     theme {
+        mode = "auto"
         color = "#0EA5E9"
     }
     backends {

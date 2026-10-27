@@ -14,17 +14,22 @@ import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Heading
 import com.nexustools.genericui.component.typography.Text
+import com.nexustools.genericui.enums.bootstrap.BorderRadiusStyle
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FontWeight
+import com.nexustools.genericui.enums.bootstrap.ShadowElevation
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.enums.ui.ThemeMode
+import com.nexustools.genericui.style.color.RgbaColor
 
 /**
  * Primary UI [Fragment] for the Counter & Theme Switcher example.
  *
  * Demonstrates:
  * - Reactive counter controls (`Increment`, `Decrement`, `Reset`) with a configurable step multiplier (`1`, `5`, `10`).
- * - Runtime theme mode switching (`LIGHT`, `DARK`, `SYSTEM`) and accent `themeColor` presets (`#2563EB`, `#10B981`, `#8B5CF6`).
+ * - Runtime theme mode switching (`AUTO`, `LIGHT`, `DARK`) and accent `themeColor` presets (`#2563EB`, `#10B981`, `#8B5CF6`).
+ * - Typed `getBootstrap()` (`ComponentBootstrap`) and `getStyle()` (`ComponentStyle`) configuration with strict custom CSS class isolation.
  * - Automatic or manual persistence of [CounterSettings] via [PreferenceStore].
  */
 @MainAppFragment
@@ -43,6 +48,15 @@ class CounterFragment(
     ).apply {
         id = "counter-value-badge"
         addClass("counter-badge")
+        getBootstrap().apply {
+            fontWeight = FontWeight.BOLD
+            paddingX = SpacingScale.FOUR
+            paddingY = SpacingScale.TWO
+        }
+        getStyle().apply {
+            fontSizePx = 28f
+            borderRadiusPx = 999f
+        }
     }
 
     val incrementButton: Button = Button(
@@ -51,6 +65,11 @@ class CounterFragment(
         size = BootstrapSize.MD
     ).apply {
         id = "btn-increment"
+        getBootstrap().apply {
+            type = BootstrapType.PRIMARY
+            size = BootstrapSize.MD
+            fontWeight = FontWeight.SEMIBOLD
+        }
     }
 
     val decrementButton: Button = Button(
@@ -59,6 +78,10 @@ class CounterFragment(
         size = BootstrapSize.MD
     ).apply {
         id = "btn-decrement"
+        getBootstrap().apply {
+            type = BootstrapType.SECONDARY
+            size = BootstrapSize.MD
+        }
     }
 
     val resetButton: Button = Button(
@@ -67,6 +90,10 @@ class CounterFragment(
         size = BootstrapSize.MD
     ).apply {
         id = "btn-reset"
+        getBootstrap().apply {
+            type = BootstrapType.DANGER
+            size = BootstrapSize.MD
+        }
     }
 
     val stepSelect: Select = Select(
@@ -188,6 +215,11 @@ class CounterFragment(
 
         val counterCard = Card("Reactive Counter & Step Multiplier").apply {
             addClass("counter-card")
+            getBootstrap().apply {
+                borderRadius = BorderRadiusStyle.LARGE
+                shadow = ShadowElevation.SMALL
+                padding = SpacingScale.THREE
+            }
         }
         val counterCardBody = VStack(gap = SpacingScale.TWO)
         val badgeRow = HStack(gap = SpacingScale.TWO)
@@ -210,6 +242,11 @@ class CounterFragment(
 
         val themeCard = Card("Theme Mode, Accent Color & Persistence").apply {
             addClass("theme-card")
+            getBootstrap().apply {
+                borderRadius = BorderRadiusStyle.LARGE
+                shadow = ShadowElevation.SMALL
+                padding = SpacingScale.THREE
+            }
         }
         val themeCardBody = VStack(gap = SpacingScale.TWO)
 
@@ -323,8 +360,7 @@ class CounterFragment(
 
     fun updateThemeMode(modeName: String) {
         syncSwitchStateIfNeeded()
-        val mode = ThemeMode.entries.firstOrNull { it.name.equals(modeName.trim(), ignoreCase = true) }
-            ?: ThemeMode.DARK
+        val mode = ThemeMode.fromString(modeName)
         settings = settings.copy(
             themeModeName = mode.name,
             autoSave = autoSaveSwitch.isChecked
@@ -377,11 +413,14 @@ class CounterFragment(
 
     private fun refreshUiFromSettings() {
         counterValueBadge.text = settings.count.toString()
-        counterValueBadge.type = when {
+        counterValueBadge.getBootstrap().type = when {
             settings.count > 0 -> BootstrapType.PRIMARY
             settings.count < 0 -> BootstrapType.WARNING
             else -> BootstrapType.SECONDARY
         }
+        val accentRgba = RgbaColor.fromHex(settings.themeColorHex)
+        autoSaveSwitch.getStyle().accentColor = accentRgba
+        incrementButton.getStyle().accentColor = accentRgba
         stepSelect.selectedValue = settings.stepSize.toString()
         themeModeSelect.selectedValue = settings.themeModeName
         autoSaveSwitch.isChecked = settings.autoSave
@@ -392,6 +431,6 @@ class CounterFragment(
     private fun refreshStatusBadges() {
         activeThemeBadge.text = "${settings.themeModeName} (${settings.themeColorHex})"
         persistenceStatusBadge.text = if (settings.autoSave) "Auto-Save: ON" else "Auto-Save: OFF"
-        persistenceStatusBadge.type = if (settings.autoSave) BootstrapType.SUCCESS else BootstrapType.WARNING
+        persistenceStatusBadge.getBootstrap().type = if (settings.autoSave) BootstrapType.SUCCESS else BootstrapType.WARNING
     }
 }

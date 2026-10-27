@@ -23,11 +23,12 @@ class CounterApp(
 ) {
 
     init {
-        setThemeMode(counterFragment.settings.resolvedThemeMode())
+        setTheme(counterFragment.settings.resolvedThemeMode())
         setThemeColor(counterFragment.settings.themeColorHex)
+        addStyleSheet(StylesPrecompiledStyleSheet)
 
         counterFragment.onThemeUpdated = { mode, colorHex ->
-            setThemeMode(mode)
+            setTheme(mode)
             setThemeColor(colorHex)
         }
 
@@ -63,14 +64,14 @@ class CounterApp(
             })
 
         val themeMenu = Menu("Theme")
+            .addItem(MenuItem("Auto (System) Mode") {
+                counterFragment.updateThemeMode("AUTO")
+            })
             .addItem(MenuItem("Light Mode") {
                 counterFragment.updateThemeMode("LIGHT")
             })
             .addItem(MenuItem("Dark Mode") {
                 counterFragment.updateThemeMode("DARK")
-            })
-            .addItem(MenuItem("System Mode") {
-                counterFragment.updateThemeMode("SYSTEM")
             })
             .addSeparator()
             .addItem(MenuItem("Accent Blue (#2563EB)") {

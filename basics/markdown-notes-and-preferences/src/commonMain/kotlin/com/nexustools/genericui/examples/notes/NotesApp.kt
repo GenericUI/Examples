@@ -3,6 +3,7 @@ package com.nexustools.genericui.examples.notes
 import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.component.system.PreferenceStore
+import com.nexustools.genericui.enums.ui.ThemeMode
 import com.nexustools.genericui.examples.notes.styles.StylesPrecompiledStyleSheet
 import com.nexustools.genericui.window.TitleBar
 
@@ -20,7 +21,9 @@ class NotesApp(
 ) {
 
     init {
+        setTheme(ThemeMode.AUTO)
         setThemeColor("#8B5CF6")
+        addStyleSheet(StylesPrecompiledStyleSheet)
         val titleBar = TitleBar(
             embedMenuBar = false,
             showWindowTitle = true,

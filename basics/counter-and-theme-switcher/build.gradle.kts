@@ -19,6 +19,7 @@ genericui {
         icon = "src/commonMain/resources/icon.svg"
     }
     theme {
+        mode = "auto"
         color = "#2563EB"
     }
     application {

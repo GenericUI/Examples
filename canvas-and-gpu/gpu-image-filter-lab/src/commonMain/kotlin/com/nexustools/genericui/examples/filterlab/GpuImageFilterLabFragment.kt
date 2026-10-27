@@ -30,6 +30,7 @@ import com.nexustools.genericui.ext.imageprocessing.ImageHistogramResult
 import com.nexustools.genericui.ext.imageprocessing.VignetteFilter
 import com.nexustools.genericui.image.ImageBuffer
 import com.nexustools.genericui.style.RgbaColor
+import com.nexustools.genericui.enums.css.CssCursor
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -148,7 +149,12 @@ class GpuImageFilterLabFragment : Fragment() {
                             onRender = { ctx, _, _, _ ->
                                 self.renderPreviewToContext(ctx)
                             }
-                        )
+                        ) {
+                            getStyle().apply {
+                                borderRadiusPx = 8f
+                                setCursor(CssCursor.CROSSHAIR)
+                            }
+                        }
                     }
 
                     vstack(classes = "filter-controls-card gap-2") {
@@ -224,7 +230,11 @@ class GpuImageFilterLabFragment : Fragment() {
                             onRender = { ctx, _, _, _ ->
                                 self.renderHistogramToContext(ctx)
                             }
-                        )
+                        ) {
+                            getStyle().apply {
+                                borderRadiusPx = 6f
+                            }
+                        }
                     }
                 }
 
@@ -329,6 +339,15 @@ class GpuImageFilterLabFragment : Fragment() {
         if (::meanLumaBadge.isInitialized) {
             meanLumaBadge.text = "Mean Luma: $roundedLuma"
             presetBadge.text = "Preset: ${current.activePresetName}"
+            presetBadge.getBootstrap().type = when (current.activePresetName) {
+                "Vivid" -> BootstrapType.SUCCESS
+                "Noir" -> BootstrapType.SECONDARY
+                "Warm Cinema" -> BootstrapType.WARNING
+                else -> BootstrapType.PRIMARY
+            }
+            vividPresetButton.getBootstrap().outline = current.activePresetName != "Vivid"
+            noirPresetButton.getBootstrap().outline = current.activePresetName != "Noir"
+            cinemaPresetButton.getBootstrap().outline = current.activePresetName != "Warm Cinema"
             statusLabel.text =
                 "Preset=${current.activePresetName} | B=${current.brightness} C=${current.contrast} S=${current.saturation} Blur=${current.blurRadius}px"
         }

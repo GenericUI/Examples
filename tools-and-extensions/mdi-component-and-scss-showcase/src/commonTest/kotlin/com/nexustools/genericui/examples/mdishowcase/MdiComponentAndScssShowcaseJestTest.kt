@@ -1,7 +1,10 @@
 package com.nexustools.genericui.examples.mdishowcase
 
 import com.nexustools.genericui.component.shell.MdiWindowState
+import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.enums.dock.StudioWindowMode
+import com.nexustools.genericui.enums.ui.ThemeMode
+import com.nexustools.genericui.examples.mdishowcase.styles.StylesPrecompiledStyleSheet
 import com.nexustools.genericui.ext.codeeditor.CodeLanguage
 import com.nexustools.genericui.ext.codeeditor.CursorPosition
 import com.nexustools.genericui.ext.codeeditor.ScssLanguageSupport
@@ -10,6 +13,8 @@ import com.nexustools.genericui.ext.codeeditor.SyntaxTokenizer
 import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 /**
  * Cross-platform [JestElectricRunner] BDD & Robolectric UI test suite for `mdi-component-and-scss-showcase`.
@@ -318,6 +323,42 @@ class MdiComponentAndScssShowcaseJestTest {
                     expect(completions.any { it.label == "genericui:mdicontainer" }).toBe(true)
                     expect(completions.any { it.label == "background-color" }).toBe(true)
                     controller.destroy()
+                }
+
+                it("manages IApplication.addStyleSheet / removeStyleSheet, ThemeMode.AUTO / DARK / LIGHT, getBootstrap(), and getStyle()") {
+                    val controller = launchApp(visualOnWindows = false) { MdiComponentAndScssShowcaseApp() }
+                    val app = controller.app
+                    val frag = app.showcaseFragment
+
+                    // Verify initial ThemeMode.AUTO and global precompiled stylesheet registration
+                    expect(app.getTheme()).toBe(ThemeMode.AUTO)
+                    assertTrue(app.hasStyleSheet(StylesPrecompiledStyleSheet))
+                    assertTrue(frag.hasClass("mdi-showcase-root"))
+
+                    // Switch theme mode between DARK, LIGHT, and AUTO
+                    app.selectAppThemeMode(ThemeMode.DARK)
+                    expect(app.getTheme()).toBe(ThemeMode.DARK)
+                    expect(app.getResolvedTheme()).toBe(ThemeMode.DARK)
+
+                    app.selectAppThemeMode(ThemeMode.LIGHT)
+                    expect(app.getTheme()).toBe(ThemeMode.LIGHT)
+                    expect(app.getResolvedTheme()).toBe(ThemeMode.LIGHT)
+
+                    app.selectAppThemeMode(ThemeMode.AUTO)
+                    expect(app.getTheme()).toBe(ThemeMode.AUTO)
+
+                    // Toggle global stylesheet via removeStyleSheet / addStyleSheet
+                    assertTrue(app.setGlobalStyleSheetEnabled(false))
+                    assertFalse(app.hasStyleSheet(StylesPrecompiledStyleSheet))
+                    assertTrue(app.setGlobalStyleSheetEnabled(true))
+                    assertTrue(app.hasStyleSheet(StylesPrecompiledStyleSheet))
+
+                    // Verify getBootstrap() and getStyle() on showcase controls
+                    expect(frag.scssStatusBadge.getBootstrap().type).toBe(BootstrapType.SUCCESS)
+                    expect(frag.presetRainbowButton.getBootstrap().outline).toBe(false)
+                    expect(frag.presetEmeraldButton.getBootstrap().outline).toBe(true)
+                    val topBar = controller.findById("outer-shell-topbar")
+                    expect(topBar.component?.getStyle()?.borderRadiusPx).toBe(8f)
                 }
             }
         }

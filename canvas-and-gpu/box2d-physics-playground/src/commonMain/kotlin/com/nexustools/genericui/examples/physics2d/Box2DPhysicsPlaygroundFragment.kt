@@ -32,6 +32,7 @@ import com.nexustools.genericui.ext.dsl.label
 import com.nexustools.genericui.ext.dsl.rangeSlider
 import com.nexustools.genericui.ext.dsl.vstack
 import com.nexustools.genericui.style.RgbaColor
+import com.nexustools.genericui.enums.css.CssCursor
 import kotlin.math.roundToInt
 
 /**
@@ -164,7 +165,12 @@ class Box2DPhysicsPlaygroundFragment : Fragment() {
                                 }
                                 self.renderWorldToContext(ctx)
                             }
-                        )
+                        ) {
+                            getStyle().apply {
+                                borderRadiusPx = 8f
+                                setCursor(CssCursor.CROSSHAIR)
+                            }
+                        }
                     }
 
                     vstack(classes = "controls-card gap-2") {
@@ -336,6 +342,10 @@ class Box2DPhysicsPlaygroundFragment : Fragment() {
         isPaused = !isPaused
         if (::pauseResumeButton.isInitialized) {
             pauseResumeButton.text = if (isPaused) "Resume" else "Pause"
+            pauseResumeButton.getBootstrap().apply {
+                type = if (isPaused) BootstrapType.SUCCESS else BootstrapType.WARNING
+                outline = !isPaused
+            }
         }
         syncTelemetryLabels(if (isPaused) "Simulation paused" else "Simulation running")
     }
@@ -434,6 +444,11 @@ class Box2DPhysicsPlaygroundFragment : Fragment() {
     private fun syncTelemetryLabels(statusMessage: String) {
         if (!::presetBadge.isInitialized) return
         presetBadge.text = "Scene: ${activePreset.label}"
+        presetBadge.getBootstrap().type = when (activePreset) {
+            PhysicsScenePreset.PYRAMID_STACK -> BootstrapType.PRIMARY
+            PhysicsScenePreset.PENDULUM_CRADLE -> BootstrapType.INFO
+            PhysicsScenePreset.BOUNCY_CASCADE -> BootstrapType.SUCCESS
+        }
         bodyCountBadge.text = "Bodies: ${world.bodies.size}"
         stepCountBadge.text = "Steps: $totalStepCount"
         statusLabel.text = statusMessage

@@ -6,7 +6,8 @@ A purely **visual, multi-tab structured document editor** for **JSON (`.json`)**
 
 ## Key `GenericUI` Features Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `DataEditorFragment` (`@MainAppFragment`) and `DataEditorApp` (`@AppApplication` extending `FragmentApplication` with `TitleBar`, `MenuBar`, and `StylesPrecompiledStyleSheet`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `DataEditorFragment` (`@MainAppFragment`) and `DataEditorApp` (`@AppApplication` extending `FragmentApplication` with `TitleBar`, `MenuBar`, `setTheme(ThemeMode.DARK)`, and `addStyleSheet(StylesPrecompiledStyleSheet)`).
+- **`getStyle()` & `getBootstrap()` Styling API**: Configures toolbar/status bar inline styles via `getStyle().apply { ... }` and updates active format badge and conversion button states via `getBootstrap()`.
 - **Purely Visual `LazyGridTree` Editor (No Text-Based Editor)**:
   - **4-Column Hierarchical `LazyGridTree` (`Key / Hierarchy`, `Value`, `Type (12 DataTypes)`, `Node Actions`)**:
     - **Leaf Nodes**: Each leaf row provides an inline editable `Key` `TextField` (for object/map entries; `[index]` badge for array items), an inline editable `Value` control (`TextField` for strings/numbers, `CheckBox` switch for `BOOLEAN`, `"null"` badge for `NULL`), a `Type` `Select` dropdown supporting all 12 `DataNodeValueType`s, and inline `↑` / `↓` buttons to move the leaf up or down within its parent container, plus `Dup` and `Del` buttons.

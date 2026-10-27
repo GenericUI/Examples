@@ -6,7 +6,8 @@ A multi-step developer onboarding wizard built with **GenericUI** demonstrating 
 
 ## Key `GenericUI` APIs Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `RegistrationWizardFragment` (`@MainAppFragment`) and `RegistrationWizardApp` (`@AppApplication` extending `FragmentApplication`) with `TitleBar`, `MenuBar`, and `StylesPrecompiledStyleSheet`.
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `RegistrationWizardFragment` (`@MainAppFragment`) and `RegistrationWizardApp` (`@AppApplication` extending `FragmentApplication`) with `TitleBar`, `MenuBar`, `ThemeMode.AUTO` (`setTheme(ThemeMode.AUTO)`), and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
+- **`ComponentBootstrap` (`getBootstrap()`) & `ComponentStyle` (`getStyle()`)**: Uses strongly-typed `getBootstrap()` (`BootstrapType`, `BootstrapSize`, `SpacingScale`, `BorderRadiusStyle`, `ShadowElevation`, `FontWeight`) and W3C `getStyle()` (`accentColor` on `RangeSlider` and `CheckBox`) with strict user-added CSS class isolation.
 - **3-Step Validated Wizard Flow**:
   - **Step 1 (Account Credentials)**: `TextField` (`input-username`, `input-email`) and `PasswordField` (`input-password`) with live validation rules.
   - **Step 2 (Developer Profile)**: `Select` (`select-role`) and `RangeSlider` (`slider-experience`) with live experience badge updates (`badge-experience-years`).
@@ -64,6 +65,7 @@ genericui {
         icon = "src/commonMain/resources/icon.svg"
     }
     theme {
+        mode = "auto"
         color = "#10B981"
     }
     backends {

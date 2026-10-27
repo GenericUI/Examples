@@ -6,7 +6,8 @@ A multiplatform developer tool built with `GenericUI`, `:extensions:codeeditor`,
 
 ## Key `GenericUI` Features & Extensions Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `CodeEditorRegexFragment` (`@MainAppFragment`) and `CodeEditorRegexApp` (`@AppApplication` extending `FragmentApplication` with `TitleBar` and `MenuBar`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `CodeEditorRegexFragment` (`@MainAppFragment`) and `CodeEditorRegexApp` (`@AppApplication` extending `FragmentApplication` with `TitleBar`, `MenuBar`, `setTheme(ThemeMode.DARK)`, and `addStyleSheet(StylesPrecompiledStyleSheet)`).
+- **`getStyle()` & `getBootstrap()` Styling API**: Configures toolbar and code editor inline styles via `getStyle().apply { ... }` and updates regex match badge states via `getBootstrap()`.
 - **Multi-Language Syntax Highlighting (`IdeCodeEditor` & `CodeLanguage`)**: Live lexical syntax highlighting, line numbers, code folding (`{ ... }`), bracket matching, diagnostic squiggle underlines (`CodeDiagnostic`), and `CodeEditorTheme` switching (`DARK_IDE`, `DRACULA`, `MONOKAI`, `LIGHT_IDE`) across `KOTLIN`, `TYPESCRIPT`, `JAVASCRIPT`, `JSON`, `CSS`, `PYTHON`, `RUST`, `SQL`, and `MARKDOWN`.
 - **Live Regular Expression Playground**: Interactive regex pattern input (`#input-regex-pattern`), case-insensitive (`#check-ignore-case`) and multiline (`#check-multiline`) flags, match count badge (`#badge-match-count`), inline editor match diagnostics, and a structured capture-group extraction table (`#table-capture-groups` with `RegexMatchRecord`).
 - **Persistent Snippet Library (`PreferenceStore`)**: Built-in language presets plus custom code/regex snippet saving (`#btn-save-snippet`) and loading (`#btn-load-snippet`) backed by `PreferenceStore("CodeEditorRegexExample")` and `CodeSnippetPreset`.

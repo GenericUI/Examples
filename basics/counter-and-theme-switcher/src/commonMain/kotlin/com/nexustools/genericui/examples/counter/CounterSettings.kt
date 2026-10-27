@@ -12,7 +12,7 @@ import com.nexustools.genericui.enums.ui.ThemeMode
 data class CounterSettings(
     val count: Int = 0,
     val stepSize: Int = 1,
-    val themeModeName: String = "DARK",
+    val themeModeName: String = "AUTO",
     val themeColorHex: String = "#2563EB",
     val autoSave: Boolean = true
 ) : PreferenceSerializable {
@@ -26,14 +26,13 @@ data class CounterSettings(
     )
 
     fun resolvedThemeMode(): ThemeMode =
-        ThemeMode.entries.firstOrNull { it.name.equals(themeModeName, ignoreCase = true) }
-            ?: ThemeMode.DARK
+        ThemeMode.fromString(themeModeName)
 
     companion object {
         const val DEFAULT_STORE_NAME: String = "CounterThemeExample"
         const val SETTINGS_KEY: String = "counter_settings"
         val STEP_OPTIONS: List<String> = listOf("1", "5", "10")
-        val THEME_MODE_OPTIONS: List<String> = listOf("LIGHT", "DARK", "SYSTEM")
+        val THEME_MODE_OPTIONS: List<String> = listOf("AUTO", "LIGHT", "DARK")
         val ACCENT_COLOR_PRESETS: List<String> = listOf("#2563EB", "#10B981", "#8B5CF6")
 
         init {
@@ -49,13 +48,14 @@ data class CounterSettings(
         fun fromElementMap(fields: Map<String, PreferenceElement>): CounterSettings {
             val countVal = fields["count"]?.asInt(0) ?: 0
             val stepVal = (fields["stepSize"]?.asInt(1) ?: 1).coerceAtLeast(1)
-            val modeVal = fields["themeModeName"]?.asString("DARK") ?: "DARK"
+            val modeVal = fields["themeModeName"]?.asString("AUTO") ?: "AUTO"
             val colorVal = fields["themeColorHex"]?.asString("#2563EB") ?: "#2563EB"
             val autoSaveVal = fields["autoSave"]?.asBoolean(true) ?: true
+            val normalizedMode = ThemeMode.fromString(modeVal).name
             return CounterSettings(
                 count = countVal,
                 stepSize = stepVal,
-                themeModeName = modeVal.uppercase(),
+                themeModeName = normalizedMode,
                 themeColorHex = colorVal,
                 autoSave = autoSaveVal
             )

@@ -71,6 +71,7 @@ genericui {
         generateWebCss = true
         precompileToKotlin = true
         sourceDir = "src/commonMain/resources"
+        globalStyleSheet = "styles.scss"
         kotlinPackageName = "com.nexustools.genericui.examples.filterlab.styles"
     }
 }

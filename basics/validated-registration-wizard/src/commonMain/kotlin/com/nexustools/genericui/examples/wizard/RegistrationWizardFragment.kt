@@ -19,9 +19,13 @@ import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Heading
 import com.nexustools.genericui.component.typography.Text
+import com.nexustools.genericui.enums.bootstrap.BorderRadiusStyle
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FontWeight
+import com.nexustools.genericui.enums.bootstrap.ShadowElevation
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
+import com.nexustools.genericui.style.color.RgbaColor
 import kotlin.math.roundToInt
 
 /**
@@ -114,6 +118,9 @@ class RegistrationWizardFragment(
         step = 1.0
     ).apply {
         id = "slider-experience"
+        getStyle().apply {
+            accentColor = RgbaColor.fromHex("#10B981")
+        }
     }
 
     val experienceYearsBadge: Badge = Badge(
@@ -121,6 +128,10 @@ class RegistrationWizardFragment(
         type = BootstrapType.SECONDARY
     ).apply {
         id = "badge-experience-years"
+        getBootstrap().apply {
+            type = BootstrapType.SECONDARY
+            fontWeight = FontWeight.SEMIBOLD
+        }
     }
 
     // Step 3 controls
@@ -142,6 +153,9 @@ class RegistrationWizardFragment(
         checked = profile.acceptedTerms
     ).apply {
         id = "check-terms"
+        getStyle().apply {
+            accentColor = RgbaColor.fromHex("#10B981")
+        }
     }
 
     val submitButton: Button = Button(
@@ -150,6 +164,11 @@ class RegistrationWizardFragment(
         size = BootstrapSize.MD
     ).apply {
         id = "btn-submit"
+        getBootstrap().apply {
+            type = BootstrapType.SUCCESS
+            size = BootstrapSize.MD
+            fontWeight = FontWeight.SEMIBOLD
+        }
     }
 
     // Navigation buttons
@@ -159,6 +178,10 @@ class RegistrationWizardFragment(
         size = BootstrapSize.MD
     ).apply {
         id = "btn-back"
+        getBootstrap().apply {
+            type = BootstrapType.SECONDARY
+            size = BootstrapSize.MD
+        }
     }
 
     val nextButton: Button = Button(
@@ -167,21 +190,38 @@ class RegistrationWizardFragment(
         size = BootstrapSize.MD
     ).apply {
         id = "btn-next"
+        getBootstrap().apply {
+            type = BootstrapType.PRIMARY
+            size = BootstrapSize.MD
+            fontWeight = FontWeight.SEMIBOLD
+        }
     }
 
     val step1Panel: VStack = VStack(gap = SpacingScale.TWO).apply {
         id = "step-1-panel"
         addClass("wizard-step-panel")
+        getBootstrap().apply {
+            padding = SpacingScale.THREE
+            borderRadius = BorderRadiusStyle.MEDIUM
+        }
     }
 
     val step2Panel: VStack = VStack(gap = SpacingScale.TWO).apply {
         id = "step-2-panel"
         addClass("wizard-step-panel")
+        getBootstrap().apply {
+            padding = SpacingScale.THREE
+            borderRadius = BorderRadiusStyle.MEDIUM
+        }
     }
 
     val step3Panel: VStack = VStack(gap = SpacingScale.TWO).apply {
         id = "step-3-panel"
         addClass("wizard-step-panel")
+        getBootstrap().apply {
+            padding = SpacingScale.THREE
+            borderRadius = BorderRadiusStyle.MEDIUM
+        }
     }
 
     private var uiBuilt: Boolean = false
@@ -269,6 +309,11 @@ class RegistrationWizardFragment(
 
         val wizardCard = Card("Onboarding Steps").apply {
             addClass("wizard-card")
+            getBootstrap().apply {
+                borderRadius = BorderRadiusStyle.LARGE
+                shadow = ShadowElevation.SMALL
+                padding = SpacingScale.THREE
+            }
         }
         wizardCard.addChild(step1Panel)
         wizardCard.addChild(step2Panel)

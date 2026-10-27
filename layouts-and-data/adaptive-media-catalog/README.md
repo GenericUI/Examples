@@ -6,7 +6,8 @@ Demonstrates responsive 3-posture layout adaptation in `GenericUI` using `Adapti
 
 ## Key `GenericUI` APIs Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `AdaptiveMediaCatalogFragment` (`@MainAppFragment` extending `AdaptiveSplitTabFragment`) and `AdaptiveMediaCatalogApp` (`@AppApplication` extending `FragmentApplication`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `AdaptiveMediaCatalogFragment` (`@MainAppFragment` extending `AdaptiveSplitTabFragment`) and `AdaptiveMediaCatalogApp` (`@AppApplication` extending `FragmentApplication`) with `ThemeMode.AUTO` (`setTheme(ThemeMode.AUTO)`) and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
+- **`ComponentBootstrap` (`bootstrap { ... }`) & `ComponentStyle` (`style { ... }`)**: Uses `:extensions:dsl` `bootstrap { ... }` and `style { ... }` builders (`BootstrapType`, `BootstrapSize`, `BorderRadiusStyle`, `ShadowElevation`, `SpacingScale`, `FontWeight`, `accentColor`) with strict custom CSS class isolation.
 - **Adaptive Helper Fragment**: `AdaptiveSplitTabFragment`, `AdaptiveSplitTabFragment.LayoutMode`, `WindowConfiguration`, `setPrimaryView`, and `addTab`.
 - **Navigation & Surfaces**: `TabContainer` (`Channels`, `Queue`, `Details`), `Card`, `Badge`, `Button`, `Heading`, `Label`, `HStack`, and `VStack`.
 - **Posture Simulation & Testing**: Live switching between Desktop (`1280x800`), Phone Landscape (`800x390`), and Phone Portrait (`390x844`) postures verified with `JestElectricRunner` (`AdaptiveMediaCatalogJestTest.kt`).
@@ -60,6 +61,7 @@ genericui {
         icon = "src/commonMain/resources/icon.svg"
     }
     theme {
+        mode = "auto"
         color = "#7C3AED"
     }
     backends {

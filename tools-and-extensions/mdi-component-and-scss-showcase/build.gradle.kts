@@ -19,7 +19,9 @@ genericui {
         icon = "src/commonMain/resources/icon.svg"
     }
     theme {
+        mode = "auto"
         color = "#FF2A6D"
+        styleSheet = "styles.scss"
     }
     application {
         baseName = "MdiComponentAndScssShowcase"
@@ -69,6 +71,7 @@ genericui {
         generateWebCss = true
         precompileToKotlin = true
         sourceDir = "src/commonMain/resources"
+        globalStyleSheet = "styles.scss"
         kotlinPackageName = "com.nexustools.genericui.examples.mdishowcase.styles"
     }
 }

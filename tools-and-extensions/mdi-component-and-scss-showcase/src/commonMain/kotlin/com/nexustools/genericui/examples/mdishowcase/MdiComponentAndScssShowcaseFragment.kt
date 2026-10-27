@@ -113,6 +113,7 @@ import com.nexustools.genericui.component.surface.Accordion
 import com.nexustools.genericui.component.surface.AccordionItem
 import com.nexustools.genericui.component.surface.Card
 import com.nexustools.genericui.component.surface.CollapsiblePanel
+import com.nexustools.genericui.style.css.CssEdgeLengths
 import com.nexustools.genericui.component.surface.Jumbotron
 import com.nexustools.genericui.component.surface.ListGroup
 import com.nexustools.genericui.component.surface.ListGroupItem
@@ -518,6 +519,10 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
             addClass("outer-shell-topbar")
             alignItems = AlignItems.CENTER
             justifyContent = JustifyContent.BETWEEN
+            getStyle().apply {
+                padding = CssEdgeLengths.px(6, 12)
+                borderRadiusPx = 8f
+            }
         }
         val titleGroup = HStack(gap = SpacingScale.S2).apply {
             alignItems = AlignItems.CENTER
@@ -970,8 +975,8 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
 
         mainTabContainer.onTabEntrySelected = { entry ->
             activeMainTabBadge.text = entry.tab.title
-            switchPreviewTabButton.outline = (entry.id != "tab-mdi-preview")
-            switchScssTabButton.outline = (entry.id != "tab-scss-editor")
+            switchPreviewTabButton.getBootstrap().outline = (entry.id != "tab-mdi-preview")
+            switchScssTabButton.getBootstrap().outline = (entry.id != "tab-scss-editor")
         }
 
         presetRainbowButton.setOnClick { selectThemePreset(ScssThemePreset.RAINBOW_PRISM) }
@@ -1006,17 +1011,17 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
         mainTabContainer.setActiveTab(tabId)
         val tabTitle = mainTabContainer.getTab(tabId)?.title ?: tabId
         activeMainTabBadge.text = tabTitle
-        switchPreviewTabButton.outline = (tabId != "tab-mdi-preview")
-        switchScssTabButton.outline = (tabId != "tab-scss-editor")
+        switchPreviewTabButton.getBootstrap().outline = (tabId != "tab-mdi-preview")
+        switchScssTabButton.getBootstrap().outline = (tabId != "tab-scss-editor")
     }
 
     fun selectThemePreset(preset: ScssThemePreset): ScssCompileResult {
         activePreset = preset
-        presetRainbowButton.outline = (preset != ScssThemePreset.RAINBOW_PRISM)
-        presetCyberpunkButton.outline = (preset != ScssThemePreset.CYBERPUNK_NEON)
-        presetOceanButton.outline = (preset != ScssThemePreset.OCEAN_SLATE)
-        presetEmeraldButton.outline = (preset != ScssThemePreset.EMERALD_STUDIO)
-        presetSunsetButton.outline = (preset != ScssThemePreset.SUNSET_WARM)
+        presetRainbowButton.getBootstrap().outline = (preset != ScssThemePreset.RAINBOW_PRISM)
+        presetCyberpunkButton.getBootstrap().outline = (preset != ScssThemePreset.CYBERPUNK_NEON)
+        presetOceanButton.getBootstrap().outline = (preset != ScssThemePreset.OCEAN_SLATE)
+        presetEmeraldButton.getBootstrap().outline = (preset != ScssThemePreset.EMERALD_STUDIO)
+        presetSunsetButton.getBootstrap().outline = (preset != ScssThemePreset.SUNSET_WARM)
 
         scssEditor.setText(preset.scssSource)
         return applyScssSource(preset.scssSource)
@@ -1044,21 +1049,21 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
             val ruleCount = result.styleSheet.rules.size
             val varCount = result.variables.size
             scssStatusBadge.text = "SCSS Applied (Rev #${liveScssEngine.revisionCount})"
-            scssStatusBadge.type = BootstrapType.SUCCESS
+            scssStatusBadge.getBootstrap().type = BootstrapType.SUCCESS
             scssRulesBadge.text = "$ruleCount rules"
             scssVarsBadge.text = "$varCount vars"
             compiledCssPreviewLabel.text = result.compiledCss
         } else {
             val firstError = result.errors.firstOrNull()?.message ?: "Syntax error"
             scssStatusBadge.text = "SCSS Error: $firstError"
-            scssStatusBadge.type = BootstrapType.DANGER
+            scssStatusBadge.getBootstrap().type = BootstrapType.DANGER
         }
         return result
     }
 
     private fun syncEditorDiagnostics(errorCount: Int) {
         scssErrorCountBadge.text = "$errorCount errors"
-        scssErrorCountBadge.type = if (errorCount == 0) BootstrapType.SUCCESS else BootstrapType.DANGER
+        scssErrorCountBadge.getBootstrap().type = if (errorCount == 0) BootstrapType.SUCCESS else BootstrapType.DANGER
     }
 
     private fun formatScssSource(rawScss: String): String =

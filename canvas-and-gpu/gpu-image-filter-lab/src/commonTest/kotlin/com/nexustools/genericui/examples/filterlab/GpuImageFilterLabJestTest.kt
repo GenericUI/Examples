@@ -1,8 +1,11 @@
 package com.nexustools.genericui.examples.filterlab
 
+import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.css.CssCursor
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.math.abs
 import kotlin.test.Test
+import kotlin.test.assertTrue
 
 /**
  * Cross-platform unit and UI component tests for [GpuImageFilterLabApp] and
@@ -17,12 +20,16 @@ class GpuImageFilterLabJestTest {
             visualOnWindows = false
         ) {
             describe("Initial procedural image and histogram state") {
-                it("mounts controls and computes initial 256-bin histogram") {
+                it("mounts controls, verifies getStyle() and getBootstrap(), and computes initial 256-bin histogram") {
                     val controller = launchApp(visualOnWindows = false) { GpuImageFilterLabApp() }
                     val fragment = controller.app.filterLabFragment
 
                     expectNode(controller.findById("lbl-title")).toHaveText("GPU Image Filter Lab")
                     expectNode(controller.findById("badge-preset")).toHaveText("Preset: Default")
+                    expect(fragment.presetBadge.getBootstrap().type).toBe(BootstrapType.PRIMARY)
+                    expect(fragment.previewSurface.getStyle().getCursor()).toBe(CssCursor.CROSSHAIR)
+                    expect(fragment.previewSurface.getStyle().borderRadiusPx).toBe(8f)
+                    assertTrue(fragment.previewSurface.hasClass("filter-preview-canvas"))
                     expect(fragment.histogram.totalPixels).toBe(160 * 120)
                     expect(fragment.meanLuminance > 40f).toBe(true)
                 }
@@ -47,6 +54,9 @@ class GpuImageFilterLabJestTest {
 
                     controller.findById("btn-preset-noir").performClick()
                     expectNode(controller.findById("badge-preset")).toHaveText("Preset: Noir")
+                    expect(fragment.presetBadge.getBootstrap().type).toBe(BootstrapType.SECONDARY)
+                    expect(fragment.noirPresetButton.getBootstrap().outline).toBe(false)
+                    expect(fragment.vividPresetButton.getBootstrap().outline).toBe(true)
 
                     // Sample center pixel to verify R, G, B channels are equalized by saturation = 0
                     val cx = fragment.processedImage.width / 2

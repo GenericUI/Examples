@@ -1,6 +1,6 @@
 # Counter & Theme Switcher (`examples/basics/counter-and-theme-switcher`)
 
-A beginner-friendly **GenericUI** multiplatform example demonstrating reactive UI controls, Bootstrap contextual styling, runtime theme mode (`LIGHT`, `DARK`, `SYSTEM`) and accent `themeColor` switching, and cross-platform object persistence via `PreferenceStore` across all 8 backends.
+A beginner-friendly **GenericUI** multiplatform example demonstrating reactive UI controls, `ComponentBootstrap` (`getBootstrap()`) contextual styling, `ComponentStyle` (`getStyle()`) inline CSS properties, runtime theme mode (`AUTO`, `LIGHT`, `DARK`) and accent `themeColor` switching, and cross-platform object persistence via `PreferenceStore` across all 8 backends.
 
 ---
 
@@ -8,8 +8,8 @@ A beginner-friendly **GenericUI** multiplatform example demonstrating reactive U
 
 - **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `CounterFragment` (`@MainAppFragment`) and `CounterApp` (`@AppApplication` extending `FragmentApplication`) with `TitleBar`, `MenuBar`, and zero manual `main()` or per-backend bootstrap boilerplate.
 - **Core Widgets & Layouts**: `VStack`, `HStack`, `Card`, `Button`, `Badge`, `Select`, `SelectOption`, `Switch`, `Heading`, and `Text`.
-- **Bootstrap Styling & Precompiled SASS**: Uses `BootstrapType` (`PRIMARY`, `SECONDARY`, `DANGER`, `SUCCESS`, `INFO`, `WARNING`), `BootstrapSize`, `SpacingScale`, and build-time `styles.scss` precompilation (`StylesPrecompiledStyleSheet`).
-- **Runtime Theme & Accent Color Switching**: Updates `setThemeMode(...)` (`ThemeMode.LIGHT`, `ThemeMode.DARK`, `ThemeMode.SYSTEM`) and `setThemeColor(...)` (`#2563EB`, `#10B981`, `#8B5CF6`).
+- **`ComponentBootstrap` (`getBootstrap()`) & `ComponentStyle` (`getStyle()`)**: Uses strongly-typed `getBootstrap()` (`BootstrapType`, `BootstrapSize`, `SpacingScale`, `BorderRadiusStyle`, `ShadowElevation`, `FontWeight`), W3C `getStyle()` (`accentColor`, `fontSizePx`, `borderRadiusPx`), strict custom CSS class isolation (`addClass` / `hasClass` / `getClasses`), and build-time `styles.scss` precompilation (`StylesPrecompiledStyleSheet` via `addStyleSheet(...)`).
+- **Runtime Theme & Accent Color Switching**: Updates `setTheme(...)` / `getTheme()` / `getResolvedTheme()` (`ThemeMode.AUTO`, `ThemeMode.LIGHT`, `ThemeMode.DARK`) and `setThemeColor(...)` (`#2563EB`, `#10B981`, `#8B5CF6`).
 - **`PreferenceStore` Object Persistence**: Automatically serializes and restores `CounterSettings` (`PreferenceSerializable` + `PreferenceObjectCodec`) across all 8 backends.
 - **`JestElectricRunner` Test Suite**: Full BDD (`describe`, `it`, `expect`, `expectNode`) and Robolectric-style (`launchApp`, `launchFragment`, `findById`, `performClick`, `performSelectValue`, `performSetChecked`) UI test coverage in `CounterJestTest.kt`.
 
@@ -62,6 +62,7 @@ genericui {
         icon = "src/commonMain/resources/icon.svg"
     }
     theme {
+        mode = "auto"
         color = "#2563EB"
     }
     backends {

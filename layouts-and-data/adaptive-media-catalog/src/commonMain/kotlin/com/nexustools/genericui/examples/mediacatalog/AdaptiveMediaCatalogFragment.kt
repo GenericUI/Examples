@@ -11,9 +11,15 @@ import com.nexustools.genericui.component.surface.Card
 import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Heading
 import com.nexustools.genericui.component.typography.Label
+import com.nexustools.genericui.enums.bootstrap.BorderRadiusStyle
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FontWeight
+import com.nexustools.genericui.enums.bootstrap.ShadowElevation
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
+import com.nexustools.genericui.ext.dsl.bootstrap
+import com.nexustools.genericui.ext.dsl.style
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.window.WindowConfiguration
 
 /**
@@ -50,16 +56,29 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
 
     val desktopPostureButton: Button = Button("Desktop Split (1280x800)", BootstrapType.PRIMARY, BootstrapSize.SM).apply {
         id = "btn-posture-desktop"
+        bootstrap {
+            type = BootstrapType.PRIMARY
+            size = BootstrapSize.SM
+            fontWeight = FontWeight.SEMIBOLD
+        }
         onClick = { applyViewportPosture(1280, 800) }
     }
 
     val phoneLandscapePostureButton: Button = Button("Phone Landscape (800x390)", BootstrapType.SECONDARY, BootstrapSize.SM).apply {
         id = "btn-posture-phone-landscape"
+        bootstrap {
+            type = BootstrapType.SECONDARY
+            size = BootstrapSize.SM
+        }
         onClick = { applyViewportPosture(800, 390) }
     }
 
     val phonePortraitPostureButton: Button = Button("Phone Portrait (390x844)", BootstrapType.SECONDARY, BootstrapSize.SM).apply {
         id = "btn-posture-phone-portrait"
+        bootstrap {
+            type = BootstrapType.SECONDARY
+            size = BootstrapSize.SM
+        }
         onClick = { applyViewportPosture(390, 844) }
     }
 
@@ -97,6 +116,14 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
 
     val playPauseButton: Button = Button("Pause", BootstrapType.SUCCESS, BootstrapSize.SM).apply {
         id = "btn-transport-play-pause"
+        bootstrap {
+            type = BootstrapType.SUCCESS
+            size = BootstrapSize.SM
+            fontWeight = FontWeight.SEMIBOLD
+        }
+        style {
+            accentColor = RgbaColor.fromHex("#7C3AED")
+        }
         onClick = { togglePlayPause() }
     }
 
@@ -238,6 +265,10 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
 
         val postureToolbar = HStack(gap = SpacingScale.S2).apply {
             addClass("catalog-posture-bar")
+            bootstrap {
+                padding = SpacingScale.S2
+                borderRadius = BorderRadiusStyle.MEDIUM
+            }
             addChild(desktopPostureButton)
             addChild(phoneLandscapePostureButton)
             addChild(phonePortraitPostureButton)
@@ -246,6 +277,11 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
         }
 
         val nowPlayingCard = Card("Now Playing Viewport").apply {
+            bootstrap {
+                borderRadius = BorderRadiusStyle.LARGE
+                shadow = ShadowElevation.SMALL
+                padding = SpacingScale.S3
+            }
             val metaRow = HStack(gap = SpacingScale.S2).apply {
                 addChild(nowPlayingTitleLabel)
                 addChild(nowPlayingGenreBadge)
@@ -259,6 +295,10 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
 
         val transportBar = HStack(gap = SpacingScale.S2).apply {
             addClass("catalog-transport-bar")
+            bootstrap {
+                padding = SpacingScale.S2
+                borderRadius = BorderRadiusStyle.SMALL
+            }
             addChild(prevTrackButton)
             addChild(playPauseButton)
             addChild(nextTrackButton)
@@ -357,11 +397,11 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
         layoutModeBadge.text = modeName
         viewportSizeBadge.text = "${activeViewportConfig.widthPx}x${activeViewportConfig.heightPx}"
 
-        desktopPostureButton.type =
+        desktopPostureButton.getBootstrap().type =
             if (getActiveLayoutMode() == LayoutMode.TABLET_DESKTOP_COLUMNS) BootstrapType.PRIMARY else BootstrapType.SECONDARY
-        phoneLandscapePostureButton.type =
+        phoneLandscapePostureButton.getBootstrap().type =
             if (getActiveLayoutMode() == LayoutMode.PHONE_LANDSCAPE_FULLSCREEN) BootstrapType.PRIMARY else BootstrapType.SECONDARY
-        phonePortraitPostureButton.type =
+        phonePortraitPostureButton.getBootstrap().type =
             if (getActiveLayoutMode() == LayoutMode.PORTRAIT_SINGLE_FLOW_TABS) BootstrapType.PRIMARY else BootstrapType.SECONDARY
     }
 

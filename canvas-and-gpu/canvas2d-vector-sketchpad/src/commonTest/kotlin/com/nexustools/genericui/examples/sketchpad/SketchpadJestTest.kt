@@ -1,8 +1,12 @@
 package com.nexustools.genericui.examples.sketchpad
 
+import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.geometry.Point
+import com.nexustools.genericui.style.css.CssCustomCursor
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 /**
  * Cross-platform `JestElectricRunner` test suite for the Canvas2D Vector Sketchpad example.
@@ -16,7 +20,7 @@ class SketchpadJestTest {
             visualOnWindows = false
         ) {
             describe("Toolbar Tool Selection & Vector Shape Commands") {
-                it("switches between Freehand, Rectangle, Ellipse, Line, and Bezier Curve tools and adds shapes") {
+                it("switches between Freehand, Rectangle, Ellipse, Line, and Bezier Curve tools and updates CssCustomCursor and getBootstrap()") {
                     val controller = launchApp(visualOnWindows = false) { SketchpadApp() }
                     val fragment = controller.app.sketchpadFragment
 
@@ -24,6 +28,19 @@ class SketchpadJestTest {
                     expectNode(controller.findById("badge-shape-count")).toHaveText("Shapes: 0")
                     expectNode(controller.findById("btn-undo")).toBeDisabled()
                     expectNode(controller.findById("btn-redo")).toBeDisabled()
+
+                    // Verify initial custom SVG cursor and Bootstrap state
+                    val initialCursor = fragment.sketchCanvas.getStyle().getCursor() as? CssCustomCursor
+                    assertNotNull(initialCursor)
+                    expect(initialCursor.hotspotX).toBe(3)
+                    expect(initialCursor.hotspotY).toBe(21)
+                    val cursorBitmap = initialCursor.resolveToImageBuffer()
+                    assertNotNull(cursorBitmap)
+                    expect(cursorBitmap.width).toBe(24)
+                    expect(cursorBitmap.height).toBe(24)
+                    expect(fragment.freehandToolButton.getBootstrap().type).toBe(BootstrapType.PRIMARY)
+                    expect(fragment.rectToolButton.getBootstrap().type).toBe(BootstrapType.SECONDARY)
+                    assertTrue(fragment.sketchCanvas.hasClass("sketchpad-canvas"))
 
                     // Add a Freehand shape
                     controller.findById("btn-add-shape").performClick()
@@ -35,6 +52,12 @@ class SketchpadJestTest {
                     // Switch to Rectangle tool and add shape
                     controller.findById("btn-tool-rect").performClick()
                     expectNode(controller.findById("badge-active-tool")).toHaveText("Tool: RECTANGLE")
+                    expect(fragment.rectToolButton.getBootstrap().type).toBe(BootstrapType.PRIMARY)
+                    expect(fragment.freehandToolButton.getBootstrap().type).toBe(BootstrapType.SECONDARY)
+                    val rectCursor = fragment.sketchCanvas.getStyle().getCursor() as? CssCustomCursor
+                    assertNotNull(rectCursor)
+                    expect(rectCursor.hotspotX).toBe(12)
+                    expect(rectCursor.hotspotY).toBe(12)
                     controller.findById("btn-add-shape").performClick()
                     expect(fragment.commands.size).toBe(2)
                     expect(fragment.commands.last().type).toBe(SketchShapeType.RECTANGLE)

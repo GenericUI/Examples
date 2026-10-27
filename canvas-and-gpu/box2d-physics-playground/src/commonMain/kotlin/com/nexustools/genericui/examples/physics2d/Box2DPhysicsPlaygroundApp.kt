@@ -18,7 +18,8 @@ class Box2DPhysicsPlaygroundApp(
     initialThemeColor = "#10B981"
 ) {
     init {
-        setThemeMode(ThemeMode.DARK)
+        setTheme(ThemeMode.DARK)
+        addStyleSheet(StylesPrecompiledStyleSheet)
         val titleBar = TitleBar(
             embedMenuBar = false,
             showWindowTitle = true,

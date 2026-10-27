@@ -14,11 +14,17 @@ import com.nexustools.genericui.component.surface.Card
 import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Heading
 import com.nexustools.genericui.component.typography.Label
+import com.nexustools.genericui.enums.bootstrap.BorderRadiusStyle
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FontWeight
+import com.nexustools.genericui.enums.bootstrap.ShadowElevation
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.enums.dock.DockPosition
 import com.nexustools.genericui.enums.dock.StudioWindowMode
+import com.nexustools.genericui.ext.dsl.bootstrap
+import com.nexustools.genericui.ext.dsl.style
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.window.TitleBar
 
 /**
@@ -52,11 +58,23 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
 
     val newDocTabButton: Button = Button("New Document Tab", BootstrapType.PRIMARY, BootstrapSize.SM).apply {
         id = "btn-new-doc-tab"
+        bootstrap {
+            type = BootstrapType.PRIMARY
+            size = BootstrapSize.SM
+            fontWeight = FontWeight.SEMIBOLD
+        }
+        style {
+            accentColor = RgbaColor.fromHex("#0EA5E9")
+        }
         onClick = { createAndOpenNewDocument() }
     }
 
     val toggleWindowModeButton: Button = Button("Toggle Single/Multi Window", BootstrapType.INFO, BootstrapSize.SM).apply {
         id = "btn-toggle-window-mode"
+        bootstrap {
+            type = BootstrapType.INFO
+            size = BootstrapSize.SM
+        }
         onClick = {
             toggleWindowMode()
             syncStudioStatus()
@@ -65,11 +83,20 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
 
     val toggleHudOverlayButton: Button = Button("Toggle HUD Overlay", BootstrapType.WARNING, BootstrapSize.SM).apply {
         id = "btn-toggle-hud-overlay"
+        bootstrap {
+            type = BootstrapType.WARNING
+            size = BootstrapSize.SM
+        }
         onClick = { toggleHudOverlay() }
     }
 
     val closeActiveDocButton: Button = Button("Close Active Tab", BootstrapType.DANGER, BootstrapSize.SM, outline = true).apply {
         id = "btn-close-active-doc"
+        bootstrap {
+            type = BootstrapType.DANGER
+            size = BootstrapSize.SM
+            outline = true
+        }
         onClick = { closeActiveStudioDocument() }
     }
 
@@ -184,6 +211,10 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
         val studioToolbar = HStack(gap = SpacingScale.S2).apply {
             id = "studio-top-toolbar"
             addClass("studio-toolbar")
+            bootstrap {
+                padding = SpacingScale.S2
+                borderRadius = BorderRadiusStyle.SMALL
+            }
             addChild(Heading("Dock Workspace Studio", level = 5))
             addChild(newDocTabButton)
             addChild(closeActiveDocButton)
@@ -339,7 +370,7 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
         isHudOverlayVisible = !isHudOverlayVisible
         hudOverlayPanel.isVisible = isHudOverlayVisible
         hudStatusBadge.text = if (isHudOverlayVisible) "HUD: VISIBLE" else "HUD: HIDDEN"
-        hudStatusBadge.type = if (isHudOverlayVisible) BootstrapType.SUCCESS else BootstrapType.SECONDARY
+        hudStatusBadge.getBootstrap().type = if (isHudOverlayVisible) BootstrapType.SUCCESS else BootstrapType.SECONDARY
         logConsoleEvent("Floating HUD overlay visibility: $isHudOverlayVisible")
         return isHudOverlayVisible
     }
@@ -422,6 +453,11 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
             addClass("studio-doc-surface")
         }
         val card = Card(model.title).apply {
+            bootstrap {
+                borderRadius = BorderRadiusStyle.MEDIUM
+                shadow = ShadowElevation.SMALL
+                padding = SpacingScale.S2
+            }
             addChild(Label("Document ID: ${model.id}"))
             addChild(Label("Initial Layers: ${model.layerCount} | Initial Zoom: ${model.zoomPercent}%"))
             addChild(Label(model.notes))

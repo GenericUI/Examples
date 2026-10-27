@@ -1,7 +1,10 @@
 package com.nexustools.genericui.examples.counter
 
 import com.nexustools.genericui.component.system.PreferenceStore
+import com.nexustools.genericui.enums.bootstrap.BootstrapSize
+import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.enums.ui.ThemeMode
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
 
@@ -55,25 +58,46 @@ class CounterJestTest {
                     expectNode(controller.findById("counter-value-badge")).toHaveText("-10")
                 }
 
-                it("updates application theme mode and accent themeColor dynamically") {
+                it("updates application theme mode (AUTO, LIGHT, DARK) and accent themeColor dynamically") {
                     val store = PreferenceStore("CounterTestStore_3").apply { clear() }
                     val controller = launchApp(visualOnWindows = false) { CounterApp(store) }
 
-                    expect(controller.app.getThemeMode()).toBe(ThemeMode.DARK)
+                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(controller.app.getResolvedTheme().isAuto).toBe(false)
                     expect(controller.app.getThemeColor()).toBe("#2563EB")
 
                     controller.findById("select-theme-mode").performSelectValue("LIGHT")
-                    expect(controller.app.getThemeMode()).toBe(ThemeMode.LIGHT)
+                    expect(controller.app.getTheme()).toBe(ThemeMode.LIGHT)
+                    expect(controller.app.getResolvedTheme()).toBe(ThemeMode.LIGHT)
                     expectNode(controller.findById("badge-active-theme")).toContainText("LIGHT")
 
                     controller.findById("btn-color-emerald").performClick()
                     expect(controller.app.getThemeColor()).toBe("#10B981")
                     expectNode(controller.findById("badge-active-theme")).toContainText("#10B981")
 
-                    controller.findById("select-theme-mode").performSelectValue("SYSTEM")
+                    controller.findById("select-theme-mode").performSelectValue("DARK")
                     controller.findById("btn-color-purple").performClick()
-                    expect(controller.app.getThemeMode()).toBe(ThemeMode.SYSTEM)
+                    expect(controller.app.getTheme()).toBe(ThemeMode.DARK)
+                    expect(controller.app.getResolvedTheme()).toBe(ThemeMode.DARK)
                     expect(controller.app.getThemeColor()).toBe("#8B5CF6")
+
+                    controller.findById("select-theme-mode").performSelectValue("AUTO")
+                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                }
+
+                it("isolates ComponentBootstrap enum properties and ComponentStyle inline CSS from user-added custom classes") {
+                    val store = PreferenceStore("CounterTestStore_StyleIsolation").apply { clear() }
+                    val controller = launchApp(visualOnWindows = false) { CounterApp(store) }
+                    val fragment = controller.app.counterFragment
+
+                    expect(fragment.incrementButton.getBootstrap().type).toBe(BootstrapType.PRIMARY)
+                    expect(fragment.incrementButton.getBootstrap().size).toBe(BootstrapSize.MD)
+                    expect(fragment.incrementButton.hasClass("btn-primary")).toBe(false)
+                    expect(fragment.incrementButton.getClasses().isEmpty()).toBe(true)
+
+                    expect(fragment.counterValueBadge.hasClass("counter-badge")).toBe(true)
+                    expect(fragment.counterValueBadge.hasClass("badge")).toBe(false)
+                    expect(fragment.autoSaveSwitch.getStyle().accentColor).toBe(RgbaColor.fromHex("#2563EB"))
                 }
 
                 it("persists and restores CounterSettings across application restarts when auto-save is enabled") {

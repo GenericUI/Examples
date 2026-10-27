@@ -24,7 +24,9 @@ class RegistrationWizardApp(
 ) {
 
     init {
-        setThemeMode(ThemeMode.DARK)
+        setTheme(ThemeMode.AUTO)
+        setThemeColor("#10B981")
+        addStyleSheet(StylesPrecompiledStyleSheet)
         val titleBar = TitleBar(
             embedMenuBar = true,
             showWindowTitle = true,

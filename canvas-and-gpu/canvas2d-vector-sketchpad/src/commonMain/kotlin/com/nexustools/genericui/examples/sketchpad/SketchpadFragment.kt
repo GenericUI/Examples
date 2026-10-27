@@ -31,6 +31,8 @@ import com.nexustools.genericui.ext.dsl.vstack
 import com.nexustools.genericui.geometry.Point
 import com.nexustools.genericui.image.ImageBuffer
 import com.nexustools.genericui.style.RgbaColor
+import com.nexustools.genericui.enums.css.CssCursor
+import com.nexustools.genericui.style.css.CssCustomCursor
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.hypot
@@ -243,6 +245,10 @@ class SketchpadFragment : Fragment() {
                             self.renderSketchpadScene(ctx)
                         }
                     ) {
+                        getStyle().apply {
+                            setCursor(self.toolCursorFor(self.activeTool))
+                            borderRadiusPx = 8f
+                        }
                         onPointerDown = { ev -> self.handlePointerDown(ev) }
                         onPointerMove = { ev -> self.handlePointerMove(ev) }
                         onPointerUp = { ev -> self.handlePointerUp(ev) }
@@ -301,7 +307,54 @@ class SketchpadFragment : Fragment() {
     }
 
     /**
-     * Switches the active drawing tool and updates toolbar button visual states.
+     * Builds a custom SVG tool cursor ([CssCustomCursor]) for the specified [tool].
+     */
+    fun toolCursorFor(tool: SketchShapeType): CssCustomCursor = when (tool) {
+        SketchShapeType.FREEHAND -> CssCustomCursor.fromSvg(
+            svgMarkup = """<svg viewBox="0 0 24 24"><line x1="3" y1="21" x2="18" y2="6" stroke="#38BDF8" stroke-width="2"/><circle cx="3" cy="21" r="2" fill="#38BDF8"/></svg>""",
+            widthPx = 24,
+            heightPx = 24,
+            hotspotX = 3,
+            hotspotY = 21,
+            fallback = CssCursor.CROSSHAIR
+        )
+        SketchShapeType.RECTANGLE -> CssCustomCursor.fromSvg(
+            svgMarkup = """<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" stroke="#A855F7" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="2" fill="#A855F7"/></svg>""",
+            widthPx = 24,
+            heightPx = 24,
+            hotspotX = 12,
+            hotspotY = 12,
+            fallback = CssCursor.CROSSHAIR
+        )
+        SketchShapeType.ELLIPSE -> CssCustomCursor.fromSvg(
+            svgMarkup = """<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" stroke="#10B981" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="2" fill="#10B981"/></svg>""",
+            widthPx = 24,
+            heightPx = 24,
+            hotspotX = 12,
+            hotspotY = 12,
+            fallback = CssCursor.CROSSHAIR
+        )
+        SketchShapeType.LINE -> CssCustomCursor.fromSvg(
+            svgMarkup = """<svg viewBox="0 0 24 24"><line x1="4" y1="20" x2="20" y2="4" stroke="#F59E0B" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#F59E0B"/></svg>""",
+            widthPx = 24,
+            heightPx = 24,
+            hotspotX = 12,
+            hotspotY = 12,
+            fallback = CssCursor.CROSSHAIR
+        )
+        SketchShapeType.BEZIER_CURVE -> CssCustomCursor.fromSvg(
+            svgMarkup = """<svg viewBox="0 0 24 24"><path d="M 4 18 C 8 4 16 20 20 6" stroke="#EC4899" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="2" fill="#EC4899"/></svg>""",
+            widthPx = 24,
+            heightPx = 24,
+            hotspotX = 12,
+            hotspotY = 12,
+            fallback = CssCursor.CROSSHAIR
+        )
+    }
+
+    /**
+     * Switches the active drawing tool, updates toolbar button `getBootstrap()` visual states,
+     * and applies a custom SVG tool cursor ([CssCustomCursor]) to [sketchCanvas] via `getStyle().setCursor(...)`.
      */
     fun selectTool(tool: SketchShapeType) {
         activeTool = tool
@@ -314,8 +367,13 @@ class SketchpadFragment : Fragment() {
         )
         for ((shapeType, btn) in buttonMap) {
             val isSelected = shapeType == tool
-            btn.type = if (isSelected) BootstrapType.PRIMARY else BootstrapType.SECONDARY
-            btn.outline = !isSelected
+            btn.getBootstrap().apply {
+                type = if (isSelected) BootstrapType.PRIMARY else BootstrapType.SECONDARY
+                outline = !isSelected
+            }
+        }
+        if (::sketchCanvas.isInitialized) {
+            sketchCanvas.getStyle().setCursor(toolCursorFor(tool))
         }
         statusLabel.text = "Selected tool: ${tool.displayName}"
         syncStatusControls()

@@ -2,6 +2,10 @@ package com.nexustools.genericui.examples.notes
 
 import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.component.typography.MarkdownView
+import com.nexustools.genericui.enums.bootstrap.BootstrapSize
+import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.ui.ThemeMode
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
 
@@ -46,6 +50,16 @@ class NotesJestTest {
 
                     // PreferenceChangeListener badge should reflect recent key change
                     expectNode(controller.findById("badge-last-change")).toContainText("Pref changed:")
+
+                    // Verify ComponentBootstrap, ComponentStyle, and strict CSS class isolation
+                    val fragment = controller.app.notesFragment
+                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(fragment.newNoteButton.getBootstrap().type).toBe(BootstrapType.PRIMARY)
+                    expect(fragment.newNoteButton.getBootstrap().size).toBe(BootstrapSize.SM)
+                    expect(fragment.newNoteButton.hasClass("btn-primary")).toBe(false)
+                    expect(fragment.restoreNoteButton.getBootstrap().outline).toBe(true)
+                    expect(fragment.pinNoteCheckBox.getStyle().accentColor).toBe(RgbaColor.fromHex("#8B5CF6"))
+                    expect(fragment.hasClass("notes-shell")).toBe(true)
 
                     controller.destroy()
                 }

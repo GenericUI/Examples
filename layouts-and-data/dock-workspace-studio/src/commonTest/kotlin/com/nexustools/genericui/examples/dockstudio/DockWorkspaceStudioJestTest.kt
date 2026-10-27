@@ -1,7 +1,11 @@
 package com.nexustools.genericui.examples.dockstudio
 
+import com.nexustools.genericui.enums.bootstrap.BootstrapSize
+import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.enums.dock.DockPosition
 import com.nexustools.genericui.enums.dock.StudioWindowMode
+import com.nexustools.genericui.enums.ui.ThemeMode
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
 
@@ -119,6 +123,14 @@ class DockWorkspaceStudioJestTest {
                     expect(fragment.isHudOverlayVisible).toBe(true)
                     expectComponent(fragment.hudOverlayPanel).toBeVisible()
                     expectNode(controller.findById("badge-hud-status")).toHaveText("HUD: VISIBLE")
+
+                    // Verify ComponentBootstrap, ComponentStyle, and strict CSS class isolation
+                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(fragment.newDocTabButton.getBootstrap().type).toBe(BootstrapType.PRIMARY)
+                    expect(fragment.newDocTabButton.getBootstrap().size).toBe(BootstrapSize.SM)
+                    expect(fragment.newDocTabButton.hasClass("btn-primary")).toBe(false)
+                    expect(fragment.closeActiveDocButton.getBootstrap().outline).toBe(true)
+                    expect(fragment.newDocTabButton.getStyle().accentColor).toBe(RgbaColor.fromHex("#0EA5E9"))
                 }
             }
         }

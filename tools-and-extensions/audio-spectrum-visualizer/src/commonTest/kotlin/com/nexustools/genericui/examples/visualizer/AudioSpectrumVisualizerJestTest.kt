@@ -1,11 +1,14 @@
 package com.nexustools.genericui.examples.visualizer
 
 import com.nexustools.genericui.component.media.WebVttSrtParser
+import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.enums.media.AudioCodec
 import com.nexustools.genericui.enums.media.MediaContainer
 import com.nexustools.genericui.enums.media.VideoCodec
+import com.nexustools.genericui.enums.css.CssCursor
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
+import kotlin.test.assertTrue
 
 /**
  * Cross-platform [JestElectricRunner] BDD & Robolectric UI test suite for `audio-spectrum-visualizer`.
@@ -20,11 +23,15 @@ class AudioSpectrumVisualizerJestTest {
         ) {
             describe("MediaCapabilitiesReport, Transport Controls, FFT Energy Bands & WebVTT Subtitles") {
 
-                it("populates MediaCapabilitiesReport hardware/software codec table on launch") {
+                it("populates MediaCapabilitiesReport hardware/software codec table on launch and verifies getStyle() / getBootstrap()") {
                     val controller = launchFragment {
                         AudioSpectrumVisualizerFragment()
                     }
 
+                    assertTrue(controller.fragment.hasClass("visualizer-root"))
+                    expect(controller.fragment.topToolbar.getStyle().borderRadiusPx).toBe(8f)
+                    expect(controller.fragment.visualizerCanvas.getStyle().getCursor()).toBe(CssCursor.CROSSHAIR)
+                    expect(controller.fragment.playPauseButton.getBootstrap().type).toBe(BootstrapType.SUCCESS)
                     val caps = controller.fragment.mediaCapabilities
                     expect(caps.isHardwareAccelerated(VideoCodec.H264)).toBe(true)
                     expect(caps.isHardwareAccelerated(VideoCodec.HEVC)).toBe(true)

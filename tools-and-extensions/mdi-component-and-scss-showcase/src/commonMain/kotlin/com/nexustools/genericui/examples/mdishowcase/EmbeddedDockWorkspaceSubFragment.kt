@@ -238,6 +238,8 @@ class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
 
     private fun syncBadges() {
         windowModeBadge.text = windowMode.name
+        windowModeBadge.getBootstrap().type =
+            if (windowMode == StudioWindowMode.SINGLE_WINDOW_MODE) BootstrapType.PRIMARY else BootstrapType.WARNING
         tabCountBadge.text = "${documents.size} tabs"
     }
 }

@@ -9,7 +9,10 @@ A multiplatform showcase and live theme studio built with `GenericUI`, `:extensi
 - **Annotation-Driven Entry Point & Fragment Hierarchy (`@MainAppFragment`, `@AppFragment`, & `@AppApplication`)**:
   - `MdiComponentAndScssShowcaseFragment` (`@MainAppFragment`) hosts the main 2-tab MDI & SCSS studio.
   - `EmbeddedDockWorkspaceSubFragment` (`@AppFragment` extending `DockWorkspaceFragment`) is embedded inside MDI Window #6 and automatically gets its own generated `EmbeddedDockWorkspaceSubFragmentActivity` on Android.
-  - `MdiComponentAndScssShowcaseApp` (`@AppApplication` extending `FragmentApplication`) configures the outer `TitleBar`, `MenuBar`, and precompiled stylesheet.
+  - `MdiComponentAndScssShowcaseApp` (`@AppApplication` extending `FragmentApplication`) configures the outer `TitleBar`, `MenuBar`, `ThemeMode.AUTO` (`setTheme` / `getTheme` / `getResolvedTheme`), and precompiled stylesheet (`addStyleSheet(StylesPrecompiledStyleSheet)` / `removeStyleSheet(...)`).
+- **Precompiled `.scss` Stylesheets, `getStyle()`, & `getBootstrap()`**:
+  - Compiles `src/commonMain/resources/styles.scss` at build time into `StylesPrecompiledStyleSheet` via `styles { compileSass = true; precompileToKotlin = true; generateWebCss = true; globalStyleSheet = "styles.scss" }`.
+  - Uses `getStyle()` and `getBootstrap()` to manage inline CSS properties and Bootstrap button/badge states.
 - **Multi-Document Interface (`MdiContainer` & `MdiWindow`)**: Interactive desktop workspace (`#showcase-mdi-container`) with cascade, tile grid, minimize, maximize, restore, and taskbar strip controls hosting **6 category `MdiWindow`s**:
   1. **HTML Compat & Typography (`#mdi-win-htmlcompat`)**: Semantic HTML5 wrapper components (`Header`, `Footer`, `Main`, `Section`, `Article`, `Aside`, `Div`, `Span`, `H1`..`H6`, `P`, `A`, `Strong`, `B`, `Em`, `I`, `Small`, `Sup`, `Sub`, `Pre`, `Code`, `Blockquote`, `Ul`, `Ol`, `Li`, `Figure`, `Figcaption`, `Details`, `Summary`, `Hr`, `Br`).
   2. **Actions, Buttons & Navigation (`#mdi-win-actions-nav`)**: Standard Bootstrap `<button>` (`Button.htmlTag == "button"`), `IconButton`, `ToggleButton`, `DropdownButton`, `SplitDropdownButton`, `FloatingActionButton`, `ButtonGroup`, `Toolbar`, `MenuBar` (`genericui:menubar`), `Navbar`, `Nav`, `Breadcrumb`, `Pagination`, `Stepper`, and `BottomNavigationBar`.

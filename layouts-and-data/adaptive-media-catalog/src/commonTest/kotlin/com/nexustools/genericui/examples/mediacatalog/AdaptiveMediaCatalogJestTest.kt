@@ -1,6 +1,10 @@
 package com.nexustools.genericui.examples.mediacatalog
 
 import com.nexustools.genericui.component.fragment.helper.AdaptiveSplitTabFragment
+import com.nexustools.genericui.enums.bootstrap.BootstrapSize
+import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.ui.ThemeMode
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
 
@@ -110,6 +114,13 @@ class AdaptiveMediaCatalogJestTest {
                     expect(fragment.playbackQueue.size).toBe(0)
                     expectNode(controller.findById("badge-queue-count")).toHaveText("Queue: 0")
                     expectNode(controller.findById("label-queue-summary")).toHaveText("Queue is empty")
+
+                    // Verify ComponentBootstrap, ComponentStyle, and strict CSS class isolation
+                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(fragment.desktopPostureButton.getBootstrap().type).toBe(BootstrapType.PRIMARY)
+                    expect(fragment.desktopPostureButton.getBootstrap().size).toBe(BootstrapSize.SM)
+                    expect(fragment.desktopPostureButton.hasClass("btn-primary")).toBe(false)
+                    expect(fragment.playPauseButton.getStyle().accentColor).toBe(RgbaColor.fromHex("#7C3AED"))
                 }
             }
         }

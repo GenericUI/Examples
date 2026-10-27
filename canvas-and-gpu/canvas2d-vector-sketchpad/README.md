@@ -6,11 +6,12 @@ Interactive 2D vector drawing and cubic-Bezier curve sketchpad demonstrating `:e
 
 ## Key `GenericUI` APIs Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `SketchpadFragment` (`@MainAppFragment`) and `SketchpadApp` (`@AppApplication` extending `FragmentApplication`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `SketchpadFragment` (`@MainAppFragment`) and `SketchpadApp` (`@AppApplication` extending `FragmentApplication` with `setTheme(ThemeMode.DARK)` and `addStyleSheet(StylesPrecompiledStyleSheet)`).
+- **Custom SVG Tool Cursors (`CssCustomCursor`) & `getStyle()` / `getBootstrap()`**: Dynamic tool-specific cursors built with `CssCustomCursor.fromSvg(...)` (with custom hotspot coordinates and `CssCursor.CROSSHAIR` fallback) applied via `sketchCanvas.getStyle().setCursor(...)`, and active tool button state updates via `btn.getBootstrap().apply { type = ...; outline = ... }`.
 - **`:extensions:canvas2d` (`Canvas2DExtSurface` & `CurveEditorExt`)**: Immediate-mode 2D vector drawing (`beginPath`, `moveTo`, `lineTo`, `bezierCurveTo`, `arc`, `fillRect`, `strokeRect`) and interactive cubic-Bezier curve editing (`sampleCurveY`).
 - **Hardware VBlank Rendering**: Frame-accurate rendering loop tracking `deltaMs` and VBlank frame counters (`badge-vblank-frames`).
 - **Form & Action Controls**: Tool switcher `Button`s (`Freehand`, `Rectangle`, `Ellipse`, `Line`, `Bezier Curve` via `SketchShapeType`), stroke width `RangeSlider` (`slider-stroke-width`), `ColorPicker` (`picker-stroke-color`), Undo/Redo history stack, and PNG export (`Dialogs.saveFile`).
-- **`JestElectricRunner` Test Suite**: Automated vector drawing, undo/redo, and UI tests in `SketchpadJestTest.kt`.
+- **`JestElectricRunner` Test Suite**: Automated vector drawing, custom cursor rasterization (`resolveToImageBuffer()`), `getBootstrap()`, undo/redo, and UI tests in `SketchpadJestTest.kt`.
 
 ---
 

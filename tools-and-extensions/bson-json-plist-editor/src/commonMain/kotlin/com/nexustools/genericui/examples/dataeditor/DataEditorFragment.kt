@@ -31,6 +31,7 @@ import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
+import com.nexustools.genericui.style.css.CssEdgeLengths
 
 /**
  * Visual multi-tab document editor [Fragment] for `.json` (JSON), `.bson` ([com.nexustools.genericui.util.BinaryJson]),
@@ -231,6 +232,10 @@ class DataEditorFragment(
         val rootStack = VStack(gap = SpacingScale.S2)
 
         // 1. Top Toolbar
+        topToolbar.getStyle().apply {
+            padding = CssEdgeLengths.px(4, 8)
+            borderRadiusPx = 6f
+        }
         val toolbarRow = HStack(gap = SpacingScale.S1)
         toolbarRow.addClass("editor-toolbar")
         toolbarRow.addChild(newJsonTabButton)
@@ -301,6 +306,9 @@ class DataEditorFragment(
 
         // 6. Status Bar
         statusBar.addClass("status-bar")
+        statusBar.getStyle().apply {
+            padding = "4px 8px"
+        }
         val statusRow = HStack(gap = SpacingScale.S2)
         statusRow.addChild(Label("Selected:"))
         statusRow.addChild(selectedPathBadge)
@@ -1233,7 +1241,7 @@ class DataEditorFragment(
 
         selectedPathBadge.text = path
         selectedTypeBadge.text = selected.valueType.badgeLabel
-        selectedTypeBadge.type = badgeTypeForValueType(selected.valueType)
+        selectedTypeBadge.getBootstrap().type = badgeTypeForValueType(selected.valueType)
 
         nodeKeyField.value = selected.keyOrIndex
         val canRenameKey = parent != null &&
@@ -1324,11 +1332,14 @@ class DataEditorFragment(
 
     private fun refreshFormatComparisonCard(tab: DataDocumentTabState) {
         activeFormatBadge.text = tab.format.shortBadge
-        activeFormatBadge.type = when (tab.format) {
+        activeFormatBadge.getBootstrap().type = when (tab.format) {
             DataFormat.JSON -> BootstrapType.PRIMARY
             DataFormat.BINARY_JSON_BSON -> BootstrapType.INFO
             DataFormat.BINARY_PLIST -> BootstrapType.SUCCESS
         }
+        convertToJsonButton.getBootstrap().outline = (tab.format != DataFormat.JSON)
+        convertToBsonButton.getBootstrap().outline = (tab.format != DataFormat.BINARY_JSON_BSON)
+        convertToPlistButton.getBootstrap().outline = (tab.format != DataFormat.BINARY_PLIST)
         formatSelector.selectedValue = tab.format.name
 
         val element = tab.toPreferenceElement()

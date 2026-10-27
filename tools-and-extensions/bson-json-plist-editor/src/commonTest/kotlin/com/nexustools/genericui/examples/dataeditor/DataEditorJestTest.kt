@@ -1,8 +1,11 @@
 package com.nexustools.genericui.examples.dataeditor
 
 import com.nexustools.genericui.component.system.PreferenceStore
+import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.examples.dataeditor.styles.StylesPrecompiledStyleSheet
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
+import kotlin.test.assertTrue
 
 class DataEditorJestTest {
 
@@ -13,12 +16,19 @@ class DataEditorJestTest {
             visualOnWindows = false
         ) {
             describe("Visual Multi-Tab Document Lifecycle & LazyGridTree Node Editing") {
-                test("launches DataEditorApp and verifies initial LazyGridTree and tab state") {
+                test("launches DataEditorApp and verifies initial LazyGridTree, getStyle(), getBootstrap(), and tab state") {
                     val controller = launchApp(visualOnWindows = false) { DataEditorApp() }.setup()
-                    expect(controller.app.fragment.openTabs.size).toBe(1)
-                    expect(controller.app.fragment.activeFormatBadge.text).toBe("JSON")
-                    expect(controller.app.fragment.documentGridTree.columns).toBe(4)
-                    expect(controller.app.fragment.documentGridTree.visibleRowCount).toBeGreaterThan(1)
+                    val frag = controller.app.fragment
+                    assertTrue(controller.app.hasStyleSheet(StylesPrecompiledStyleSheet))
+                    assertTrue(frag.hasClass("data-editor-root"))
+                    expect(frag.topToolbar.getStyle().borderRadiusPx).toBe(6f)
+                    expect(frag.openTabs.size).toBe(1)
+                    expect(frag.activeFormatBadge.text).toBe("JSON")
+                    expect(frag.activeFormatBadge.getBootstrap().type).toBe(BootstrapType.PRIMARY)
+                    expect(frag.convertToJsonButton.getBootstrap().outline).toBe(false)
+                    expect(frag.convertToBsonButton.getBootstrap().outline).toBe(true)
+                    expect(frag.documentGridTree.columns).toBe(4)
+                    expect(frag.documentGridTree.visibleRowCount).toBeGreaterThan(1)
                     controller.destroy()
                 }
 
@@ -57,9 +67,13 @@ class DataEditorJestTest {
 
                     frag.convertActiveTabFormat(DataFormat.BINARY_JSON_BSON)
                     expect(frag.activeFormatBadge.text).toBe("BSON")
+                    expect(frag.activeFormatBadge.getBootstrap().type).toBe(BootstrapType.INFO)
+                    expect(frag.convertToBsonButton.getBootstrap().outline).toBe(false)
 
                     frag.convertActiveTabFormat(DataFormat.BINARY_PLIST)
                     expect(frag.activeFormatBadge.text).toBe("PLIST")
+                    expect(frag.activeFormatBadge.getBootstrap().type).toBe(BootstrapType.SUCCESS)
+                    expect(frag.convertToPlistButton.getBootstrap().outline).toBe(false)
 
                     controller.destroy()
                 }

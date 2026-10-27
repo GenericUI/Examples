@@ -19,10 +19,16 @@ import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Heading
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.core.AbstractComponent
+import com.nexustools.genericui.enums.bootstrap.BorderRadiusStyle
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FontWeight
+import com.nexustools.genericui.enums.bootstrap.ShadowElevation
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.enums.ui.Orientation
+import com.nexustools.genericui.ext.dsl.bootstrap
+import com.nexustools.genericui.ext.dsl.style
+import com.nexustools.genericui.style.color.RgbaColor
 
 /**
  * Primary [Fragment] for the Virtualized Data Explorer example.
@@ -61,16 +67,32 @@ class VirtualizedDataExplorerFragment(
 
     val modeListButton: Button = Button("List View", BootstrapType.PRIMARY, BootstrapSize.SM).apply {
         id = "btn-mode-list"
+        bootstrap {
+            type = BootstrapType.PRIMARY
+            size = BootstrapSize.SM
+            fontWeight = FontWeight.SEMIBOLD
+        }
+        style {
+            accentColor = RgbaColor.fromHex("#2563EB")
+        }
         onClick = { switchViewMode(ExplorerViewMode.LIST) }
     }
 
     val modeGridButton: Button = Button("Grid View", BootstrapType.SECONDARY, BootstrapSize.SM).apply {
         id = "btn-mode-grid"
+        bootstrap {
+            type = BootstrapType.SECONDARY
+            size = BootstrapSize.SM
+        }
         onClick = { switchViewMode(ExplorerViewMode.GRID) }
     }
 
     val modeTreeButton: Button = Button("Tree View", BootstrapType.SECONDARY, BootstrapSize.SM).apply {
         id = "btn-mode-tree"
+        bootstrap {
+            type = BootstrapType.SECONDARY
+            size = BootstrapSize.SM
+        }
         onClick = { switchViewMode(ExplorerViewMode.TREE) }
     }
 
@@ -186,6 +208,10 @@ class VirtualizedDataExplorerFragment(
 
         val controlsBar = HStack(gap = SpacingScale.S2).apply {
             addClass("explorer-toolbar")
+            bootstrap {
+                padding = SpacingScale.S2
+                borderRadius = BorderRadiusStyle.MEDIUM
+            }
             addChild(modeListButton)
             addChild(modeGridButton)
             addChild(modeTreeButton)
@@ -199,6 +225,10 @@ class VirtualizedDataExplorerFragment(
 
         val telemetryBar = HStack(gap = SpacingScale.S2).apply {
             addClass("explorer-telemetry-bar")
+            bootstrap {
+                padding = SpacingScale.S2
+                borderRadius = BorderRadiusStyle.SMALL
+            }
             addChild(totalItemsBadge)
             addChild(activeWindowBadge)
             addChild(recycleStatsBadge)
@@ -206,6 +236,11 @@ class VirtualizedDataExplorerFragment(
         }
 
         val viewportCard = Card("Active Virtualized Viewport").apply {
+            bootstrap {
+                borderRadius = BorderRadiusStyle.LARGE
+                shadow = ShadowElevation.SMALL
+                padding = SpacingScale.S2
+            }
             addChild(lazyList)
             addChild(lazyGrid)
             addChild(treeView)
@@ -229,9 +264,9 @@ class VirtualizedDataExplorerFragment(
         lazyGrid.isVisible = (mode == ExplorerViewMode.GRID)
         treeView.isVisible = (mode == ExplorerViewMode.TREE)
 
-        modeListButton.type = if (mode == ExplorerViewMode.LIST) BootstrapType.PRIMARY else BootstrapType.SECONDARY
-        modeGridButton.type = if (mode == ExplorerViewMode.GRID) BootstrapType.PRIMARY else BootstrapType.SECONDARY
-        modeTreeButton.type = if (mode == ExplorerViewMode.TREE) BootstrapType.PRIMARY else BootstrapType.SECONDARY
+        modeListButton.getBootstrap().type = if (mode == ExplorerViewMode.LIST) BootstrapType.PRIMARY else BootstrapType.SECONDARY
+        modeGridButton.getBootstrap().type = if (mode == ExplorerViewMode.GRID) BootstrapType.PRIMARY else BootstrapType.SECONDARY
+        modeTreeButton.getBootstrap().type = if (mode == ExplorerViewMode.TREE) BootstrapType.PRIMARY else BootstrapType.SECONDARY
         activeModeBadge.text = "Mode: ${mode.name}"
 
         activeWindow = when (mode) {

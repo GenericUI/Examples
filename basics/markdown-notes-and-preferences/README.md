@@ -6,7 +6,8 @@ A two-pane Markdown note manager demonstrating structured object persistence in 
 
 ## Key `GenericUI` APIs Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `NotesFragment` (`@MainAppFragment`) and `NotesApp` (`@AppApplication` extending `FragmentApplication`) in a single shared `src/commonMain/kotlin` source set.
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `NotesFragment` (`@MainAppFragment`) and `NotesApp` (`@AppApplication` extending `FragmentApplication`) with `ThemeMode.AUTO` (`setTheme(ThemeMode.AUTO)`) and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
+- **`ComponentBootstrap` (`getBootstrap()`) & `ComponentStyle` (`getStyle()`)**: Uses strongly-typed `getBootstrap()` (`BootstrapType`, `BootstrapSize`, `BorderRadiusStyle`, `ShadowElevation`, `SpacingScale`, `FontWeight`) and W3C `getStyle()` (`accentColor` on `CheckBox`) with strict user-added CSS class isolation.
 - **Two-Pane Shell & Surface Components**: `SplitPane` (`Orientation.HORIZONTAL`), `Card`, `ListGroup`, and `ListGroupItem`.
 - **Form & Typography Controls**: `SearchField`, `TextField`, `TextArea`, `CheckBox`, `Badge`, `Heading`, `Text`, and `MarkdownView`.
 - **Native File Browser Dialogs**: `Dialogs.openFile` and `Dialogs.saveFile` with `FileTypeFilter`.
@@ -62,6 +63,7 @@ genericui {
         icon = "src/commonMain/resources/icon.svg"
     }
     theme {
+        mode = "auto"
         color = "#8B5CF6"
     }
     backends {

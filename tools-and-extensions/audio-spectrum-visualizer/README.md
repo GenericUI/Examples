@@ -6,7 +6,8 @@ A multiplatform media and visualization showcase built with `GenericUI`, `:exten
 
 ## Key `GenericUI` Features & Extensions Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `AudioSpectrumVisualizerFragment` (`@MainAppFragment`) and `AudioSpectrumVisualizerApp` (`@AppApplication` extending `FragmentApplication` with `TitleBar` and `MenuBar`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `AudioSpectrumVisualizerFragment` (`@MainAppFragment`) and `AudioSpectrumVisualizerApp` (`@AppApplication` extending `FragmentApplication` with `TitleBar`, `MenuBar`, `setTheme(ThemeMode.DARK)`, and `addStyleSheet(StylesPrecompiledStyleSheet)`).
+- **`getStyle()` & `getBootstrap()` Styling API**: Configures transport toolbar and spectrum canvas inline styles (`getStyle().apply { borderRadius = "8px"; setCursor(CssCursor.CROSSHAIR) }`) and updates transport button and subtitle/energy badge Bootstrap states via `getBootstrap()`.
 - **Real-Time FFT Spectrum & `AudioEnergyBands` Telemetry (`AudioPlayerExt` & `AudioAnalyzerExt`)**: Synthesizes multi-harmonic test chords (`#btn-synth-chord`), extracts 64-band FFT frequency bins and time-domain waveforms, and drives live Bass (`#badge-bass`), Midrange (`#badge-mid`), Treble (`#badge-treble`), and RMS/Peak Beat (`#badge-rms`) meters.
 - **3 Interactive `Canvas2DExtSurface` Visualizer Modes (`VisualizerDisplayMode`)**:
   - `FFT_SPECTRUM_BARS`: 64-band color-graded logarithmic frequency bars.

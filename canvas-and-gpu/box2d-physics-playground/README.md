@@ -6,7 +6,8 @@ An interactive 2D rigid-body physics sandbox built with `:extensions:box2d`, `:e
 
 ## Key `GenericUI` Features & Extensions Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `Box2DPhysicsPlaygroundFragment` (`@MainAppFragment`) and `Box2DPhysicsPlaygroundApp` (`@AppApplication` extending `FragmentApplication`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `Box2DPhysicsPlaygroundFragment` (`@MainAppFragment`) and `Box2DPhysicsPlaygroundApp` (`@AppApplication` extending `FragmentApplication` with `setTheme(ThemeMode.DARK)` and `addStyleSheet(StylesPrecompiledStyleSheet)`).
+- **`getStyle()` & `getBootstrap()` Styling API**: Configures arena surface inline style (`getStyle().apply { borderRadius = "8px"; setCursor(CssCursor.CROSSHAIR) }`) and dynamically updates pause/resume button and preset badge Bootstrap state via `getBootstrap()`.
 - **Rigid-Body Dynamics (`:extensions:box2d` — `World2D`, `Body2D`, `BodyDef2D`, `BodyType2D`, `FixtureDef2D`)**: Simulates static boundaries and dynamic polygon (`PolygonShape2D`) and circle (`CircleShape2D`) bodies with configurable density, friction, and restitution.
 - **Revolute Joints (`RevoluteJoint2D`)**: Demonstrates constraints and pendulum motion in the `Pendulum Cradle` preset (`PhysicsScenePreset.PENDULUM_CRADLE`).
 - **Canvas2D Debug Visualization (`Box2DDebugDrawer` & `Canvas2DExtSurface`)**: Renders world bodies, fixtures, orientation vectors, and joint anchors onto a `Canvas2DExtSurface` (`canvas2DExt`).

@@ -36,6 +36,7 @@ import com.nexustools.genericui.ext.codeeditor.CodeLanguage
 import com.nexustools.genericui.ext.codeeditor.CursorPosition
 import com.nexustools.genericui.ext.codeeditor.IdeCodeEditor
 import com.nexustools.genericui.ext.codeeditor.TextRange
+import com.nexustools.genericui.style.css.CssEdgeLengths
 
 /**
  * Primary [Fragment] combining `:extensions:codeeditor` ([IdeCodeEditor] and [CodeLanguage])
@@ -255,6 +256,13 @@ class CodeEditorRegexFragment(
         val rootStack = VStack(gap = SpacingScale.S2)
 
         // 1. Top Toolbar
+        topToolbar.getStyle().apply {
+            padding = CssEdgeLengths.px(6, 10)
+            borderRadiusPx = 8f
+        }
+        codeEditor.getStyle().apply {
+            borderRadiusPx = 6f
+        }
         val toolbarRow = HStack(gap = SpacingScale.S2)
         toolbarRow.addClass("regex-toolbar")
         toolbarRow.addChild(Label("Language:"))
@@ -474,7 +482,7 @@ class CodeEditorRegexFragment(
             lastRegexMatches = emptyList()
             lastRegexError = null
             matchCountBadge.text = "0 matches"
-            matchCountBadge.type = BootstrapType.SECONDARY
+            matchCountBadge.getBootstrap().type = BootstrapType.SECONDARY
             regexStatusLabel.text = "Enter a regular expression pattern to evaluate."
             captureGroupsTable.setRows(emptyList())
             matchesListStack.clearChildren()
@@ -496,7 +504,7 @@ class CodeEditorRegexFragment(
             lastRegexMatches = emptyList()
             lastRegexError = ex.message ?: "Invalid regular expression"
             matchCountBadge.text = "0 matches"
-            matchCountBadge.type = BootstrapType.DANGER
+            matchCountBadge.getBootstrap().type = BootstrapType.DANGER
             regexStatusLabel.text = "Regex syntax error: $lastRegexError"
             captureGroupsTable.setRows(emptyList())
             matchesListStack.clearChildren()
@@ -546,7 +554,7 @@ class CodeEditorRegexFragment(
         codeEditor.setDiagnostics(diagnostics)
 
         matchCountBadge.text = "${records.size} matches"
-        matchCountBadge.type = if (records.isNotEmpty()) BootstrapType.SUCCESS else BootstrapType.WARNING
+        matchCountBadge.getBootstrap().type = if (records.isNotEmpty()) BootstrapType.SUCCESS else BootstrapType.WARNING
         regexStatusLabel.text = "Evaluated /${patternText}/ (${records.size} matches found)"
 
         val tableRows = records.map { rec ->

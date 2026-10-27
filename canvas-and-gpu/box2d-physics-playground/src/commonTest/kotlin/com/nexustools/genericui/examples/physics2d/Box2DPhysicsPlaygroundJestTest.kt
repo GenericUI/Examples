@@ -1,7 +1,10 @@
 package com.nexustools.genericui.examples.physics2d
 
+import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.css.CssCursor
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
+import kotlin.test.assertTrue
 
 /**
  * Cross-platform unit and UI component tests for [Box2DPhysicsPlaygroundApp] and
@@ -16,12 +19,16 @@ class Box2DPhysicsPlaygroundJestTest {
             visualOnWindows = false
         ) {
             describe("Initial Pyramid Stack scene") {
-                it("mounts controls and creates static boundaries plus 6 pyramid boxes") {
+                it("mounts controls, verifies getStyle() and getBootstrap(), and creates static boundaries plus 6 pyramid boxes") {
                     val controller = launchApp(visualOnWindows = false) { Box2DPhysicsPlaygroundApp() }
                     val fragment = controller.app.physicsFragment
 
                     expectNode(controller.findById("lbl-title")).toHaveText("Box2D Physics Playground")
                     expectNode(controller.findById("badge-scene-preset")).toHaveText("Scene: Pyramid Stack")
+                    expect(fragment.presetBadge.getBootstrap().type).toBe(BootstrapType.PRIMARY)
+                    expect(fragment.arenaSurface.getStyle().getCursor()).toBe(CssCursor.CROSSHAIR)
+                    expect(fragment.arenaSurface.getStyle().borderRadiusPx).toBe(8f)
+                    assertTrue(fragment.arenaSurface.hasClass("physics-arena-canvas"))
                     // 3 static boundary walls + 6 dynamic pyramid crates = 9 bodies
                     expect(fragment.world.bodies.size).toBe(9)
                     expect(fragment.dynamicBodies().size).toBe(6)
@@ -61,6 +68,7 @@ class Box2DPhysicsPlaygroundJestTest {
 
                     controller.findById("btn-preset-pendulum").performClick()
                     expectNode(controller.findById("badge-scene-preset")).toHaveText("Scene: Pendulum Cradle")
+                    expect(fragment.presetBadge.getBootstrap().type).toBe(BootstrapType.INFO)
                     expect(fragment.world.joints.size).toBe(1)
 
                     controller.findById("slider-gravity").performSetSliderValue(-4.5)
@@ -69,6 +77,8 @@ class Box2DPhysicsPlaygroundJestTest {
                     // Pause prevents VBlank frame from advancing step count
                     controller.findById("btn-toggle-pause").performClick()
                     expect(fragment.isPaused).toBe(true)
+                    expect(fragment.pauseResumeButton.getBootstrap().type).toBe(BootstrapType.SUCCESS)
+                    expect(fragment.pauseResumeButton.getBootstrap().outline).toBe(false)
                     val stepsBeforeVBlank = fragment.totalStepCount
                     fragment.arenaSurface.dispatchVBlankFrame(32.0)
                     expect(fragment.totalStepCount).toBe(stepsBeforeVBlank)
@@ -76,6 +86,8 @@ class Box2DPhysicsPlaygroundJestTest {
                     // Resume allows VBlank frame to advance step count
                     controller.findById("btn-toggle-pause").performClick()
                     expect(fragment.isPaused).toBe(false)
+                    expect(fragment.pauseResumeButton.getBootstrap().type).toBe(BootstrapType.WARNING)
+                    expect(fragment.pauseResumeButton.getBootstrap().outline).toBe(true)
                     fragment.arenaSurface.dispatchVBlankFrame(48.0)
                     expect(fragment.totalStepCount).toBe(stepsBeforeVBlank + 1)
                 }

@@ -29,7 +29,8 @@ class DataEditorApp(
         get() = editorFragment
 
     init {
-        setThemeMode(ThemeMode.DARK)
+        setTheme(ThemeMode.DARK)
+        addStyleSheet(StylesPrecompiledStyleSheet)
         val titleBar = TitleBar(
             embedMenuBar = true,
             showWindowTitle = true,

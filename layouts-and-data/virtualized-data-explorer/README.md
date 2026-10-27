@@ -6,7 +6,8 @@ Demonstrates true viewport window virtualization across a **10,000-record datase
 
 ## Key `GenericUI` APIs Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `VirtualizedDataExplorerFragment` (`@MainAppFragment`) and `VirtualizedDataExplorerApp` (`@AppApplication` extending `FragmentApplication`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `VirtualizedDataExplorerFragment` (`@MainAppFragment`) and `VirtualizedDataExplorerApp` (`@AppApplication` extending `FragmentApplication`) with `ThemeMode.AUTO` (`setTheme(ThemeMode.AUTO)`) and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
+- **`ComponentBootstrap` (`bootstrap { ... }`) & `ComponentStyle` (`style { ... }`)**: Uses `:extensions:dsl` `bootstrap { ... }` and `style { ... }` builders (`BootstrapType`, `BootstrapSize`, `BorderRadiusStyle`, `ShadowElevation`, `SpacingScale`, `FontWeight`, `accentColor`) with strict custom CSS class isolation.
 - **Virtualized Containers**: `LazyList`, `LazyGrid`, `TreeView`, `TreeNode`, `LazyViewportWindow` (`[firstVisibleIndex .. lastVisibleIndex]`), and `ViewHolderPool` (`onLoadItem` / `onUnloadItem`).
 - **Form & Filter Controls**: `TextField` (`id = "input-filter"`), `Select` (`id = "select-category"`), `SelectOption`, and `Button` (`btn-mode-list`, `btn-mode-grid`, `btn-mode-tree`, `btn-scroll-top`, `btn-scroll-mid`, `btn-scroll-bottom`).
 - **Live Telemetry Badges**: `Badge` (`id = "badge-total-items"`, `id = "badge-active-window"`, `id = "badge-selected-item"`, `id = "badge-recycle-stats"`).
@@ -62,6 +63,7 @@ genericui {
         icon = "src/commonMain/resources/icon.svg"
     }
     theme {
+        mode = "auto"
         color = "#2563EB"
     }
     backends {

@@ -39,7 +39,9 @@ import com.nexustools.genericui.ext.media.AudioAnalyzerExt
 import com.nexustools.genericui.ext.media.AudioPlayerExt
 import com.nexustools.genericui.ext.media.MediaExtension
 import com.nexustools.genericui.nativeimpl.media.AudioAnalyzerNativeImpl
+import com.nexustools.genericui.enums.css.CssCursor
 import com.nexustools.genericui.style.color.RgbaColor
+import com.nexustools.genericui.style.css.CssEdgeLengths
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.log10
@@ -302,6 +304,14 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         val rootStack = VStack(gap = SpacingScale.S2)
 
         // 1. Top Transport Toolbar
+        topToolbar.getStyle().apply {
+            padding = CssEdgeLengths.px(6, 10)
+            borderRadiusPx = 8f
+        }
+        visualizerCanvas.getStyle().apply {
+            borderRadiusPx = 8f
+            setCursor(CssCursor.CROSSHAIR)
+        }
         val toolbarRow = HStack(gap = SpacingScale.S2)
         toolbarRow.addClass("transport-toolbar")
         toolbarRow.addChild(playPauseButton)
@@ -465,9 +475,9 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         if (isTransportPlaying) {
             audioPlayer.play()
             playPauseButton.text = "Pause"
-            playPauseButton.type = BootstrapType.WARNING
+            playPauseButton.getBootstrap().type = BootstrapType.WARNING
             playbackStateBadge.text = "PLAYING"
-            playbackStateBadge.type = BootstrapType.SUCCESS
+            playbackStateBadge.getBootstrap().type = BootstrapType.SUCCESS
             if (playbackPositionSeconds == 0.0) {
                 seekToSeconds(1.5)
             }
@@ -478,9 +488,9 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         } else {
             audioPlayer.pause()
             playPauseButton.text = "Play"
-            playPauseButton.type = BootstrapType.SUCCESS
+            playPauseButton.getBootstrap().type = BootstrapType.SUCCESS
             playbackStateBadge.text = "PAUSED"
-            playbackStateBadge.type = BootstrapType.SECONDARY
+            playbackStateBadge.getBootstrap().type = BootstrapType.SECONDARY
             statusMessageLabel.text = "Playback paused at ${formatSeconds(playbackPositionSeconds)}."
         }
         return isTransportPlaying
@@ -506,9 +516,9 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         playbackPositionSeconds = 0.0
         audioPlayer.stop()
         playPauseButton.text = "Play"
-        playPauseButton.type = BootstrapType.SUCCESS
+        playPauseButton.getBootstrap().type = BootstrapType.SUCCESS
         playbackStateBadge.text = "STOPPED"
-        playbackStateBadge.type = BootstrapType.SECONDARY
+        playbackStateBadge.getBootstrap().type = BootstrapType.SECONDARY
         playbackTimeBadge.text = "0.0s"
         updateSubtitleForTimestamp(0.0)
         statusMessageLabel.text = "Transport reset to 0.0s."
@@ -607,10 +617,10 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         val activeCue = subtitleCues.firstOrNull { it.isActiveAt(timeSeconds) }
         if (activeCue != null) {
             subtitleCueBadge.text = "[${activeCue.id}] ${activeCue.text}"
-            subtitleCueBadge.type = BootstrapType.INFO
+            subtitleCueBadge.getBootstrap().type = BootstrapType.INFO
         } else {
             subtitleCueBadge.text = "No active subtitle cue at ${formatSeconds(timeSeconds)}"
-            subtitleCueBadge.type = BootstrapType.SECONDARY
+            subtitleCueBadge.getBootstrap().type = BootstrapType.SECONDARY
         }
         return activeCue
     }
@@ -625,6 +635,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         midBadge.text = "Mid: $midPct%"
         trebleBadge.text = "Treble: $treblePct%"
         rmsBadge.text = "RMS: $rmsPct% | Beat: ${if (bands.peakBeatDetected) "PEAK" else "IDLE"}"
+        rmsBadge.getBootstrap().type = if (bands.peakBeatDetected) BootstrapType.SUCCESS else BootstrapType.SECONDARY
 
         bassMeterBar.progress = bands.bass.coerceIn(0f, 1f)
         midMeterBar.progress = bands.mid.coerceIn(0f, 1f)

@@ -1,6 +1,10 @@
 package com.nexustools.genericui.examples.wizard
 
 import com.nexustools.genericui.component.system.PreferenceStore
+import com.nexustools.genericui.enums.bootstrap.BootstrapSize
+import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.ui.ThemeMode
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
 
@@ -97,6 +101,17 @@ class RegistrationWizardJestTest {
                     expect(savedProfile?.role).toBe("QA Engineer")
                     expect(savedProfile?.experienceYears).toBe(9)
                     expect(savedProfile?.acceptedTerms).toBe(true)
+
+                    // Verify ComponentBootstrap, ComponentStyle, and strict CSS class isolation
+                    val fragment = controller.app.wizardFragment
+                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(fragment.nextButton.getBootstrap().type).toBe(BootstrapType.PRIMARY)
+                    expect(fragment.nextButton.getBootstrap().size).toBe(BootstrapSize.MD)
+                    expect(fragment.nextButton.hasClass("btn-primary")).toBe(false)
+                    expect(fragment.submitButton.getBootstrap().type).toBe(BootstrapType.SUCCESS)
+                    expect(fragment.step1Panel.hasClass("wizard-step-panel")).toBe(true)
+                    expect(fragment.experienceSlider.getStyle().accentColor).toBe(RgbaColor.fromHex("#10B981"))
+                    expect(fragment.termsCheckBox.getStyle().accentColor).toBe(RgbaColor.fromHex("#10B981"))
                 }
             }
         }

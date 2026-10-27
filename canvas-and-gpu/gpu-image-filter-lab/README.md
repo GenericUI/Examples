@@ -6,7 +6,8 @@ An interactive multi-stage image filter pipeline and live 256-bin RGB/Luminance 
 
 ## Key `GenericUI` Features & Extensions Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `GpuImageFilterLabFragment` (`@MainAppFragment`) and `GpuImageFilterLabApp` (`@AppApplication` extending `FragmentApplication`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `GpuImageFilterLabFragment` (`@MainAppFragment`) and `GpuImageFilterLabApp` (`@AppApplication` extending `FragmentApplication` with `setTheme(ThemeMode.DARK)` and `addStyleSheet(StylesPrecompiledStyleSheet)`).
+- **`getStyle()` & `getBootstrap()` Styling API**: Configures preview and histogram canvas inline styles via `getStyle().apply { borderRadius = "8px"; setCursor(CssCursor.CROSSHAIR) }` and updates preset badge/button visual state via `getBootstrap()`.
 - **Multi-Stage Filter Pipeline (`:extensions:imageprocessing`)**: Chains `BrightnessContrastFilter`, `HueSaturationLightnessFilter`, `GaussianBlurFilter`, and `VignetteFilter` via `GpuImageProcessor.process(sourceImage) { ... }`.
 - **256-Bin Histogram & Mean Luminance (`ImageHistogramResult`)**: Computes real-time R/G/B and luminance histograms (`GpuImageProcessor.computeHistogram`) and renders the luminance distribution onto a dedicated `Canvas2DExtSurface` (`histogram-canvas`).
 - **One-Click Filter Presets & Sliders**: Switch between `Vivid`, `Noir`, `Warm Cinema`, and `Default` presets (`FilterLabState`) or fine-tune parameters via interactive `RangeSlider` controls (`slider-brightness`, `slider-contrast`, `slider-saturation`, `slider-blur`).
