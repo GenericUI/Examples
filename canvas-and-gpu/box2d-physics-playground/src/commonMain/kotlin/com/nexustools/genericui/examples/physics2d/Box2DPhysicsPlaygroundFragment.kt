@@ -10,6 +10,7 @@ import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.component.media.Canvas2D
 import com.nexustools.genericui.ext.box2d.Body2D
 import com.nexustools.genericui.ext.box2d.BodyDef2D
 import com.nexustools.genericui.ext.box2d.BodyType2D
@@ -20,8 +21,7 @@ import com.nexustools.genericui.ext.box2d.PolygonShape2D
 import com.nexustools.genericui.ext.box2d.RevoluteJoint2D
 import com.nexustools.genericui.ext.box2d.Vec2
 import com.nexustools.genericui.ext.box2d.World2D
-import com.nexustools.genericui.ext.canvas2d.Canvas2DExtSurface
-import com.nexustools.genericui.ext.canvas2d.dsl.canvas2DExt
+import com.nexustools.genericui.ext.canvas2d.dsl.canvas2D
 import com.nexustools.genericui.ext.dsl.badge
 import com.nexustools.genericui.ext.dsl.build
 import com.nexustools.genericui.ext.dsl.button
@@ -31,14 +31,14 @@ import com.nexustools.genericui.ext.dsl.hstack
 import com.nexustools.genericui.ext.dsl.label
 import com.nexustools.genericui.ext.dsl.rangeSlider
 import com.nexustools.genericui.ext.dsl.vstack
-import com.nexustools.genericui.style.RgbaColor
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.enums.css.CssCursor
 import kotlin.math.roundToInt
 
 /**
  * Interactive 2D rigid-body physics sandbox built with `:extensions:box2d`
  * ([World2D], [Body2D], [PolygonShape2D], [CircleShape2D], [RevoluteJoint2D],
- * [Box2DDebugDrawer]) and rendered onto [Canvas2DExtSurface].
+ * [Box2DDebugDrawer]) and rendered onto [Canvas2D].
  */
 @MainAppFragment
 class Box2DPhysicsPlaygroundFragment : Fragment() {
@@ -67,7 +67,7 @@ class Box2DPhysicsPlaygroundFragment : Fragment() {
 
     private var spawnSequenceIndex: Int = 0
 
-    lateinit var arenaSurface: Canvas2DExtSurface
+    lateinit var arenaSurface: Canvas2D
     lateinit var bodyCountBadge: Badge
     lateinit var stepCountBadge: Badge
     lateinit var presetBadge: Badge
@@ -154,7 +154,7 @@ class Box2DPhysicsPlaygroundFragment : Fragment() {
                 hstack(classes = "arena-card gap-3 align-items-start") {
                     vstack(classes = "gap-2") {
                         label("World2D Debug Viewport (560x380 — 46 px/m)", id = "lbl-arena-heading")
-                        self.arenaSurface = canvas2DExt(
+                        self.arenaSurface = canvas2D(
                             width = 560,
                             height = 380,
                             id = "physics-arena-canvas",

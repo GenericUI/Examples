@@ -54,7 +54,7 @@ class Box2DPhysicsPlaygroundJestTest {
                     // Floor top is at y = -3.2 + 0.35 = -2.85, so body stays above floor
                     expect(spawnedCircle.position.y > -3.0f).toBe(true)
 
-                    // Verify debug drawer renders non-empty pixels to the Canvas2DExtSurface
+                    // Verify debug drawer renders non-empty pixels to the Canvas2D
                     fragment.arenaSurface.dispatchVBlankFrame(16.0)
                     val buffer = fragment.arenaSurface.toImageBuffer()
                     expect(buffer.width).toBe(560)

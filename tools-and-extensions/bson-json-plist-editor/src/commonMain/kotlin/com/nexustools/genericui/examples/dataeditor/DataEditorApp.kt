@@ -16,20 +16,27 @@ import com.nexustools.genericui.window.TitleBar
  */
 @AppApplication
 class DataEditorApp(
-    val editorFragment: DataEditorFragment = DataEditorFragment()
+    val editorFragment: DataEditorFragment = DataEditorFragment(),
+    private val customPreferenceStore: PreferenceStore? = null
 ) : FragmentApplication(
     initialFragment = editorFragment,
     title = "BSON / JSON / Binary Plist Visual Editor",
     initialThemeColor = "#1E293B"
 ) {
 
-    constructor(preferenceStore: PreferenceStore) : this(DataEditorFragment(preferenceStore))
+    constructor(preferenceStore: PreferenceStore) : this(
+        editorFragment = DataEditorFragment(preferenceStore),
+        customPreferenceStore = preferenceStore
+    )
+
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
 
     val fragment: DataEditorFragment
         get() = editorFragment
 
     init {
-        setTheme(ThemeMode.DARK)
+        setThemeMode(ThemeMode.DARK)
         addStyleSheet(StylesPrecompiledStyleSheet)
         val titleBar = TitleBar(
             embedMenuBar = true,

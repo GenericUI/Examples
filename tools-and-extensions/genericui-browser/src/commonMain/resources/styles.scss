@@ -1,0 +1,177 @@
+$chrome-bg-dark: #1f2023;
+$chrome-strip-bg: #17181b;
+$chrome-toolbar-bg: #292a2d;
+$chrome-omnibox-bg: #202124;
+$chrome-surface-light: #f8f9fa;
+$chrome-card-white: #ffffff;
+$chrome-text-light: #e8eaed;
+$chrome-text-muted: #9aa0a6;
+$chrome-accent-blue: #1a73e8;
+$chrome-gemini-pill: #28354a;
+$github-dark-bg: #0d1117;
+$github-dark-surface: #161b22;
+$github-dark-border: #30363d;
+$github-topic-bg: #121d2f;
+$github-topic-text: #58a6ff;
+
+html, body, #genericui-app, .genericui-window {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $chrome-bg-dark;
+    color: $chrome-text-light;
+    font-family: "Google Sans", "Segoe UI", Roboto, system-ui, sans-serif;
+}
+
+.genericui-browser-root {
+    width: 100%;
+    height: 100%;
+    background-color: $chrome-bg-dark;
+    color: $chrome-text-light;
+
+    .genericui-tabbed-header-slot {
+        background-color: $chrome-strip-bg;
+        border-bottom: 1px solid #3c4043;
+    }
+
+    .genericui-tabbed-desktop-strip {
+        background-color: $chrome-strip-bg;
+        padding: 6px 10px 0 10px;
+    }
+
+    .genericui-tabbed-chip {
+        background-color: #202124;
+        border-radius: 10px 10px 0 0;
+        padding: 4px 10px;
+
+        &.active {
+            background-color: $chrome-toolbar-bg;
+        }
+
+        &.pinned {
+            padding: 4px 8px;
+        }
+    }
+
+    .genericui-tabbed-new-tab-btn {
+        border-radius: 16px;
+        padding: 2px 10px;
+    }
+
+    .browser-desktop-toolbar {
+        background-color: $chrome-toolbar-bg;
+        padding: 6px 12px;
+    }
+
+    .browser-mobile-toolbar {
+        background-color: $chrome-toolbar-bg;
+        padding: 8px 10px;
+    }
+
+    .browser-omnibox-pill {
+        background-color: $chrome-omnibox-bg;
+        color: $chrome-text-light;
+        border-radius: 20px;
+        padding: 4px 14px;
+    }
+
+    .browser-ask-gemini-btn {
+        background-color: $chrome-gemini-pill;
+        color: #a8c7fa;
+        border-radius: 18px;
+        padding: 4px 12px;
+        font-weight: 600;
+    }
+
+    .browser-bookmarks-bar {
+        background-color: $chrome-toolbar-bg;
+        padding: 4px 12px 6px 12px;
+        border-bottom: 1px solid #3c4043;
+    }
+
+    .genericui-tabbed-mobile-pill {
+        border-radius: 8px;
+        font-weight: 700;
+        padding: 2px 8px;
+    }
+
+    .genericui-tabbed-mobile-overview {
+        background-color: #121316;
+        padding: 12px;
+    }
+
+    .genericui-tabbed-overview-card {
+        background-color: #28292c;
+        border-radius: 16px;
+        padding: 10px;
+
+        &.active {
+            border: 2px solid #8ab4f8;
+        }
+    }
+
+    .browser-gemini-sidebar {
+        background-color: #1e293b;
+        border-left: 1px solid #334155;
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    .google-one-page {
+        background-color: $chrome-surface-light;
+        color: #202124;
+        padding: 20px 32px;
+
+        .google-one-credits-card {
+            background-color: #f1f3f4;
+            border-radius: 16px;
+            padding: 20px 24px;
+        }
+
+        .google-one-credits-balance {
+            font-size: 32px;
+            font-weight: 700;
+            color: #202124;
+        }
+
+        .google-one-add-btn {
+            background-color: $chrome-accent-blue;
+            color: #ffffff;
+            border-radius: 20px;
+            padding: 6px 18px;
+        }
+
+        .google-one-activity-card {
+            background-color: $chrome-card-white;
+            border-radius: 16px;
+            padding: 16px 20px;
+        }
+    }
+
+    .github-repo-page {
+        background-color: $github-dark-bg;
+        color: #f0f6fc;
+        padding: 16px 20px;
+
+        .github-repo-header {
+            background-color: $github-dark-surface;
+            border-bottom: 1px solid $github-dark-border;
+            padding: 12px 16px;
+            border-radius: 10px;
+        }
+
+        .github-topic-pill {
+            background-color: $github-topic-bg;
+            color: $github-topic-text;
+            border-radius: 14px;
+            padding: 2px 10px;
+        }
+    }
+
+    .browser-mobile-bottom-nav {
+        background-color: #000000;
+        color: #e8eaed;
+        padding: 6px 24px;
+    }
+}

@@ -1,0 +1,151 @@
+$paint-titlebar-bg: #18181b;
+$paint-ribbon-bg: #222226;
+$paint-ribbon-border: #323238;
+$paint-workspace-bg: #141416;
+$paint-statusbar-bg: #1c1c20;
+$paint-pill-bg: #27272c;
+$paint-surface-elevated: #2c2c32;
+$paint-text-primary: #f4f4f6;
+$paint-text-muted: #a1a1aa;
+$paint-accent-blue: #60a5fa;
+$paint-canvas-white: #ffffff;
+
+html, body, #genericui-app, .genericui-window {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $paint-workspace-bg;
+    color: $paint-text-primary;
+    font-family: "Segoe UI Variable", "Segoe UI", "Inter", system-ui, sans-serif;
+}
+
+.paint-root {
+    width: 100%;
+    height: 100%;
+    background-color: $paint-workspace-bg;
+    color: $paint-text-primary;
+    padding: 0;
+
+    .paint-command-bar {
+        background-color: $paint-titlebar-bg;
+        border-bottom: 1px solid $paint-ribbon-border;
+        padding: 4px 12px;
+    }
+
+    .paint-ribbon-bar {
+        background-color: $paint-ribbon-bg;
+        border-bottom: 1px solid $paint-ribbon-border;
+        padding: 8px 12px 6px 12px;
+    }
+
+    .paint-ribbon-group {
+        background-color: transparent;
+        border-right: 1px solid $paint-ribbon-border;
+        padding: 2px 10px;
+    }
+
+    .paint-ribbon-group-last {
+        background-color: transparent;
+        padding: 2px 10px;
+    }
+
+    .paint-ribbon-section-label {
+        color: $paint-text-muted;
+        font-size: 11px;
+        text-align: center;
+        margin-top: 4px;
+    }
+
+    .paint-tools-grid {
+        background-color: $paint-surface-elevated;
+        border-radius: 6px;
+        padding: 4px;
+    }
+
+    .paint-shapes-box {
+        background-color: $paint-surface-elevated;
+        border: 1px solid $paint-ribbon-border;
+        border-radius: 6px;
+        padding: 4px 6px;
+        max-height: 76px;
+    }
+
+    .paint-swatch-circle {
+        border-radius: 12px;
+        min-width: 22px;
+        min-height: 22px;
+        padding: 2px 6px;
+        border: 1px solid #3f3f46;
+    }
+
+    .paint-active-swatch-fg {
+        border-radius: 16px;
+        min-width: 30px;
+        min-height: 30px;
+        border: 2px solid $paint-accent-blue;
+    }
+
+    .paint-active-swatch-bg {
+        border-radius: 14px;
+        min-width: 26px;
+        min-height: 26px;
+        border: 2px solid #71717a;
+    }
+
+    .paint-workspace-area {
+        background-color: $paint-workspace-bg;
+        padding: 16px;
+        min-height: 340px;
+    }
+
+    .paint-floating-pill {
+        background-color: $paint-pill-bg;
+        border: 1px solid $paint-ribbon-border;
+        border-radius: 18px;
+        padding: 10px 8px;
+    }
+
+    .paint-canvas-stage {
+        background-color: #101012;
+        border: 1px solid #27272a;
+        border-radius: 4px;
+        padding: 24px;
+    }
+
+    .paint-canvas-frame {
+        background-color: $paint-canvas-white;
+        border: 1px solid #52525b;
+        padding: 0;
+    }
+
+    .paint-resize-handle {
+        background-color: $paint-canvas-white;
+        border: 1px solid #27272a;
+        width: 6px;
+        height: 6px;
+    }
+
+    .paint-layers-sidebar {
+        background-color: $paint-ribbon-bg;
+        border-left: 1px solid $paint-ribbon-border;
+        border-radius: 6px;
+        padding: 10px;
+        min-width: 210px;
+    }
+
+    .paint-layer-card {
+        background-color: $paint-surface-elevated;
+        border: 1px solid $paint-ribbon-border;
+        border-radius: 6px;
+        padding: 6px 8px;
+    }
+
+    .paint-status-bar {
+        background-color: $paint-statusbar-bg;
+        border-top: 1px solid $paint-ribbon-border;
+        padding: 4px 12px;
+        font-size: 12px;
+        color: $paint-text-muted;
+    }
+}

@@ -22,7 +22,7 @@ class AudioSpectrumVisualizerApp(
 ) {
 
     init {
-        setTheme(ThemeMode.DARK)
+        setThemeMode(ThemeMode.DARK)
         addStyleSheet(StylesPrecompiledStyleSheet)
         val titleBar = TitleBar(
             embedMenuBar = true,

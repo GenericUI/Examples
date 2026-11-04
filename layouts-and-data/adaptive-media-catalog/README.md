@@ -6,7 +6,7 @@ Demonstrates responsive 3-posture layout adaptation in `GenericUI` using `Adapti
 
 ## Key `GenericUI` APIs Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `AdaptiveMediaCatalogFragment` (`@MainAppFragment` extending `AdaptiveSplitTabFragment`) and `AdaptiveMediaCatalogApp` (`@AppApplication` extending `FragmentApplication`) with `ThemeMode.AUTO` (`setTheme(ThemeMode.AUTO)`) and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `AdaptiveMediaCatalogFragment` (`@MainAppFragment` extending `AdaptiveSplitTabFragment`) and `AdaptiveMediaCatalogApp` (`@AppApplication` extending `FragmentApplication`) with `ThemeMode.AUTO` (`setThemeMode(ThemeMode.AUTO)`) and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
 - **`ComponentBootstrap` (`bootstrap { ... }`) & `ComponentStyle` (`style { ... }`)**: Uses `:extensions:dsl` `bootstrap { ... }` and `style { ... }` builders (`BootstrapType`, `BootstrapSize`, `BorderRadiusStyle`, `ShadowElevation`, `SpacingScale`, `FontWeight`, `accentColor`) with strict custom CSS class isolation.
 - **Adaptive Helper Fragment**: `AdaptiveSplitTabFragment`, `AdaptiveSplitTabFragment.LayoutMode`, `WindowConfiguration`, `setPrimaryView`, and `addTab`.
 - **Navigation & Surfaces**: `TabContainer` (`Channels`, `Queue`, `Details`), `Card`, `Badge`, `Button`, `Heading`, `Label`, `HStack`, and `VStack`.
@@ -106,24 +106,24 @@ From `examples/layouts-and-data/adaptive-media-catalog`, invoke the root Gradle 
 
 ```bash
 # Desktop — Windows (Win32 / Direct2D / ANGLE / Vulkan)
-../../../gradlew windowsDevelopment
+../../../gradlew developmentWindows
 
 # Desktop — macOS (AppKit / CoreGraphics / MoltenVK)
-../../../gradlew macDevelopment
+../../../gradlew developmentMac
 
 # Desktop — Linux GTK & Qt
-../../../gradlew linuxDevelopmentGtk
-../../../gradlew linuxDevelopmentQt
+../../../gradlew developmentLinuxGtk
+../../../gradlew developmentLinuxQt
 
 # Desktop — JVM / AWT / Swing
-../../../gradlew swingDevelopment
+../../../gradlew developmentSwing
 
 # Mobile — Android & iOS
-../../../gradlew androidDevelopment
-../../../gradlew iosDevelopment
+../../../gradlew developmentAndroid
+../../../gradlew developmentIos
 
 # Web — WasmJS primary + JS fallback + PWA manifest.webmanifest
-../../../gradlew webDevelopment
+../../../gradlew developmentWeb
 ```
 
 ---

@@ -37,13 +37,19 @@ import kotlin.math.roundToInt
  */
 @MainAppFragment
 class RegistrationWizardFragment(
-    val preferenceStore: PreferenceStore = PreferenceStore(RegistrationProfile.DEFAULT_STORE_NAME)
+    private val customPreferenceStore: PreferenceStore? = null
 ) : Fragment() {
+
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
+    val preferenceStore: PreferenceStore
+        get() = getPreferenceStore()
 
     var currentStep: Int = 1
         private set
 
-    var profile: RegistrationProfile = RegistrationProfile.loadFrom(preferenceStore) ?: RegistrationProfile()
+    var profile: RegistrationProfile = RegistrationProfile.loadFrom(getPreferenceStore()) ?: RegistrationProfile()
         private set
 
     var isSubmitted: Boolean = false

@@ -8,16 +8,16 @@ import com.nexustools.genericui.component.form.RangeSlider
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
 import com.nexustools.genericui.component.fragment.MainAppFragment
+import com.nexustools.genericui.component.media.Canvas2D
+import com.nexustools.genericui.component.media.CurveEditor
 import com.nexustools.genericui.ext.imageprocessing.context2d.ImageBuffer2DContext
 import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.event.PointerEvent
-import com.nexustools.genericui.ext.canvas2d.Canvas2DExtSurface
-import com.nexustools.genericui.ext.canvas2d.CurveEditorExt
-import com.nexustools.genericui.ext.canvas2d.dsl.canvas2DExt
-import com.nexustools.genericui.ext.canvas2d.dsl.curveEditorExt
+import com.nexustools.genericui.ext.canvas2d.dsl.canvas2D
+import com.nexustools.genericui.ext.canvas2d.dsl.curveEditor
 import com.nexustools.genericui.ext.dsl.badge
 import com.nexustools.genericui.ext.dsl.build
 import com.nexustools.genericui.ext.dsl.button
@@ -30,7 +30,7 @@ import com.nexustools.genericui.ext.dsl.rangeSlider
 import com.nexustools.genericui.ext.dsl.vstack
 import com.nexustools.genericui.geometry.Point
 import com.nexustools.genericui.image.ImageBuffer
-import com.nexustools.genericui.style.RgbaColor
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.enums.css.CssCursor
 import com.nexustools.genericui.style.css.CssCustomCursor
 import kotlin.math.PI
@@ -41,7 +41,7 @@ import kotlin.math.min
 
 /**
  * Interactive 2D vector and cubic-Bezier sketchpad [Fragment] built with `:extensions:canvas2d`
- * ([Canvas2DExtSurface] and [CurveEditorExt]) and hardware VBlank rendering (`registerVBlankRender`).
+ * ([Canvas2D] and [CurveEditor]) and hardware VBlank rendering (`registerVBlankRender`).
  */
 @MainAppFragment
 class SketchpadFragment : Fragment() {
@@ -91,8 +91,8 @@ class SketchpadFragment : Fragment() {
     val strokeColorPicker: ColorPicker = ColorPicker(RgbaColor.fromHex("#38BDF8")).apply {
         id = "picker-stroke-color"
     }
-    lateinit var sketchCanvas: Canvas2DExtSurface
-    lateinit var curveEditor: CurveEditorExt
+    lateinit var sketchCanvas: Canvas2D
+    lateinit var curveEditor: CurveEditor
 
     // Status Badges & Labels
     lateinit var shapeCountBadge: Badge
@@ -233,7 +233,7 @@ class SketchpadFragment : Fragment() {
 
                 // Main Workspace: Canvas2D Surface + Inspector Sidebar
                 hstack(classes = "sketchpad-workspace gap-3 align-items-start") {
-                    self.sketchCanvas = canvas2DExt(
+                    self.sketchCanvas = canvas2D(
                         width = 720,
                         height = 460,
                         id = "sketchpad-canvas-surface",
@@ -274,22 +274,22 @@ class SketchpadFragment : Fragment() {
 
                         label("Stroke Color Hex")
                         self.strokeColorPicker.onColorChanged = { chosen ->
-                            self.activeColorHex = chosen.toHexString()
+                            self.activeColorHex = chosen.toHex()
                             self.syncStatusControls()
                             self.sketchCanvas.requestRender()
                         }
                         self.strokeColorPicker.onValueChanged = { text ->
                             val parsed = RgbaColor.fromCss(text)
                             if (parsed != null) {
-                                self.activeColorHex = parsed.toHexString()
+                                self.activeColorHex = parsed.toHex()
                                 self.syncStatusControls()
                                 self.sketchCanvas.requestRender()
                             }
                         }
                         component(self.strokeColorPicker)
 
-                        label("Cubic-Bezier Taper Curve (CurveEditorExt)")
-                        self.curveEditor = curveEditorExt(
+                        label("Cubic-Bezier Taper Curve (CurveEditor)")
+                        self.curveEditor = curveEditor(
                             width = 220,
                             height = 180,
                             controlPoint1 = Point(0.35f, 0.15f),

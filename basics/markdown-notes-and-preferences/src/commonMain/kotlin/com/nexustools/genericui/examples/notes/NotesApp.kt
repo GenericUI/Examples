@@ -12,16 +12,22 @@ import com.nexustools.genericui.window.TitleBar
  */
 @AppApplication
 class NotesApp(
-    val preferenceStore: PreferenceStore = PreferenceStore(NoteItem.PREFERENCE_NAMESPACE),
-    val notesFragment: NotesFragment = NotesFragment(preferenceStore)
+    private val customPreferenceStore: PreferenceStore? = null,
+    val notesFragment: NotesFragment = NotesFragment(customPreferenceStore)
 ) : FragmentApplication(
     initialFragment = notesFragment,
     title = "GenericUI — Markdown Notes & Preferences",
     initialThemeColor = "#8B5CF6"
 ) {
 
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
+    val preferenceStore: PreferenceStore
+        get() = getPreferenceStore()
+
     init {
-        setTheme(ThemeMode.AUTO)
+        setThemeMode(ThemeMode.AUTO)
         setThemeColor("#8B5CF6")
         addStyleSheet(StylesPrecompiledStyleSheet)
         val titleBar = TitleBar(

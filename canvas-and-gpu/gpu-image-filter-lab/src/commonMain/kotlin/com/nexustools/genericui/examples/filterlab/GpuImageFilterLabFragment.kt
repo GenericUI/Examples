@@ -5,14 +5,14 @@ import com.nexustools.genericui.component.form.RangeSlider
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
 import com.nexustools.genericui.component.fragment.MainAppFragment
+import com.nexustools.genericui.component.media.Canvas2D
 import com.nexustools.genericui.ext.imageprocessing.context2d.ImageBuffer2DContext
 import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
-import com.nexustools.genericui.ext.canvas2d.Canvas2DExtSurface
 import com.nexustools.genericui.ext.canvas2d.Canvas2DExtension
-import com.nexustools.genericui.ext.canvas2d.dsl.canvas2DExt
+import com.nexustools.genericui.ext.canvas2d.dsl.canvas2D
 import com.nexustools.genericui.ext.dsl.badge
 import com.nexustools.genericui.ext.dsl.build
 import com.nexustools.genericui.ext.dsl.button
@@ -29,7 +29,7 @@ import com.nexustools.genericui.ext.imageprocessing.HueSaturationLightnessFilter
 import com.nexustools.genericui.ext.imageprocessing.ImageHistogramResult
 import com.nexustools.genericui.ext.imageprocessing.VignetteFilter
 import com.nexustools.genericui.image.ImageBuffer
-import com.nexustools.genericui.style.RgbaColor
+import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.enums.css.CssCursor
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -40,7 +40,7 @@ import kotlin.math.sqrt
  * Interactive GPU-accelerated image processing laboratory demonstrating
  * `:extensions:imageprocessing` ([GpuImageProcessor], [BrightnessContrastFilter],
  * [HueSaturationLightnessFilter], [GaussianBlurFilter], [VignetteFilter],
- * [ImageHistogramResult]) rendered onto [Canvas2DExtSurface].
+ * [ImageHistogramResult]) rendered onto [Canvas2D].
  */
 @MainAppFragment
 class GpuImageFilterLabFragment : Fragment() {
@@ -59,8 +59,8 @@ class GpuImageFilterLabFragment : Fragment() {
     var meanLuminance: Float = 0f
         private set
 
-    lateinit var previewSurface: Canvas2DExtSurface
-    lateinit var histogramSurface: Canvas2DExtSurface
+    lateinit var previewSurface: Canvas2D
+    lateinit var histogramSurface: Canvas2D
 
     lateinit var presetBadge: Badge
     lateinit var meanLumaBadge: Badge
@@ -141,7 +141,7 @@ class GpuImageFilterLabFragment : Fragment() {
                 hstack(classes = "filter-workspace gap-3 align-items-start") {
                     vstack(classes = "gap-2") {
                         label("Filtered Output Preview (160x120 Buffer)", id = "lbl-preview-heading")
-                        self.previewSurface = canvas2DExt(
+                        self.previewSurface = canvas2D(
                             width = 320,
                             height = 240,
                             id = "filter-preview-canvas",
@@ -222,7 +222,7 @@ class GpuImageFilterLabFragment : Fragment() {
                         }
 
                         label("256-Bin Luminance & RGB Histogram", id = "lbl-histogram-heading")
-                        self.histogramSurface = canvas2DExt(
+                        self.histogramSurface = canvas2D(
                             width = 256,
                             height = 100,
                             id = "histogram-canvas",

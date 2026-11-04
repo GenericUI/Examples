@@ -6,7 +6,7 @@ A purely **visual, multi-tab structured document editor** for **JSON (`.json`)**
 
 ## Key `GenericUI` Features Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `DataEditorFragment` (`@MainAppFragment`) and `DataEditorApp` (`@AppApplication` extending `FragmentApplication` with `TitleBar`, `MenuBar`, `setTheme(ThemeMode.DARK)`, and `addStyleSheet(StylesPrecompiledStyleSheet)`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `DataEditorFragment` (`@MainAppFragment`) and `DataEditorApp` (`@AppApplication` extending `FragmentApplication` with `TitleBar`, `MenuBar`, `setThemeMode(ThemeMode.DARK)`, and `addStyleSheet(StylesPrecompiledStyleSheet)`).
 - **`getStyle()` & `getBootstrap()` Styling API**: Configures toolbar/status bar inline styles via `getStyle().apply { ... }` and updates active format badge and conversion button states via `getBootstrap()`.
 - **Purely Visual `LazyGridTree` Editor (No Text-Based Editor)**:
   - **4-Column Hierarchical `LazyGridTree` (`Key / Hierarchy`, `Value`, `Type (12 DataTypes)`, `Node Actions`)**:
@@ -16,10 +16,10 @@ A purely **visual, multi-tab structured document editor** for **JSON (`.json`)**
     - `OBJECT`, `MAP`, `ARRAY`, `STRING`, `BYTE`, `SHORT`, `INT`, `LONG`, `FLOAT`, `DOUBLE`, `BOOLEAN`, and `NULL`.
 - **Multi-Tab Document Workspace (`TabContainer` + `CloseableTab`)**:
   - Open, edit, switch between, and close multiple `.json`, `.bson`, and `.plist` documents simultaneously, with per-tab format badges (`[JSON]`, `[BSON]`, `[PLIST]`) and dirty indicators (`*`).
-- **3-Format Lossless Conversion & Binary Size Comparison**:
-  - Convert any open tab between **UTF-8 JSON (`.json`)**, **`BinaryJson` / BSON (`.bson`)**, and **Apple `BinaryPlist` (`bplist00` `.plist`)** with live `ProgressBar` byte-size comparisons across all three encodings.
-- **Cross-Platform Persistence (`PreferenceStore`)**:
-  - Persists user settings and recent file history via `PreferenceStore`.
+- **3-Format Lossless Conversion, `WritableByteBuffer` / `ReadableByteBuffer`, & Binary Size Comparison**:
+  - Convert any open tab between **UTF-8 JSON (`.json`)**, **`BinaryJson` / BSON (`.bson`)**, and **Apple `BinaryPlist` (`bplist00` `.plist`)** using `WritableByteBuffer`, `ReadableByteBuffer`, and `ByteBuffer.toString("utf8")`, with live `ProgressBar` byte-size comparisons across all three encodings.
+- **Cross-Platform Persistence (`getPreferenceStore()`)**:
+  - Persists user settings and recent file history via `IApplication.getPreferenceStore()` / `IFragment.getPreferenceStore()`.
 
 ---
 
@@ -95,8 +95,11 @@ genericui {
 ```kotlin
 @MainAppFragment
 class DataEditorFragment(
-    val preferenceStore: PreferenceStore = PreferenceStore.open("BsonJsonPlistEditor")
+    private val customPreferenceStore: PreferenceStore? = null
 ) : Fragment() {
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
     override fun onCreate(savedState: FragmentBundle?) {
         super.onCreate(savedState)
         if (openTabs.isEmpty()) {
@@ -119,11 +122,11 @@ From `examples/tools-and-extensions/bson-json-plist-editor`, invoke the root Gra
 | **Run Unit Tests (JVM/Swing)** | `../../../gradlew jvmTest` |
 | **Run Unit Tests (Windows Native)** | `../../../gradlew mingwX64Test` |
 | **Run Visual Tests (Windows)** | `../../../gradlew windowsVisualTest` |
-| **Swing Desktop (`:desktop:swing`)** | `../../../gradlew swingDevelopment` / `../../../gradlew swingProduction` |
-| **Windows Native (`:desktop:windows`)** | `../../../gradlew windowsDevelopment` / `../../../gradlew windowsProduction` |
-| **macOS Native (`:desktop:macos`)** | `../../../gradlew macDevelopment` / `../../../gradlew macProduction` |
-| **Linux GTK (`:desktop:gtk`)** | `../../../gradlew linuxDevelopmentGtk` / `../../../gradlew linuxProductionGtk` |
-| **Linux Qt (`:desktop:qt`)** | `../../../gradlew linuxDevelopmentQt` / `../../../gradlew linuxProductionQt` |
-| **Android (`:mobile:android`)** | `../../../gradlew androidDevelopment` / `../../../gradlew androidProduction` |
-| **iOS (`:mobile:ios`)** | `../../../gradlew iosDevelopment` / `../../../gradlew iosProduction` |
-| **Web PWA (`:web` Wasm + JS)** | `../../../gradlew webDevelopment` / `../../../gradlew webProduction` |
+| **Swing Desktop (`:desktop:swing`)** | `../../../gradlew developmentSwing` / `../../../gradlew productionSwing` |
+| **Windows Native (`:desktop:windows`)** | `../../../gradlew developmentWindows` / `../../../gradlew productionWindows` |
+| **macOS Native (`:desktop:macos`)** | `../../../gradlew developmentMac` / `../../../gradlew productionMac` |
+| **Linux GTK (`:desktop:gtk`)** | `../../../gradlew developmentLinuxGtk` / `../../../gradlew productionLinuxGtk` |
+| **Linux Qt (`:desktop:qt`)** | `../../../gradlew developmentLinuxQt` / `../../../gradlew productionLinuxQt` |
+| **Android (`:mobile:android`)** | `../../../gradlew developmentAndroid` / `../../../gradlew productionAndroid` |
+| **iOS (`:mobile:ios`)** | `../../../gradlew developmentIos` / `../../../gradlew productionIos` |
+| **Web PWA (`:web` Wasm + JS)** | `../../../gradlew developmentWeb` / `../../../gradlew productionWeb` |

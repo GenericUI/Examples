@@ -100,7 +100,7 @@ class SketchpadJestTest {
                     expectNode(controller.findById("badge-shape-count")).toHaveText("Shapes: 1")
                 }
 
-                it("supports multi-step Undo, Redo, Clear, CurveEditorExt LUT sampling, and VBlank rendering") {
+                it("supports multi-step Undo, Redo, Clear, CurveEditor LUT sampling, and VBlank rendering") {
                     val controller = launchApp(visualOnWindows = false) { SketchpadApp() }
                     val fragment = controller.app.sketchpadFragment
 

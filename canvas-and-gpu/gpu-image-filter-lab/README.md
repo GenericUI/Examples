@@ -6,10 +6,10 @@ An interactive multi-stage image filter pipeline and live 256-bin RGB/Luminance 
 
 ## Key `GenericUI` Features & Extensions Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `GpuImageFilterLabFragment` (`@MainAppFragment`) and `GpuImageFilterLabApp` (`@AppApplication` extending `FragmentApplication` with `setTheme(ThemeMode.DARK)` and `addStyleSheet(StylesPrecompiledStyleSheet)`).
-- **`getStyle()` & `getBootstrap()` Styling API**: Configures preview and histogram canvas inline styles via `getStyle().apply { borderRadius = "8px"; setCursor(CssCursor.CROSSHAIR) }` and updates preset badge/button visual state via `getBootstrap()`.
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `GpuImageFilterLabFragment` (`@MainAppFragment`) and `GpuImageFilterLabApp` (`@AppApplication` extending `FragmentApplication` with `setThemeMode(ThemeMode.DARK)` and `addStyleSheet(StylesPrecompiledStyleSheet)`).
+- **`getStyle()` & `getBootstrap()` Styling API**: Configures preview and histogram canvas inline styles via `getStyle().apply { borderRadiusPx = 8f; setCursor(CssCursor.CROSSHAIR) }` and updates preset badge/button visual state via `getBootstrap()`.
 - **Multi-Stage Filter Pipeline (`:extensions:imageprocessing`)**: Chains `BrightnessContrastFilter`, `HueSaturationLightnessFilter`, `GaussianBlurFilter`, and `VignetteFilter` via `GpuImageProcessor.process(sourceImage) { ... }`.
-- **256-Bin Histogram & Mean Luminance (`ImageHistogramResult`)**: Computes real-time R/G/B and luminance histograms (`GpuImageProcessor.computeHistogram`) and renders the luminance distribution onto a dedicated `Canvas2DExtSurface` (`histogram-canvas`).
+- **256-Bin Histogram & Mean Luminance (`ImageHistogramResult`)**: Computes real-time R/G/B and luminance histograms (`GpuImageProcessor.computeHistogram`) and renders the luminance distribution onto a dedicated `Canvas2D` (`histogram-canvas`).
 - **One-Click Filter Presets & Sliders**: Switch between `Vivid`, `Noir`, `Warm Cinema`, and `Default` presets (`FilterLabState`) or fine-tune parameters via interactive `RangeSlider` controls (`slider-brightness`, `slider-contrast`, `slider-saturation`, `slider-blur`).
 - **`JestElectricRunner` Test Suite**: Automated filter pipeline, histogram, and UI tests in `GpuImageFilterLabJestTest.kt`.
 
@@ -106,24 +106,24 @@ From `examples/canvas-and-gpu/gpu-image-filter-lab`, invoke the root Gradle wrap
 
 ```bash
 # Desktop JVM (AWT/Swing + optional LWJGL)
-../../../gradlew swingDevelopment
+../../../gradlew developmentSwing
 
 # Desktop Windows (Win32 / Direct2D / ANGLE / Vulkan)
-../../../gradlew windowsDevelopment
+../../../gradlew developmentWindows
 
 # Desktop macOS (AppKit / CoreGraphics / MoltenVK)
-../../../gradlew macDevelopment
+../../../gradlew developmentMac
 
 # Desktop Linux GTK & Qt
-../../../gradlew linuxDevelopmentGtk
-../../../gradlew linuxDevelopmentQt
+../../../gradlew developmentLinuxGtk
+../../../gradlew developmentLinuxQt
 
 # Web (WasmJS primary + JS IR fallback + PWA manifest.webmanifest)
-../../../gradlew webDevelopment
+../../../gradlew developmentWeb
 
 # Mobile (Android & iOS)
-../../../gradlew androidDevelopment
-../../../gradlew iosDevelopment
+../../../gradlew developmentAndroid
+../../../gradlew developmentIos
 ```
 
 ---

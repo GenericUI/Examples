@@ -6,10 +6,10 @@ A multiplatform media and visualization showcase built with `GenericUI`, `:exten
 
 ## Key `GenericUI` Features & Extensions Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `AudioSpectrumVisualizerFragment` (`@MainAppFragment`) and `AudioSpectrumVisualizerApp` (`@AppApplication` extending `FragmentApplication` with `TitleBar`, `MenuBar`, `setTheme(ThemeMode.DARK)`, and `addStyleSheet(StylesPrecompiledStyleSheet)`).
-- **`getStyle()` & `getBootstrap()` Styling API**: Configures transport toolbar and spectrum canvas inline styles (`getStyle().apply { borderRadius = "8px"; setCursor(CssCursor.CROSSHAIR) }`) and updates transport button and subtitle/energy badge Bootstrap states via `getBootstrap()`.
-- **Real-Time FFT Spectrum & `AudioEnergyBands` Telemetry (`AudioPlayerExt` & `AudioAnalyzerExt`)**: Synthesizes multi-harmonic test chords (`#btn-synth-chord`), extracts 64-band FFT frequency bins and time-domain waveforms, and drives live Bass (`#badge-bass`), Midrange (`#badge-mid`), Treble (`#badge-treble`), and RMS/Peak Beat (`#badge-rms`) meters.
-- **3 Interactive `Canvas2DExtSurface` Visualizer Modes (`VisualizerDisplayMode`)**:
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `AudioSpectrumVisualizerFragment` (`@MainAppFragment`) and `AudioSpectrumVisualizerApp` (`@AppApplication` extending `FragmentApplication` with `TitleBar`, `MenuBar`, `setThemeMode(ThemeMode.DARK)`, and `addStyleSheet(StylesPrecompiledStyleSheet)`).
+- **`getStyle()` & `getBootstrap()` Styling API**: Configures transport toolbar and spectrum canvas inline styles (`getStyle().apply { borderRadiusPx = 8f; setCursor(CssCursor.CROSSHAIR) }`) and updates transport button and subtitle/energy badge Bootstrap states via `getBootstrap()`.
+- **Real-Time FFT Spectrum & `AudioEnergyBands` Telemetry (`AudioPlayer` & `AudioAnalyzer`)**: Synthesizes multi-harmonic test chords (`#btn-synth-chord`), extracts 64-band FFT frequency bins and time-domain waveforms, and drives live Bass (`#badge-bass`), Midrange (`#badge-mid`), Treble (`#badge-treble`), and RMS/Peak Beat (`#badge-rms`) meters.
+- **3 Interactive `Canvas2D` Visualizer Modes (`VisualizerDisplayMode`)**:
   - `FFT_SPECTRUM_BARS`: 64-band color-graded logarithmic frequency bars.
   - `OSCILLOSCOPE_WAVEFORM`: Continuous phase-aligned time-domain waveform ribbon.
   - `RADIAL_ENERGY_RINGS`: Concentric Bass, Mid, and Treble pulse rings.
@@ -89,8 +89,8 @@ genericui {
 ```kotlin
 @MainAppFragment
 class AudioSpectrumVisualizerFragment : Fragment() {
-    val audioAnalyzer: AudioAnalyzerExt = createBoundAudioAnalyzer()
-    val audioPlayer: AudioPlayerExt = AudioPlayerExt("synth://harmonic-chord-progression.wav").apply {
+    val audioAnalyzer: AudioAnalyzer = createBoundAudioAnalyzer()
+    val audioPlayer: AudioPlayer = AudioPlayer("synth://harmonic-chord-progression.wav").apply {
         attachAudioAnalyzer(audioAnalyzer)
     }
 
@@ -109,14 +109,14 @@ From `examples/tools-and-extensions/audio-spectrum-visualizer`, invoke the root 
 
 | Target Backend | Development Build Command | Production Build Command |
 | :--- | :--- | :--- |
-| **Windows (`:desktop:windows`)** | `../../../gradlew windowsDevelopment` | `../../../gradlew windowsProduction` |
-| **macOS (`:desktop:macos`)** | `../../../gradlew macDevelopment` | `../../../gradlew macProduction` |
-| **Linux GTK (`:desktop:gtk`)** | `../../../gradlew linuxDevelopmentGtk` | `../../../gradlew linuxProductionGtk` |
-| **Linux Qt (`:desktop:qt`)** | `../../../gradlew linuxDevelopmentQt` | `../../../gradlew linuxProductionQt` |
-| **JVM / Swing (`:desktop:swing`)** | `../../../gradlew swingDevelopment` | `../../../gradlew swingProduction` |
-| **Android (`:mobile:android`)** | `../../../gradlew androidDevelopment` | `../../../gradlew androidProduction` |
-| **iOS (`:mobile:ios`)** | `../../../gradlew iosDevelopment` | `../../../gradlew iosProduction` |
-| **Web (`:web` WasmJS + JS + PWA)** | `../../../gradlew webDevelopment` | `../../../gradlew webProduction` |
+| **Windows (`:desktop:windows`)** | `../../../gradlew developmentWindows` | `../../../gradlew productionWindows` |
+| **macOS (`:desktop:macos`)** | `../../../gradlew developmentMac` | `../../../gradlew productionMac` |
+| **Linux GTK (`:desktop:gtk`)** | `../../../gradlew developmentLinuxGtk` | `../../../gradlew productionLinuxGtk` |
+| **Linux Qt (`:desktop:qt`)** | `../../../gradlew developmentLinuxQt` | `../../../gradlew productionLinuxQt` |
+| **JVM / Swing (`:desktop:swing`)** | `../../../gradlew developmentSwing` | `../../../gradlew productionSwing` |
+| **Android (`:mobile:android`)** | `../../../gradlew developmentAndroid` | `../../../gradlew productionAndroid` |
+| **iOS (`:mobile:ios`)** | `../../../gradlew developmentIos` | `../../../gradlew productionIos` |
+| **Web (`:web` WasmJS + JS + PWA)** | `../../../gradlew developmentWeb` | `../../../gradlew productionWeb` |
 
 ---
 

@@ -9,8 +9,8 @@ A beginner-friendly **GenericUI** multiplatform example demonstrating reactive U
 - **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `CounterFragment` (`@MainAppFragment`) and `CounterApp` (`@AppApplication` extending `FragmentApplication`) with `TitleBar`, `MenuBar`, and zero manual `main()` or per-backend bootstrap boilerplate.
 - **Core Widgets & Layouts**: `VStack`, `HStack`, `Card`, `Button`, `Badge`, `Select`, `SelectOption`, `Switch`, `Heading`, and `Text`.
 - **`ComponentBootstrap` (`getBootstrap()`) & `ComponentStyle` (`getStyle()`)**: Uses strongly-typed `getBootstrap()` (`BootstrapType`, `BootstrapSize`, `SpacingScale`, `BorderRadiusStyle`, `ShadowElevation`, `FontWeight`), W3C `getStyle()` (`accentColor`, `fontSizePx`, `borderRadiusPx`), strict custom CSS class isolation (`addClass` / `hasClass` / `getClasses`), and build-time `styles.scss` precompilation (`StylesPrecompiledStyleSheet` via `addStyleSheet(...)`).
-- **Runtime Theme & Accent Color Switching**: Updates `setTheme(...)` / `getTheme()` / `getResolvedTheme()` (`ThemeMode.AUTO`, `ThemeMode.LIGHT`, `ThemeMode.DARK`) and `setThemeColor(...)` (`#2563EB`, `#10B981`, `#8B5CF6`).
-- **`PreferenceStore` Object Persistence**: Automatically serializes and restores `CounterSettings` (`PreferenceSerializable` + `PreferenceObjectCodec`) across all 8 backends.
+- **Runtime Theme & Accent Color Switching**: Updates `setThemeMode(...)` / `getThemeMode()` / `getResolvedTheme()` (`ThemeMode.AUTO`, `ThemeMode.LIGHT`, `ThemeMode.DARK`) and `setThemeColor(...)` (`#2563EB`, `#10B981`, `#8B5CF6`).
+- **`getPreferenceStore()` & `PreferenceStore` Object Persistence**: Automatically serializes and restores `CounterSettings` (`PreferenceSerializable` + `PreferenceObjectCodec`) via `IFragment.getPreferenceStore()` / `IApplication.getPreferenceStore()` across all 8 backends.
 - **`JestElectricRunner` Test Suite**: Full BDD (`describe`, `it`, `expect`, `expectNode`) and Robolectric-style (`launchApp`, `launchFragment`, `findById`, `performClick`, `performSelectValue`, `performSetChecked`) UI test coverage in `CounterJestTest.kt`.
 
 ---
@@ -80,9 +80,12 @@ genericui {
 ```kotlin
 @MainAppFragment
 class CounterFragment(
-    val preferenceStore: PreferenceStore = PreferenceStore(CounterSettings.DEFAULT_STORE_NAME),
+    private val customPreferenceStore: PreferenceStore? = null,
     var onThemeUpdated: ((ThemeMode, String) -> Unit)? = null
 ) : Fragment() {
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
     override fun onCreate(savedState: FragmentBundle?) {
         super.onCreate(savedState)
         // Builds reactive counter, step selector, theme mode/color controls, and PreferenceStore sync
@@ -101,16 +104,16 @@ From `examples/basics/counter-and-theme-switcher`, invoke the root Gradle wrappe
 ../../../gradlew printGenericUiConfig
 
 # Build / Run Desktop & Web targets
-../../../gradlew swingDevelopment
-../../../gradlew windowsDevelopment
-../../../gradlew macDevelopment
-../../../gradlew linuxDevelopmentGtk
-../../../gradlew linuxDevelopmentQt
-../../../gradlew webDevelopment
+../../../gradlew developmentSwing
+../../../gradlew developmentWindows
+../../../gradlew developmentMac
+../../../gradlew developmentLinuxGtk
+../../../gradlew developmentLinuxQt
+../../../gradlew developmentWeb
 
 # Build Mobile targets
-../../../gradlew androidDevelopment
-../../../gradlew iosDevelopment
+../../../gradlew developmentAndroid
+../../../gradlew developmentIos
 ```
 
 ---

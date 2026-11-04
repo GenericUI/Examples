@@ -17,7 +17,7 @@ class AdaptiveMediaCatalogApp(
     initialThemeColor = "#7C3AED"
 ) {
     init {
-        setTheme(ThemeMode.AUTO)
+        setThemeMode(ThemeMode.AUTO)
         setThemeColor("#7C3AED")
         addStyleSheet(StylesPrecompiledStyleSheet)
         rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)

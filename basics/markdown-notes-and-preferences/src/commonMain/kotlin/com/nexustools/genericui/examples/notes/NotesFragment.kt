@@ -36,15 +36,21 @@ import com.nexustools.genericui.style.color.RgbaColor
  *
  * Demonstrates:
  * - Two-pane layout using [SplitPane] (`note-list` sidebar on the left, editor + live [MarkdownView] on the right).
- * - Structured object persistence in [PreferenceStore] (`putObject` / `getObject` with [NoteItem]).
+ * - Structured object persistence in [PreferenceStore] (`put` / `get` with [NoteItem] via [getPreferenceStore]).
  * - Live [PreferenceChangeListener] notifications updating a status [Badge] (`badge-last-change`).
  * - Live search filtering via [SearchField] (`input-search`).
  * - Native file import/export via [Dialogs.openFile] and [Dialogs.saveFile].
  */
 @MainAppFragment
 class NotesFragment(
-    val preferenceStore: PreferenceStore = PreferenceStore(NoteItem.PREFERENCE_NAMESPACE)
+    private val customPreferenceStore: PreferenceStore? = null
 ) : Fragment() {
+
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
+    val preferenceStore: PreferenceStore
+        get() = getPreferenceStore()
 
     private val notes: MutableList<NoteItem> = mutableListOf()
     var activeNoteId: String? = null
@@ -408,7 +414,7 @@ class NotesFragment(
         val ids = preferenceStore.getStringList(NoteItem.NOTE_IDS_KEY)
         var maxNum = 0
         for (id in ids) {
-            val loaded = preferenceStore.getObject(
+            val loaded = preferenceStore.get(
                 key = "${NoteItem.NOTE_KEY_PREFIX}$id",
                 targetClass = NoteItem::class
             )
@@ -517,7 +523,7 @@ class NotesFragment(
     }
 
     private fun persistNote(note: NoteItem) {
-        preferenceStore.putObject("${NoteItem.NOTE_KEY_PREFIX}${note.id}", note)
+        preferenceStore.put("${NoteItem.NOTE_KEY_PREFIX}${note.id}", note)
         preferenceStore.flush()
     }
 

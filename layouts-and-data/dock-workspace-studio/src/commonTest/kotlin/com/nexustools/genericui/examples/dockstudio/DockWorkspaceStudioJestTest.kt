@@ -125,7 +125,7 @@ class DockWorkspaceStudioJestTest {
                     expectNode(controller.findById("badge-hud-status")).toHaveText("HUD: VISIBLE")
 
                     // Verify ComponentBootstrap, ComponentStyle, and strict CSS class isolation
-                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(controller.app.getThemeMode()).toBe(ThemeMode.AUTO)
                     expect(fragment.newDocTabButton.getBootstrap().type).toBe(BootstrapType.PRIMARY)
                     expect(fragment.newDocTabButton.getBootstrap().size).toBe(BootstrapSize.SM)
                     expect(fragment.newDocTabButton.hasClass("btn-primary")).toBe(false)

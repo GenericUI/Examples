@@ -119,7 +119,7 @@ class VirtualizedDataExplorerJestTest {
                     expectNode(controller.findById("badge-total-items")).toHaveText("Total: 10000 / 10000")
 
                     // Verify ComponentBootstrap, ComponentStyle, and strict CSS class isolation
-                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(controller.app.getThemeMode()).toBe(ThemeMode.AUTO)
                     expect(fragment.modeListButton.getBootstrap().type).toBe(BootstrapType.PRIMARY)
                     expect(fragment.modeListButton.getBootstrap().size).toBe(BootstrapSize.SM)
                     expect(fragment.modeListButton.hasClass("btn-primary")).toBe(false)

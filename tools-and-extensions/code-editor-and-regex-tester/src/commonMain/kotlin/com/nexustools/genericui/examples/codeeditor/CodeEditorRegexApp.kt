@@ -16,16 +16,19 @@ import com.nexustools.genericui.window.TitleBar
  */
 @AppApplication
 class CodeEditorRegexApp(
-    preferenceStore: PreferenceStore = PreferenceStore("CodeEditorRegexExample"),
-    val regexFragment: CodeEditorRegexFragment = CodeEditorRegexFragment(preferenceStore)
+    private val customPreferenceStore: PreferenceStore? = null,
+    val regexFragment: CodeEditorRegexFragment = CodeEditorRegexFragment(customPreferenceStore)
 ) : FragmentApplication(
     initialFragment = regexFragment,
     title = "GenericUI — Syntax-Highlighted CodeEditor & Regex Playground",
     initialThemeColor = "#6366F1"
 ) {
 
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
     init {
-        setTheme(ThemeMode.DARK)
+        setThemeMode(ThemeMode.DARK)
         addStyleSheet(StylesPrecompiledStyleSheet)
         val titleBar = TitleBar(
             embedMenuBar = true,

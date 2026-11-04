@@ -104,7 +104,7 @@ class RegistrationWizardJestTest {
 
                     // Verify ComponentBootstrap, ComponentStyle, and strict CSS class isolation
                     val fragment = controller.app.wizardFragment
-                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(controller.app.getThemeMode()).toBe(ThemeMode.AUTO)
                     expect(fragment.nextButton.getBootstrap().type).toBe(BootstrapType.PRIMARY)
                     expect(fragment.nextButton.getBootstrap().size).toBe(BootstrapSize.MD)
                     expect(fragment.nextButton.hasClass("btn-primary")).toBe(false)

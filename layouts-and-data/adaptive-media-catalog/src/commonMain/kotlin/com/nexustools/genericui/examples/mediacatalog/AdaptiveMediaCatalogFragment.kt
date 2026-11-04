@@ -3,9 +3,12 @@ package com.nexustools.genericui.examples.mediacatalog
 import com.nexustools.genericui.component.action.Button
 import com.nexustools.genericui.component.fragment.FragmentBundle
 import com.nexustools.genericui.component.fragment.MainAppFragment
-import com.nexustools.genericui.component.fragment.helper.AdaptiveSplitTabFragment
+import com.nexustools.genericui.component.fragment.helper.HybridColumnFragment
 import com.nexustools.genericui.component.layout.Container
 import com.nexustools.genericui.component.layout.HStack
+import com.nexustools.genericui.component.layout.HybridFoldMode
+import com.nexustools.genericui.component.layout.HybridFullscreenPolicy
+import com.nexustools.genericui.component.layout.HybridLayoutMode
 import com.nexustools.genericui.component.layout.VStack
 import com.nexustools.genericui.component.surface.Card
 import com.nexustools.genericui.component.typography.Badge
@@ -23,17 +26,16 @@ import com.nexustools.genericui.style.color.RgbaColor
 import com.nexustools.genericui.window.WindowConfiguration
 
 /**
- * Responsive media catalog [AdaptiveSplitTabFragment] demonstrating automatic layout adaptation
+ * Responsive media catalog [HybridColumnFragment] demonstrating automatic layout adaptation
  * across three viewport postures:
- * - **Desktop / Tablet Landscape (`1280x800`)**: Multi-column split layout (`TABLET_DESKTOP_COLUMNS`).
- * - **Phone Landscape (`800x390`)**: Immersive 100% fullscreen primary media viewport (`PHONE_LANDSCAPE_FULLSCREEN`).
- * - **Phone Portrait (`390x844`)**: Single vertical flow with primary stage on top and tabbed panes below (`PORTRAIT_SINGLE_FLOW_TABS`).
+ * - **Desktop / Tablet Landscape (`1280x800`)**: Multi-column split layout ([HybridLayoutMode.COLUMNS]).
+ * - **Phone Landscape (`800x390`)**: Immersive 100% fullscreen primary media viewport ([HybridLayoutMode.FULLSCREEN]).
+ * - **Phone Portrait (`390x844`)**: Single vertical flow with primary stage on top and tabbed panes below ([HybridLayoutMode.SINGLE]).
  */
 @MainAppFragment
-class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
-    phoneLandscapeFullscreen = true,
-    primaryColumnWeight = 1.8f,
-    secondaryColumnWeight = 1.0f
+class AdaptiveMediaCatalogFragment : HybridColumnFragment(
+    foldMode = HybridFoldMode.PIN_FIRST_COLUMN_TOP,
+    fullscreenPolicy = HybridFullscreenPolicy.AUTO_PHONE_LANDSCAPE_AND_TABLET_LOCKED
 ) {
 
     val catalogChannels: List<CatalogChannelItem> = DEFAULT_CHANNELS
@@ -82,7 +84,7 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
         onClick = { applyViewportPosture(390, 844) }
     }
 
-    val layoutModeBadge: Badge = Badge("TABLET_DESKTOP_COLUMNS", BootstrapType.INFO, pill = true).apply {
+    val layoutModeBadge: Badge = Badge(HybridLayoutMode.COLUMNS.name, BootstrapType.INFO, pill = true).apply {
         id = "badge-layout-mode"
     }
 
@@ -165,11 +167,10 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
         super.onCreate(savedState)
 
         val primaryStage = buildPrimaryViewportStage()
-        setPrimaryView(primaryStage)
-
-        addTab("Channels", buildChannelsTabPane())
-        addTab("Queue", buildQueueTabPane())
-        addTab("Details", buildDetailsTabPane())
+        addColumn(id = "primary", title = "Now Playing", weight = 1.8f, component = primaryStage)
+        addColumn(id = "channels", title = "Channels", weight = 1.0f, component = buildChannelsTabPane())
+        addColumn(id = "queue", title = "Queue", weight = 1.0f, component = buildQueueTabPane())
+        addColumn(id = "details", title = "Details", weight = 1.0f, component = buildDetailsTabPane())
 
         refreshNowPlayingAndTabs()
         syncPostureBadges()
@@ -177,16 +178,25 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
 
     /**
      * Simulates or applies a viewport configuration change (`widthPx` x `heightPx`) and triggers
-     * [AdaptiveSplitTabFragment.onConfigurationChanged].
+     * [HybridColumnFragment.onConfigurationChanged].
      */
     fun applyViewportPosture(widthPx: Int, heightPx: Int) {
+        val smallest = minOf(widthPx, heightPx)
         val config = WindowConfiguration(
             widthPx = widthPx,
             heightPx = heightPx,
-            smallestScreenWidthDp = minOf(widthPx, heightPx)
+            smallestScreenWidthDp = smallest
         )
         activeViewportConfig = config
-        onConfigurationChanged(config)
+        hybridColumnLayout.updateViewport(
+            viewportWidthDp = widthPx,
+            viewportHeightDp = heightPx,
+            smallestScreenWidthDp = smallest,
+            isMobileTarget = smallest < breakpointSpec.tabletSmallestWidthDp
+        )
+        if (isFullscreen() != hybridColumnLayout.isFullscreen) {
+            setFullscreen(hybridColumnLayout.isFullscreen, getDisplayCutoutMode())
+        }
         syncPostureBadges()
     }
 
@@ -393,16 +403,16 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
     }
 
     private fun syncPostureBadges() {
-        val modeName = getActiveLayoutMode()?.name ?: LayoutMode.TABLET_DESKTOP_COLUMNS.name
-        layoutModeBadge.text = modeName
+        val mode = layoutMode
+        layoutModeBadge.text = mode.name
         viewportSizeBadge.text = "${activeViewportConfig.widthPx}x${activeViewportConfig.heightPx}"
 
         desktopPostureButton.getBootstrap().type =
-            if (getActiveLayoutMode() == LayoutMode.TABLET_DESKTOP_COLUMNS) BootstrapType.PRIMARY else BootstrapType.SECONDARY
+            if (mode == HybridLayoutMode.COLUMNS) BootstrapType.PRIMARY else BootstrapType.SECONDARY
         phoneLandscapePostureButton.getBootstrap().type =
-            if (getActiveLayoutMode() == LayoutMode.PHONE_LANDSCAPE_FULLSCREEN) BootstrapType.PRIMARY else BootstrapType.SECONDARY
+            if (mode == HybridLayoutMode.FULLSCREEN) BootstrapType.PRIMARY else BootstrapType.SECONDARY
         phonePortraitPostureButton.getBootstrap().type =
-            if (getActiveLayoutMode() == LayoutMode.PORTRAIT_SINGLE_FLOW_TABS) BootstrapType.PRIMARY else BootstrapType.SECONDARY
+            if (mode == HybridLayoutMode.SINGLE) BootstrapType.PRIMARY else BootstrapType.SECONDARY
     }
 
     companion object {

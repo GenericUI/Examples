@@ -6,11 +6,11 @@ An interactive 2D rigid-body physics sandbox built with `:extensions:box2d`, `:e
 
 ## Key `GenericUI` Features & Extensions Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `Box2DPhysicsPlaygroundFragment` (`@MainAppFragment`) and `Box2DPhysicsPlaygroundApp` (`@AppApplication` extending `FragmentApplication` with `setTheme(ThemeMode.DARK)` and `addStyleSheet(StylesPrecompiledStyleSheet)`).
-- **`getStyle()` & `getBootstrap()` Styling API**: Configures arena surface inline style (`getStyle().apply { borderRadius = "8px"; setCursor(CssCursor.CROSSHAIR) }`) and dynamically updates pause/resume button and preset badge Bootstrap state via `getBootstrap()`.
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `Box2DPhysicsPlaygroundFragment` (`@MainAppFragment`) and `Box2DPhysicsPlaygroundApp` (`@AppApplication` extending `FragmentApplication` with `setThemeMode(ThemeMode.DARK)` and `addStyleSheet(StylesPrecompiledStyleSheet)`).
+- **`getStyle()` & `getBootstrap()` Styling API**: Configures arena surface inline style (`getStyle().apply { borderRadiusPx = 8f; setCursor(CssCursor.CROSSHAIR) }`) and dynamically updates pause/resume button and preset badge Bootstrap state via `getBootstrap()`.
 - **Rigid-Body Dynamics (`:extensions:box2d` — `World2D`, `Body2D`, `BodyDef2D`, `BodyType2D`, `FixtureDef2D`)**: Simulates static boundaries and dynamic polygon (`PolygonShape2D`) and circle (`CircleShape2D`) bodies with configurable density, friction, and restitution.
 - **Revolute Joints (`RevoluteJoint2D`)**: Demonstrates constraints and pendulum motion in the `Pendulum Cradle` preset (`PhysicsScenePreset.PENDULUM_CRADLE`).
-- **Canvas2D Debug Visualization (`Box2DDebugDrawer` & `Canvas2DExtSurface`)**: Renders world bodies, fixtures, orientation vectors, and joint anchors onto a `Canvas2DExtSurface` (`canvas2DExt`).
+- **Canvas2D Debug Visualization (`Box2DDebugDrawer` & `Canvas2D`)**: Renders world bodies, fixtures, orientation vectors, and joint anchors onto a `Canvas2D` (`canvas2D`).
 - **Interactive Controls**: Spawn boxes (`btn-spawn-box`) and circles (`btn-spawn-circle`) on demand, switch between `Pyramid Stack`, `Pendulum Cradle`, and `Bouncy Cascade` presets (`PhysicsScenePreset`), adjust vertical gravity via `RangeSlider` (`slider-gravity`), or single-step and pause the solver.
 - **`JestElectricRunner` Test Suite**: Automated simulation and UI tests in `Box2DPhysicsPlaygroundJestTest.kt`.
 
@@ -112,24 +112,24 @@ From `examples/canvas-and-gpu/box2d-physics-playground`, invoke the root Gradle 
 
 ```bash
 # Desktop JVM (AWT/Swing + optional LWJGL)
-../../../gradlew swingDevelopment
+../../../gradlew developmentSwing
 
 # Desktop Windows (Win32 / Direct2D / ANGLE / Vulkan)
-../../../gradlew windowsDevelopment
+../../../gradlew developmentWindows
 
 # Desktop macOS (AppKit / CoreGraphics / MoltenVK)
-../../../gradlew macDevelopment
+../../../gradlew developmentMac
 
 # Desktop Linux GTK & Qt
-../../../gradlew linuxDevelopmentGtk
-../../../gradlew linuxDevelopmentQt
+../../../gradlew developmentLinuxGtk
+../../../gradlew developmentLinuxQt
 
 # Web (WasmJS primary + JS IR fallback + PWA manifest.webmanifest)
-../../../gradlew webDevelopment
+../../../gradlew developmentWeb
 
 # Mobile (Android & iOS)
-../../../gradlew androidDevelopment
-../../../gradlew iosDevelopment
+../../../gradlew developmentAndroid
+../../../gradlew developmentIos
 ```
 
 ---

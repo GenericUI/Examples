@@ -14,21 +14,27 @@ import com.nexustools.genericui.window.TitleBar
  */
 @AppApplication
 class CounterApp(
-    val preferenceStore: PreferenceStore = PreferenceStore(CounterSettings.DEFAULT_STORE_NAME),
-    val counterFragment: CounterFragment = CounterFragment(preferenceStore)
+    private val customPreferenceStore: PreferenceStore? = null,
+    val counterFragment: CounterFragment = CounterFragment(customPreferenceStore)
 ) : FragmentApplication(
     initialFragment = counterFragment,
     title = "GenericUI — Counter & Theme Switcher",
     initialThemeColor = counterFragment.settings.themeColorHex
 ) {
 
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
+    val preferenceStore: PreferenceStore
+        get() = getPreferenceStore()
+
     init {
-        setTheme(counterFragment.settings.resolvedThemeMode())
+        setThemeMode(counterFragment.settings.resolvedThemeMode())
         setThemeColor(counterFragment.settings.themeColorHex)
         addStyleSheet(StylesPrecompiledStyleSheet)
 
         counterFragment.onThemeUpdated = { mode, colorHex ->
-            setTheme(mode)
+            setThemeMode(mode)
             setThemeColor(colorHex)
         }
 

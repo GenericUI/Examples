@@ -1,7 +1,15 @@
 package com.nexustools.genericui.examples.dataeditor
 
 import com.nexustools.genericui.component.system.PreferenceStore
+import com.nexustools.genericui.io.ByteBuffer
+import com.nexustools.genericui.io.ReadableByteBuffer
+import com.nexustools.genericui.io.WritableByteBuffer
+import com.nexustools.genericui.util.BinaryJson
 import com.nexustools.genericui.util.BinaryPlist
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.coroutines.startCoroutine
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -10,6 +18,22 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class DataEditorExampleTest {
+
+    private fun runSuspend(block: suspend () -> Unit) {
+        var failure: Throwable? = null
+        var completed = false
+        block.startCoroutine(
+            object : Continuation<Unit> {
+                override val context: CoroutineContext = EmptyCoroutineContext
+                override fun resumeWith(result: Result<Unit>) {
+                    completed = true
+                    failure = result.exceptionOrNull()
+                }
+            }
+        )
+        failure?.let { throw it }
+        assertTrue(completed)
+    }
 
     @Test
     fun testLazyGridTreeInlineLeafAndBranchEditingAndReordering() {
@@ -192,6 +216,29 @@ class DataEditorExampleTest {
             fromBsonTab.toJsonString(pretty = false),
             fromPlistTab.toJsonString(pretty = false)
         )
+    }
+
+    @Test
+    fun testWritableAndReadableByteBufferStreamingWithBinaryJsonAndBinaryPlist() = runSuspend {
+        val sampleElement = DataDocumentCodec.parseJsonString(
+            """{"engine":"GenericUI","streaming":true,"magic":42}"""
+        )
+
+        val bsonBuffer = DataDocumentCodec.encodeBinaryJsonToBuffer(sampleElement, WritableByteBuffer(64))
+        assertTrue(bsonBuffer.remaining > 0)
+        val decodedBson = DataDocumentCodec.decodeBinaryJson(ReadableByteBuffer(bsonBuffer))
+        assertEquals("GenericUI", decodedBson["engine"]?.asString())
+        assertEquals(true, decodedBson["streaming"]?.asBoolean())
+        assertEquals(42, decodedBson["magic"]?.asInt())
+
+        val plistBuffer = DataDocumentCodec.encodeBinaryPlistToBuffer(sampleElement, WritableByteBuffer(64))
+        assertTrue(BinaryPlist.isBinaryPlist(plistBuffer))
+        val decodedPlist = DataDocumentCodec.decodeBinaryPlist(ReadableByteBuffer(plistBuffer))
+        assertEquals("GenericUI", decodedPlist["engine"]?.asString())
+        assertEquals(42, decodedPlist["magic"]?.asInt())
+
+        val utf8Buf = ByteBuffer.fromString("{\"ok\":true}", "utf8")
+        assertEquals("{\"ok\":true}", utf8Buf.toString("utf8"))
     }
 
     @Test

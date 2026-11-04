@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="chrome-bg" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="ring-outer" x1="28" y1="28" x2="228" y2="228" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4285F4"/>
+      <stop offset="35%" stop-color="#EA4335"/>
+      <stop offset="70%" stop-color="#FBBC05"/>
+      <stop offset="100%" stop-color="#34A853"/>
+    </linearGradient>
+    <linearGradient id="core-blue" x1="88" y1="88" x2="168" y2="168" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#60A5FA"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="224" height="224" rx="48" fill="url(#chrome-bg)" stroke="url(#ring-outer)" stroke-width="8"/>
+  <!-- Outer browser globe ring -->
+  <circle cx="128" cy="128" r="78" fill="none" stroke="url(#ring-outer)" stroke-width="14"/>
+  <!-- Meridian and latitude arcs -->
+  <ellipse cx="128" cy="128" rx="42" ry="78" fill="none" stroke="#93C5FD" stroke-width="5" stroke-opacity="0.65"/>
+  <line x1="50" y1="128" x2="206" y2="128" stroke="#93C5FD" stroke-width="5" stroke-opacity="0.65"/>
+  <!-- Inner Chrome-inspired lens -->
+  <circle cx="128" cy="128" r="34" fill="url(#core-blue)" stroke="#F8FAFC" stroke-width="6"/>
+  <!-- Compass needle highlight -->
+  <polygon points="128,68 140,120 128,112 116,120" fill="#FBBF24"/>
+</svg>

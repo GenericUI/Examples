@@ -18,7 +18,7 @@ class SketchpadApp(
     initialThemeColor = "#3B82F6"
 ) {
     init {
-        setTheme(ThemeMode.DARK)
+        setThemeMode(ThemeMode.DARK)
         addStyleSheet(StylesPrecompiledStyleSheet)
         val titleBar = TitleBar(
             embedMenuBar = false,

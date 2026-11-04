@@ -15,7 +15,10 @@ import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.layout.HStack
 import com.nexustools.genericui.component.layout.ScrollView
 import com.nexustools.genericui.component.layout.VStack
+import com.nexustools.genericui.component.media.AudioAnalyzer
 import com.nexustools.genericui.component.media.AudioEnergyBands
+import com.nexustools.genericui.component.media.AudioPlayer
+import com.nexustools.genericui.component.media.Canvas2D
 import com.nexustools.genericui.ext.imageprocessing.context2d.ImageBuffer2DContext
 import com.nexustools.genericui.component.media.MediaCapabilitiesReport
 import com.nexustools.genericui.component.media.SubtitleCue
@@ -34,9 +37,6 @@ import com.nexustools.genericui.enums.media.CodecSupportLevel
 import com.nexustools.genericui.enums.media.MediaContainer
 import com.nexustools.genericui.enums.media.VideoCodec
 import com.nexustools.genericui.enums.ui.Orientation
-import com.nexustools.genericui.ext.canvas2d.Canvas2DExtSurface
-import com.nexustools.genericui.ext.media.AudioAnalyzerExt
-import com.nexustools.genericui.ext.media.AudioPlayerExt
 import com.nexustools.genericui.ext.media.MediaExtension
 import com.nexustools.genericui.nativeimpl.media.AudioAnalyzerNativeImpl
 import com.nexustools.genericui.enums.css.CssCursor
@@ -50,9 +50,9 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 /**
- * Primary [Fragment] demonstrating `:extensions:media` ([AudioPlayerExt], [AudioAnalyzerExt],
+ * Primary [Fragment] demonstrating `:extensions:media` ([AudioPlayer], [AudioAnalyzer],
  * [WebVttSrtParser], [AudioEnergyBands], [MediaCapabilitiesReport]) paired with a real-time
- * `:extensions:canvas2d` ([Canvas2DExtSurface]) visualizer stage.
+ * `:extensions:canvas2d` ([Canvas2D]) visualizer stage.
  */
 @MainAppFragment
 class AudioSpectrumVisualizerFragment : Fragment() {
@@ -79,8 +79,8 @@ class AudioSpectrumVisualizerFragment : Fragment() {
 
     val mediaCapabilities: MediaCapabilitiesReport = buildDefaultCapabilitiesReport()
 
-    val audioAnalyzer: AudioAnalyzerExt = createBoundAudioAnalyzer()
-    val audioPlayer: AudioPlayerExt = AudioPlayerExt("synth://harmonic-chord-progression.wav").apply {
+    val audioAnalyzer: AudioAnalyzer = createBoundAudioAnalyzer()
+    val audioPlayer: AudioPlayer = AudioPlayer("synth://harmonic-chord-progression.wav").apply {
         attachAudioAnalyzer(audioAnalyzer)
     }
 
@@ -154,8 +154,8 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         id = "split-visualizer-workspace"
     }
 
-    // Left Stage: Canvas2DExtSurface + Active Subtitle Cue Banner
-    val visualizerCanvas: Canvas2DExtSurface = Canvas2DExtSurface(width = 680, height = 380).apply {
+    // Left Stage: Canvas2D + Active Subtitle Cue Banner
+    val visualizerCanvas: Canvas2D = Canvas2D(width = 680, height = 380).apply {
         id = "canvas-spectrum-visualizer"
     }
 
@@ -248,7 +248,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         renderVisualizerFrame()
     }
 
-    private fun createBoundAudioAnalyzer(): AudioAnalyzerExt {
+    private fun createBoundAudioAnalyzer(): AudioAnalyzer {
         MediaExtension.registerProviders(
             audioAnalyzer = { requestedFft ->
                 activeFftSize = requestedFft.coerceAtLeast(64)
@@ -297,7 +297,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
                 }
             }
         )
-        return AudioAnalyzerExt(fftSize = 2048)
+        return AudioAnalyzer(fftSize = 2048)
     }
 
     private fun buildWorkspaceLayout() {

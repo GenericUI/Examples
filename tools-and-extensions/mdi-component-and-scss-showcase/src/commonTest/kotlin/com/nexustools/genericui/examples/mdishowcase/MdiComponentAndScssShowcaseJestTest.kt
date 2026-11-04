@@ -331,21 +331,21 @@ class MdiComponentAndScssShowcaseJestTest {
                     val frag = app.showcaseFragment
 
                     // Verify initial ThemeMode.AUTO and global precompiled stylesheet registration
-                    expect(app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(app.getThemeMode()).toBe(ThemeMode.AUTO)
                     assertTrue(app.hasStyleSheet(StylesPrecompiledStyleSheet))
                     assertTrue(frag.hasClass("mdi-showcase-root"))
 
                     // Switch theme mode between DARK, LIGHT, and AUTO
                     app.selectAppThemeMode(ThemeMode.DARK)
-                    expect(app.getTheme()).toBe(ThemeMode.DARK)
+                    expect(app.getThemeMode()).toBe(ThemeMode.DARK)
                     expect(app.getResolvedTheme()).toBe(ThemeMode.DARK)
 
                     app.selectAppThemeMode(ThemeMode.LIGHT)
-                    expect(app.getTheme()).toBe(ThemeMode.LIGHT)
+                    expect(app.getThemeMode()).toBe(ThemeMode.LIGHT)
                     expect(app.getResolvedTheme()).toBe(ThemeMode.LIGHT)
 
                     app.selectAppThemeMode(ThemeMode.AUTO)
-                    expect(app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(app.getThemeMode()).toBe(ThemeMode.AUTO)
 
                     // Toggle global stylesheet via removeStyleSheet / addStyleSheet
                     assertTrue(app.setGlobalStyleSheetEnabled(false))

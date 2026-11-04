@@ -17,7 +17,7 @@ class DockWorkspaceStudioApp(
     initialThemeColor = "#0EA5E9"
 ) {
     init {
-        setTheme(ThemeMode.AUTO)
+        setThemeMode(ThemeMode.AUTO)
         setThemeColor("#0EA5E9")
         addStyleSheet(StylesPrecompiledStyleSheet)
         rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)

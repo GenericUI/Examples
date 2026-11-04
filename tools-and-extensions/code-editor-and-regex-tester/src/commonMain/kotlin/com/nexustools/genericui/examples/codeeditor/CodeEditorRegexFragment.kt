@@ -45,8 +45,14 @@ import com.nexustools.genericui.style.css.CssEdgeLengths
  */
 @MainAppFragment
 class CodeEditorRegexFragment(
-    val preferenceStore: PreferenceStore = PreferenceStore("CodeEditorRegexExample")
+    private val customPreferenceStore: PreferenceStore? = null
 ) : Fragment() {
+
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
+    val preferenceStore: PreferenceStore
+        get() = getPreferenceStore()
 
     private val snippetRegistry = linkedMapOf<String, CodeSnippetPreset>()
     var activeSnippetId: String = CodeSnippetPreset.BUILT_IN_PRESETS.first().id

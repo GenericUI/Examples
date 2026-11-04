@@ -3,12 +3,16 @@ package com.nexustools.genericui.examples.dataeditor
 import com.nexustools.genericui.component.system.PreferenceElement
 import com.nexustools.genericui.component.system.PreferenceElementKind
 import com.nexustools.genericui.component.system.PreferenceObjectCodec
+import com.nexustools.genericui.io.ByteBuffer
+import com.nexustools.genericui.io.ReadableByteBuffer
+import com.nexustools.genericui.io.WritableByteBuffer
 import com.nexustools.genericui.util.BinaryJson
 import com.nexustools.genericui.util.BinaryPlist
 
 /**
  * Multi-format document codec bridging UTF-8 JSON strings, [BinaryJson] (`.bson` / `.bjson`),
- * and Apple [BinaryPlist] (`bplist00` `.plist`), plus hex dump and byte-size comparison helpers.
+ * and Apple [BinaryPlist] (`bplist00` `.plist`) over [WritableByteBuffer], [ReadableByteBuffer],
+ * and [ByteBuffer], plus hex dump and byte-size comparison helpers.
  */
 object DataDocumentCodec {
 
@@ -40,10 +44,24 @@ object DataDocumentCodec {
     }
 
     /**
-     * Encodes a [PreferenceElement] tree into [BinaryJson] (`.bson`) bytes.
+     * Encodes a [PreferenceElement] tree into [BinaryJson] (`.bson`) bytes via [WritableByteBuffer].
      */
-    fun encodeBinaryJson(element: PreferenceElement): ByteArray =
-        BinaryJson.encodeElement(element)
+    fun encodeBinaryJson(element: PreferenceElement): ByteArray {
+        val writable = WritableByteBuffer(256)
+        BinaryJson.encodeElement(element, writable)
+        return writable.toByteArray()
+    }
+
+    /**
+     * Encodes a [PreferenceElement] tree into a [ByteBuffer] in [BinaryJson] format.
+     */
+    fun encodeBinaryJsonToBuffer(
+        element: PreferenceElement,
+        writable: WritableByteBuffer = WritableByteBuffer(256)
+    ): ByteBuffer {
+        BinaryJson.encodeElement(element, writable)
+        return writable.toByteBuffer()
+    }
 
     /**
      * Decodes [BinaryJson] (`.bson` / `.bjson`) bytes into a [PreferenceElement] tree.
@@ -55,20 +73,46 @@ object DataDocumentCodec {
             val decoded = runCatching { decodeStandardLittleEndianBson(bytes, 0).first }.getOrNull()
             if (decoded != null) return decoded
         }
-        return BinaryJson.decodeElement(bytes)
+        return BinaryJson.decodeElement(ByteBuffer.wrap(bytes))
     }
 
     /**
-     * Encodes a [PreferenceElement] tree into Apple [BinaryPlist] (`bplist00`) bytes.
+     * Decodes [BinaryJson] from a [ReadableByteBuffer].
      */
-    fun encodeBinaryPlist(element: PreferenceElement): ByteArray =
-        BinaryPlist.encodeElement(element)
+    suspend fun decodeBinaryJson(readable: ReadableByteBuffer): PreferenceElement =
+        BinaryJson.decodeElement(readable)
+
+    /**
+     * Encodes a [PreferenceElement] tree into Apple [BinaryPlist] (`bplist00`) bytes via [WritableByteBuffer].
+     */
+    fun encodeBinaryPlist(element: PreferenceElement): ByteArray {
+        val writable = WritableByteBuffer(256)
+        BinaryPlist.encodeElement(element, writable)
+        return writable.toByteArray()
+    }
+
+    /**
+     * Encodes a [PreferenceElement] tree into a [ByteBuffer] in Apple [BinaryPlist] (`bplist00`) format.
+     */
+    fun encodeBinaryPlistToBuffer(
+        element: PreferenceElement,
+        writable: WritableByteBuffer = WritableByteBuffer(256)
+    ): ByteBuffer {
+        BinaryPlist.encodeElement(element, writable)
+        return writable.toByteBuffer()
+    }
 
     /**
      * Decodes Apple [BinaryPlist] (`bplist00`) bytes into a [PreferenceElement] tree.
      */
     fun decodeBinaryPlist(bytes: ByteArray): PreferenceElement =
-        BinaryPlist.decodeElement(bytes)
+        BinaryPlist.decodeElement(ByteBuffer.wrap(bytes))
+
+    /**
+     * Decodes Apple [BinaryPlist] (`bplist00`) from a [ReadableByteBuffer].
+     */
+    suspend fun decodeBinaryPlist(readable: ReadableByteBuffer): PreferenceElement =
+        BinaryPlist.decodeElement(readable)
 
     /**
      * Encodes [element] into the specified target [format].
@@ -79,11 +123,12 @@ object DataDocumentCodec {
         prettyJsonIndent: Int = 2
     ): ByteArray = when (format) {
         DataFormat.JSON -> {
-            if (prettyJsonIndent > 0) {
-                formatPrettyJson(element, prettyJsonIndent).encodeToByteArray()
+            val jsonText = if (prettyJsonIndent > 0) {
+                formatPrettyJson(element, prettyJsonIndent)
             } else {
-                formatCompactJson(element).encodeToByteArray()
+                formatCompactJson(element)
             }
+            ByteBuffer.fromString(jsonText, "utf8").toByteArray()
         }
         DataFormat.BINARY_JSON_BSON -> encodeBinaryJson(element)
         DataFormat.BINARY_PLIST -> encodeBinaryPlist(element)
@@ -102,7 +147,7 @@ object DataDocumentCodec {
             DataFormat.BINARY_PLIST -> decodeBinaryPlist(bytes)
             DataFormat.BINARY_JSON_BSON -> decodeBinaryJson(bytes)
             DataFormat.JSON -> {
-                val text = bytes.decodeToString()
+                val text = ByteBuffer.wrap(bytes).toString("utf8")
                 PreferenceObjectCodec.fromJsonElement(text)
             }
         }

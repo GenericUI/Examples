@@ -83,11 +83,11 @@ import com.nexustools.genericui.component.htmlcompat.Th
 import com.nexustools.genericui.component.htmlcompat.Thead
 import com.nexustools.genericui.component.htmlcompat.Tr
 import com.nexustools.genericui.component.htmlcompat.Ul
-import com.nexustools.genericui.component.layout.Col
+import com.nexustools.genericui.component.layout.Column
+import com.nexustools.genericui.component.layout.ColumnContainer
 import com.nexustools.genericui.component.layout.Container
 import com.nexustools.genericui.component.layout.FlexBox
 import com.nexustools.genericui.component.layout.HStack
-import com.nexustools.genericui.component.layout.Row
 import com.nexustools.genericui.component.layout.ScrollView
 import com.nexustools.genericui.component.layout.VStack
 import com.nexustools.genericui.component.lazy.LazyGrid
@@ -835,11 +835,11 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
             category = "Lazy & Layout",
             bounds = Rect(412, 344, 380, 310)
         ) {
-            val gridRow = Row().apply {
-                val colLeft = Col(span = 6).apply {
+            val gridRow = ColumnContainer().apply {
+                val colLeft = Column(span = 6).apply {
                     addChild(Badge("genericui:row > genericui:col (6)", BootstrapType.PRIMARY))
                 }
-                val colRight = Col(span = 6).apply {
+                val colRight = Column(span = 6).apply {
                     addChild(Badge("genericui:row > genericui:col (6)", BootstrapType.INFO))
                 }
                 addChild(colLeft)

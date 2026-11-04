@@ -1,6 +1,6 @@
 package com.nexustools.genericui.examples.mediacatalog
 
-import com.nexustools.genericui.component.fragment.helper.AdaptiveSplitTabFragment
+import com.nexustools.genericui.component.layout.HybridLayoutMode
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.enums.ui.ThemeMode
@@ -26,36 +26,36 @@ class AdaptiveMediaCatalogJestTest {
                     val fragment = controller.app.catalogFragment
 
                     // Initial Desktop / Tablet Landscape posture (1280x800)
-                    expect(fragment.getActiveLayoutMode())
-                        .toBe(AdaptiveSplitTabFragment.LayoutMode.TABLET_DESKTOP_COLUMNS)
+                    expect(fragment.layoutMode)
+                        .toBe(HybridLayoutMode.COLUMNS)
                     expectNode(controller.findById("badge-layout-mode"))
-                        .toHaveText("TABLET_DESKTOP_COLUMNS")
+                        .toHaveText("COLUMNS")
                     expect(fragment.isFullscreen()).toBe(false)
 
                     // Switch to Phone Landscape posture (800x390 -> immersive fullscreen primary view)
                     controller.findById("btn-posture-phone-landscape").performClick()
-                    expect(fragment.getActiveLayoutMode())
-                        .toBe(AdaptiveSplitTabFragment.LayoutMode.PHONE_LANDSCAPE_FULLSCREEN)
+                    expect(fragment.layoutMode)
+                        .toBe(HybridLayoutMode.FULLSCREEN)
                     expectNode(controller.findById("badge-layout-mode"))
-                        .toHaveText("PHONE_LANDSCAPE_FULLSCREEN")
+                        .toHaveText("FULLSCREEN")
                     expectNode(controller.findById("badge-viewport-size"))
                         .toHaveText("800x390")
                     expect(fragment.isFullscreen()).toBe(true)
 
                     // Switch to Phone Portrait posture (390x844 -> vertical stack with tabs)
                     controller.findById("btn-posture-phone-portrait").performClick()
-                    expect(fragment.getActiveLayoutMode())
-                        .toBe(AdaptiveSplitTabFragment.LayoutMode.PORTRAIT_SINGLE_FLOW_TABS)
+                    expect(fragment.layoutMode)
+                        .toBe(HybridLayoutMode.SINGLE)
                     expectNode(controller.findById("badge-layout-mode"))
-                        .toHaveText("PORTRAIT_SINGLE_FLOW_TABS")
+                        .toHaveText("SINGLE")
                     expectNode(controller.findById("badge-viewport-size"))
                         .toHaveText("390x844")
                     expect(fragment.isFullscreen()).toBe(false)
 
                     // Return to Desktop Split posture (1280x800)
                     controller.findById("btn-posture-desktop").performClick()
-                    expect(fragment.getActiveLayoutMode())
-                        .toBe(AdaptiveSplitTabFragment.LayoutMode.TABLET_DESKTOP_COLUMNS)
+                    expect(fragment.layoutMode)
+                        .toBe(HybridLayoutMode.COLUMNS)
                     expectNode(controller.findById("badge-viewport-size"))
                         .toHaveText("1280x800")
                 }
@@ -116,7 +116,7 @@ class AdaptiveMediaCatalogJestTest {
                     expectNode(controller.findById("label-queue-summary")).toHaveText("Queue is empty")
 
                     // Verify ComponentBootstrap, ComponentStyle, and strict CSS class isolation
-                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(controller.app.getThemeMode()).toBe(ThemeMode.AUTO)
                     expect(fragment.desktopPostureButton.getBootstrap().type).toBe(BootstrapType.PRIMARY)
                     expect(fragment.desktopPostureButton.getBootstrap().size).toBe(BootstrapSize.SM)
                     expect(fragment.desktopPostureButton.hasClass("btn-primary")).toBe(false)

@@ -53,7 +53,7 @@ class NotesJestTest {
 
                     // Verify ComponentBootstrap, ComponentStyle, and strict CSS class isolation
                     val fragment = controller.app.notesFragment
-                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(controller.app.getThemeMode()).toBe(ThemeMode.AUTO)
                     expect(fragment.newNoteButton.getBootstrap().type).toBe(BootstrapType.PRIMARY)
                     expect(fragment.newNoteButton.getBootstrap().size).toBe(BootstrapSize.SM)
                     expect(fragment.newNoteButton.hasClass("btn-primary")).toBe(false)
@@ -120,7 +120,7 @@ class NotesJestTest {
                     firstSession.destroy()
 
                     // Verify structured NoteItem directly in PreferenceStore
-                    val savedNote = store.getObject("note.note-2", NoteItem::class)
+                    val savedNote = store.get("note.note-2", NoteItem::class)
                     expect(savedNote).toBeNotNull()
                     expect(savedNote?.title).toBe("Persistent Design Spec")
                     expect(savedNote?.pinned).toBe(true)

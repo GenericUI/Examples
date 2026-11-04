@@ -50,10 +50,13 @@ import com.nexustools.genericui.style.css.CssEdgeLengths
  */
 @MainAppFragment
 class DataEditorFragment(
-    val preferenceStore: PreferenceStore = PreferenceStore.open("BsonJsonPlistEditor")
+    private val customPreferenceStore: PreferenceStore? = null
 ) : Fragment() {
 
-    private var preferences: DataEditorPreferences = DataEditorPreferences.loadFrom(preferenceStore)
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
+    private var preferences: DataEditorPreferences = DataEditorPreferences.loadFrom(getPreferenceStore())
     private var tabCounter: Int = 0
 
     private val openTabsMap = linkedMapOf<String, DataDocumentTabState>()
@@ -306,9 +309,10 @@ class DataEditorFragment(
 
         // 6. Status Bar
         statusBar.addClass("status-bar")
-        statusBar.getStyle().apply {
-            padding = "4px 8px"
-        }
+        statusBar.getStyle().padding = com.nexustools.genericui.style.css.CssEdgeLengths.symmetric(
+            vertical = com.nexustools.genericui.style.css.CssLength.px(4f),
+            horizontal = com.nexustools.genericui.style.css.CssLength.px(8f)
+        )
         val statusRow = HStack(gap = SpacingScale.S2)
         statusRow.addChild(Label("Selected:"))
         statusRow.addChild(selectedPathBadge)
@@ -772,7 +776,7 @@ class DataEditorFragment(
             nextTabId = nextTabId(),
             onLoaded = { loadedTab, selectedFile ->
                 preferences = preferences.withRecentFile(selectedFile.name)
-                DataEditorPreferences.saveTo(preferenceStore, preferences)
+                DataEditorPreferences.saveTo(getPreferenceStore(), preferences)
                 registerAndSelectTab(
                     loadedTab,
                     statusNote = "Opened '${selectedFile.name}' (${loadedTab.format.displayName})."
@@ -798,7 +802,7 @@ class DataEditorFragment(
             prettyJsonIndent = preferences.prettyPrintIndent,
             onSaved = { savedFile, writtenBytes ->
                 preferences = preferences.withRecentFile(savedFile.name)
-                DataEditorPreferences.saveTo(preferenceStore, preferences)
+                DataEditorPreferences.saveTo(getPreferenceStore(), preferences)
                 syncTabHeader(tab)
                 refreshFormatComparisonCard(tab)
                 setStatus("Saved '${savedFile.name}' (${writtenBytes.size} bytes, ${tab.format.displayName}).")

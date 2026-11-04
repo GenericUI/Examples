@@ -19,7 +19,7 @@ class MdiComponentAndScssShowcaseApp(
 ) {
 
     init {
-        setTheme(ThemeMode.AUTO)
+        setThemeMode(ThemeMode.AUTO)
         addStyleSheet(StylesPrecompiledStyleSheet)
         val titleBar = TitleBar(
             embedMenuBar = true,
@@ -38,7 +38,7 @@ class MdiComponentAndScssShowcaseApp(
      * Switches the application theme mode ([ThemeMode.AUTO], [ThemeMode.DARK], or [ThemeMode.LIGHT]).
      */
     fun selectAppThemeMode(mode: ThemeMode) {
-        setTheme(mode)
+        setThemeMode(mode)
     }
 
     /**

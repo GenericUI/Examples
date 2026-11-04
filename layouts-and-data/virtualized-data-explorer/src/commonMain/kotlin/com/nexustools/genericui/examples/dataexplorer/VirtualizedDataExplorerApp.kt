@@ -17,7 +17,7 @@ class VirtualizedDataExplorerApp(
     initialThemeColor = "#2563EB"
 ) {
     init {
-        setTheme(ThemeMode.AUTO)
+        setThemeMode(ThemeMode.AUTO)
         setThemeColor("#2563EB")
         addStyleSheet(StylesPrecompiledStyleSheet)
         rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)

@@ -34,11 +34,17 @@ import com.nexustools.genericui.style.color.RgbaColor
  */
 @MainAppFragment
 class CounterFragment(
-    val preferenceStore: PreferenceStore = PreferenceStore(CounterSettings.DEFAULT_STORE_NAME),
+    private val customPreferenceStore: PreferenceStore? = null,
     var onThemeUpdated: ((ThemeMode, String) -> Unit)? = null
 ) : Fragment() {
 
-    var settings: CounterSettings = CounterSettings.loadFrom(preferenceStore)
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
+    val preferenceStore: PreferenceStore
+        get() = getPreferenceStore()
+
+    var settings: CounterSettings = CounterSettings.loadFrom(getPreferenceStore())
         private set
 
     val counterValueBadge: Badge = Badge(

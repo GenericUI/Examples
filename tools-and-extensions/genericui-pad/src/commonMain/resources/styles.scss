@@ -1,0 +1,139 @@
+$chrome-bg: #18181B;
+$chrome-elevated: #1E1E22;
+$tab-active-bg: #27272A;
+$command-bar-bg: #202024;
+$editor-surface-bg: #1C1C1F;
+$status-bar-bg: #18181B;
+$border-subtle: #2E2E34;
+$text-primary: #F4F4F5;
+$text-secondary: #A1A1AA;
+$accent-blue: #38BDF8;
+$spellcheck-red: #EF4444;
+
+html, body, #genericui-app, .genericui-window {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $chrome-bg;
+    color: $text-primary;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+}
+
+.genericui-pad-root {
+    width: 100%;
+    height: 100%;
+    background-color: $chrome-bg;
+    color: $text-primary;
+    padding: 0;
+
+    .genericui-tabbed-header-slot {
+        background-color: $chrome-bg;
+        padding: 6px 10px 0 10px;
+        border-bottom: 1px solid $border-subtle;
+    }
+
+    .genericui-tabbed-desktop-strip {
+        background-color: $chrome-bg;
+        padding: 2px 4px;
+    }
+
+    .genericui-tabbed-chip {
+        background-color: $chrome-elevated;
+        color: $text-secondary;
+        border-radius: 8px 8px 0 0;
+        padding: 4px 10px;
+    }
+
+    .genericui-tabbed-chip.active {
+        background-color: $tab-active-bg;
+        color: $text-primary;
+        font-weight: 600;
+    }
+
+    .pad-command-bar {
+        background-color: $command-bar-bg;
+        border-bottom: 1px solid $border-subtle;
+        padding: 6px 12px;
+    }
+
+    .pad-menu-triggers {
+        padding: 2px 6px;
+    }
+
+    .pad-format-toolbar {
+        background-color: $chrome-elevated;
+        border-radius: 6px;
+        padding: 2px 8px;
+    }
+
+    .pad-right-actions {
+        padding: 2px 6px;
+    }
+
+    .pad-find-replace-bar {
+        background-color: $chrome-elevated;
+        border-bottom: 1px solid $border-subtle;
+        padding: 6px 12px;
+    }
+
+    .pad-settings-panel {
+        background-color: $chrome-elevated;
+        border-bottom: 1px solid $border-subtle;
+        padding: 8px 14px;
+    }
+
+    .pad-tab-fragment {
+        background-color: $editor-surface-bg;
+        color: $text-primary;
+        padding: 12px 16px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .pad-editor-textarea {
+        background-color: $editor-surface-bg;
+        color: $text-primary;
+        font-family: "Cascadia Code", "Consolas", "Segoe UI", monospace;
+        font-size: 15px;
+        line-height: 1.55;
+        border: 1px solid $border-subtle;
+        border-radius: 6px;
+        padding: 12px;
+        width: 100%;
+    }
+
+    .pad-spellcheck-bar {
+        background-color: $chrome-elevated;
+        border-radius: 6px;
+        padding: 4px 10px;
+    }
+
+    .pad-spellcheck-token {
+        color: $text-primary;
+        text-decoration: underline wavy $spellcheck-red;
+        border-bottom: 2px dotted $spellcheck-red;
+        padding: 1px 6px;
+    }
+
+    .pad-markdown-preview {
+        background-color: $chrome-elevated;
+        color: $text-primary;
+        border: 1px solid $border-subtle;
+        border-radius: 6px;
+        padding: 12px;
+    }
+
+    .pad-status-bar {
+        background-color: $status-bar-bg;
+        color: $text-secondary;
+        border-top: 1px solid $border-subtle;
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+
+    .pad-status-cell {
+        color: $text-secondary;
+        padding: 0 10px;
+    }
+}

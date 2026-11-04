@@ -9,7 +9,7 @@ A multiplatform showcase and live theme studio built with `GenericUI`, `:extensi
 - **Annotation-Driven Entry Point & Fragment Hierarchy (`@MainAppFragment`, `@AppFragment`, & `@AppApplication`)**:
   - `MdiComponentAndScssShowcaseFragment` (`@MainAppFragment`) hosts the main 2-tab MDI & SCSS studio.
   - `EmbeddedDockWorkspaceSubFragment` (`@AppFragment` extending `DockWorkspaceFragment`) is embedded inside MDI Window #6 and automatically gets its own generated `EmbeddedDockWorkspaceSubFragmentActivity` on Android.
-  - `MdiComponentAndScssShowcaseApp` (`@AppApplication` extending `FragmentApplication`) configures the outer `TitleBar`, `MenuBar`, `ThemeMode.AUTO` (`setTheme` / `getTheme` / `getResolvedTheme`), and precompiled stylesheet (`addStyleSheet(StylesPrecompiledStyleSheet)` / `removeStyleSheet(...)`).
+  - `MdiComponentAndScssShowcaseApp` (`@AppApplication` extending `FragmentApplication`) configures the outer `TitleBar`, `MenuBar`, `ThemeMode.AUTO` (`setThemeMode` / `getThemeMode` / `getResolvedTheme`), and precompiled stylesheet (`addStyleSheet(StylesPrecompiledStyleSheet)` / `removeStyleSheet(...)`).
 - **Precompiled `.scss` Stylesheets, `getStyle()`, & `getBootstrap()`**:
   - Compiles `src/commonMain/resources/styles.scss` at build time into `StylesPrecompiledStyleSheet` via `styles { compileSass = true; precompileToKotlin = true; generateWebCss = true; globalStyleSheet = "styles.scss" }`.
   - Uses `getStyle()` and `getBootstrap()` to manage inline CSS properties and Bootstrap button/badge states.
@@ -120,14 +120,14 @@ From `examples/tools-and-extensions/mdi-component-and-scss-showcase`, invoke the
 
 | Target Backend | Development Build Command | Production Build Command |
 | :--- | :--- | :--- |
-| **Windows (`:desktop:windows`)** | `../../../gradlew windowsDevelopment` | `../../../gradlew windowsProduction` |
-| **macOS (`:desktop:macos`)** | `../../../gradlew macDevelopment` | `../../../gradlew macProduction` |
-| **Linux GTK (`:desktop:gtk`)** | `../../../gradlew linuxDevelopmentGtk` | `../../../gradlew linuxProductionGtk` |
-| **Linux Qt (`:desktop:qt`)** | `../../../gradlew linuxDevelopmentQt` | `../../../gradlew linuxProductionQt` |
-| **JVM / Swing (`:desktop:swing`)** | `../../../gradlew swingDevelopment` | `../../../gradlew swingProduction` |
-| **Android (`:mobile:android`)** | `../../../gradlew androidDevelopment` | `../../../gradlew androidProduction` |
-| **iOS (`:mobile:ios`)** | `../../../gradlew iosDevelopment` | `../../../gradlew iosProduction` |
-| **Web (`:web` WasmJS + JS + PWA)** | `../../../gradlew webDevelopment` | `../../../gradlew webProduction` |
+| **Windows (`:desktop:windows`)** | `../../../gradlew developmentWindows` | `../../../gradlew productionWindows` |
+| **macOS (`:desktop:macos`)** | `../../../gradlew developmentMac` | `../../../gradlew productionMac` |
+| **Linux GTK (`:desktop:gtk`)** | `../../../gradlew developmentLinuxGtk` | `../../../gradlew productionLinuxGtk` |
+| **Linux Qt (`:desktop:qt`)** | `../../../gradlew developmentLinuxQt` | `../../../gradlew productionLinuxQt` |
+| **JVM / Swing (`:desktop:swing`)** | `../../../gradlew developmentSwing` | `../../../gradlew productionSwing` |
+| **Android (`:mobile:android`)** | `../../../gradlew developmentAndroid` | `../../../gradlew productionAndroid` |
+| **iOS (`:mobile:ios`)** | `../../../gradlew developmentIos` | `../../../gradlew productionIos` |
+| **Web (`:web` WasmJS + JS + PWA)** | `../../../gradlew developmentWeb` | `../../../gradlew productionWeb` |
 
 ---
 

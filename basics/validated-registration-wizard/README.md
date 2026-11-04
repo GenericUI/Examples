@@ -6,7 +6,7 @@ A multi-step developer onboarding wizard built with **GenericUI** demonstrating 
 
 ## Key `GenericUI` APIs Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `RegistrationWizardFragment` (`@MainAppFragment`) and `RegistrationWizardApp` (`@AppApplication` extending `FragmentApplication`) with `TitleBar`, `MenuBar`, `ThemeMode.AUTO` (`setTheme(ThemeMode.AUTO)`), and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `RegistrationWizardFragment` (`@MainAppFragment`) and `RegistrationWizardApp` (`@AppApplication` extending `FragmentApplication`) with `TitleBar`, `MenuBar`, `ThemeMode.AUTO` (`setThemeMode(ThemeMode.AUTO)`), `getPreferenceStore()`, and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
 - **`ComponentBootstrap` (`getBootstrap()`) & `ComponentStyle` (`getStyle()`)**: Uses strongly-typed `getBootstrap()` (`BootstrapType`, `BootstrapSize`, `SpacingScale`, `BorderRadiusStyle`, `ShadowElevation`, `FontWeight`) and W3C `getStyle()` (`accentColor` on `RangeSlider` and `CheckBox`) with strict user-added CSS class isolation.
 - **3-Step Validated Wizard Flow**:
   - **Step 1 (Account Credentials)**: `TextField` (`input-username`, `input-email`) and `PasswordField` (`input-password`) with live validation rules.
@@ -83,8 +83,11 @@ genericui {
 ```kotlin
 @MainAppFragment
 class RegistrationWizardFragment(
-    val preferenceStore: PreferenceStore = PreferenceStore(RegistrationProfile.DEFAULT_STORE_NAME)
+    private val customPreferenceStore: PreferenceStore? = null
 ) : Fragment() {
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
     override fun onCreate(savedState: FragmentBundle?) {
         super.onCreate(savedState)
         // Builds 3-step onboarding panels, live validation alert/badges, and PreferenceStore submission
@@ -103,16 +106,16 @@ From `examples/basics/validated-registration-wizard`, invoke the root Gradle wra
 ../../../gradlew printGenericUiConfig
 
 # Build / Run Desktop & Web targets
-../../../gradlew swingDevelopment
-../../../gradlew windowsDevelopment
-../../../gradlew macDevelopment
-../../../gradlew linuxDevelopmentGtk
-../../../gradlew linuxDevelopmentQt
-../../../gradlew webDevelopment
+../../../gradlew developmentSwing
+../../../gradlew developmentWindows
+../../../gradlew developmentMac
+../../../gradlew developmentLinuxGtk
+../../../gradlew developmentLinuxQt
+../../../gradlew developmentWeb
 
 # Build Mobile targets
-../../../gradlew androidDevelopment
-../../../gradlew iosDevelopment
+../../../gradlew developmentAndroid
+../../../gradlew developmentIos
 ```
 
 ---

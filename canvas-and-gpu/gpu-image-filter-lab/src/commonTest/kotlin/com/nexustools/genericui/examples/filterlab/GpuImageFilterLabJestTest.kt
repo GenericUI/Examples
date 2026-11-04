@@ -74,7 +74,7 @@ class GpuImageFilterLabJestTest {
                     controller.findById("slider-blur").performSetSliderValue(4.0)
                     expect(fragment.filterState.blurRadius).toBe(4)
 
-                    // Render preview and histogram onto Canvas2DExtSurface
+                    // Render preview and histogram onto Canvas2D
                     fragment.previewSurface.dispatchVBlankFrame(16.0)
                     fragment.histogramSurface.dispatchVBlankFrame(16.0)
                     val previewBuffer = fragment.previewSurface.toImageBuffer()

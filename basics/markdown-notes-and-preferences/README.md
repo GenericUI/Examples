@@ -6,12 +6,12 @@ A two-pane Markdown note manager demonstrating structured object persistence in 
 
 ## Key `GenericUI` APIs Demonstrated
 
-- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `NotesFragment` (`@MainAppFragment`) and `NotesApp` (`@AppApplication` extending `FragmentApplication`) with `ThemeMode.AUTO` (`setTheme(ThemeMode.AUTO)`) and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
+- **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `NotesFragment` (`@MainAppFragment`) and `NotesApp` (`@AppApplication` extending `FragmentApplication`) with `ThemeMode.AUTO` (`setThemeMode(ThemeMode.AUTO)`), `getPreferenceStore()`, and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
 - **`ComponentBootstrap` (`getBootstrap()`) & `ComponentStyle` (`getStyle()`)**: Uses strongly-typed `getBootstrap()` (`BootstrapType`, `BootstrapSize`, `BorderRadiusStyle`, `ShadowElevation`, `SpacingScale`, `FontWeight`) and W3C `getStyle()` (`accentColor` on `CheckBox`) with strict user-added CSS class isolation.
 - **Two-Pane Shell & Surface Components**: `SplitPane` (`Orientation.HORIZONTAL`), `Card`, `ListGroup`, and `ListGroupItem`.
 - **Form & Typography Controls**: `SearchField`, `TextField`, `TextArea`, `CheckBox`, `Badge`, `Heading`, `Text`, and `MarkdownView`.
 - **Native File Browser Dialogs**: `Dialogs.openFile` and `Dialogs.saveFile` with `FileTypeFilter`.
-- **Reactive Structured Persistence**: `PreferenceStore` (`putObject`, `getObject`, `putStringList`, `getStringList`), `PreferenceSerializable`, `PreferenceObjectCodec`, and live `PreferenceChangeListener` telemetry (`#badge-last-change`).
+- **Reactive Structured Persistence**: `IFragment.getPreferenceStore()` / `PreferenceStore` (`put`, `get`, `putStringList`, `getStringList`), `PreferenceSerializable`, `PreferenceObjectCodec`, and live `PreferenceChangeListener` telemetry (`#badge-last-change`).
 - **`JestElectricRunner` Test Suite**: Full UI test coverage in `NotesJestTest.kt` using `launchApp`, `launchFragment`, `performClick`, `performTypeText`, `performClearText`, `performSetChecked`, and `expectNode`.
 
 ---
@@ -81,11 +81,14 @@ genericui {
 ```kotlin
 @MainAppFragment
 class NotesFragment(
-    val preferenceStore: PreferenceStore = PreferenceStore(NoteItem.PREFERENCE_NAMESPACE)
+    private val customPreferenceStore: PreferenceStore? = null
 ) : Fragment() {
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
     override fun onCreate(savedState: FragmentBundle?) {
         super.onCreate(savedState)
-        preferenceStore.addChangeListener(preferenceListener)
+        getPreferenceStore().addChangeListener(preferenceListener)
         // Builds SplitPane with saved notes list, editor fields, and live MarkdownView preview
     }
 }
@@ -102,16 +105,16 @@ From `examples/basics/markdown-notes-and-preferences`, invoke the root Gradle wr
 ../../../gradlew printGenericUiConfig
 
 # Build / Run Desktop & Web targets
-../../../gradlew swingDevelopment
-../../../gradlew windowsDevelopment
-../../../gradlew macDevelopment
-../../../gradlew linuxDevelopmentGtk
-../../../gradlew linuxDevelopmentQt
-../../../gradlew webDevelopment
+../../../gradlew developmentSwing
+../../../gradlew developmentWindows
+../../../gradlew developmentMac
+../../../gradlew developmentLinuxGtk
+../../../gradlew developmentLinuxQt
+../../../gradlew developmentWeb
 
 # Build Mobile targets
-../../../gradlew androidDevelopment
-../../../gradlew iosDevelopment
+../../../gradlew developmentAndroid
+../../../gradlew developmentIos
 ```
 
 ---

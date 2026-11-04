@@ -18,7 +18,7 @@ class GpuImageFilterLabApp(
     initialThemeColor = "#8B5CF6"
 ) {
     init {
-        setTheme(ThemeMode.DARK)
+        setThemeMode(ThemeMode.DARK)
         addStyleSheet(StylesPrecompiledStyleSheet)
         val titleBar = TitleBar(
             embedMenuBar = false,

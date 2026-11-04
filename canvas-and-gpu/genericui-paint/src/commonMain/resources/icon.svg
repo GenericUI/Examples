@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="paint-palette-bg" x1="24" y1="24" x2="232" y2="232" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="50%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="paint-brush-handle" x1="120" y1="140" x2="224" y2="36" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#EA580C"/>
+    </linearGradient>
+  </defs>
+  <path d="M128 24 C68 24 24 68 24 126 C24 182 68 228 122 228 C140 228 152 216 152 200 C152 192 148 185 144 179 C140 173 142 164 150 164 L172 164 C208 164 232 138 232 104 C232 58 184 24 128 24 Z" fill="url(#paint-palette-bg)" stroke="#E2E8F0" stroke-width="6"/>
+  <circle cx="76" cy="96" r="14" fill="#EF4444"/>
+  <circle cx="112" cy="70" r="14" fill="#FACC15"/>
+  <circle cx="156" cy="76" r="14" fill="#22C55E"/>
+  <circle cx="72" cy="144" r="14" fill="#EC4899"/>
+  <circle cx="116" cy="192" r="12" fill="#18181B"/>
+  <path d="M148 124 L218 54 C224 48 234 48 240 54 C246 60 246 70 240 76 L170 146 Z" fill="url(#paint-brush-handle)"/>
+  <path d="M128 148 C134 134 146 126 164 140 C154 158 136 162 120 158 C124 154 126 152 128 148 Z" fill="#F8FAFC"/>
+</svg>

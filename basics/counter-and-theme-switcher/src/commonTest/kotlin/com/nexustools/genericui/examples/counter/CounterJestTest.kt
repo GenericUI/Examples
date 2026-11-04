@@ -62,12 +62,12 @@ class CounterJestTest {
                     val store = PreferenceStore("CounterTestStore_3").apply { clear() }
                     val controller = launchApp(visualOnWindows = false) { CounterApp(store) }
 
-                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(controller.app.getThemeMode()).toBe(ThemeMode.AUTO)
                     expect(controller.app.getResolvedTheme().isAuto).toBe(false)
                     expect(controller.app.getThemeColor()).toBe("#2563EB")
 
                     controller.findById("select-theme-mode").performSelectValue("LIGHT")
-                    expect(controller.app.getTheme()).toBe(ThemeMode.LIGHT)
+                    expect(controller.app.getThemeMode()).toBe(ThemeMode.LIGHT)
                     expect(controller.app.getResolvedTheme()).toBe(ThemeMode.LIGHT)
                     expectNode(controller.findById("badge-active-theme")).toContainText("LIGHT")
 
@@ -77,12 +77,12 @@ class CounterJestTest {
 
                     controller.findById("select-theme-mode").performSelectValue("DARK")
                     controller.findById("btn-color-purple").performClick()
-                    expect(controller.app.getTheme()).toBe(ThemeMode.DARK)
+                    expect(controller.app.getThemeMode()).toBe(ThemeMode.DARK)
                     expect(controller.app.getResolvedTheme()).toBe(ThemeMode.DARK)
                     expect(controller.app.getThemeColor()).toBe("#8B5CF6")
 
                     controller.findById("select-theme-mode").performSelectValue("AUTO")
-                    expect(controller.app.getTheme()).toBe(ThemeMode.AUTO)
+                    expect(controller.app.getThemeMode()).toBe(ThemeMode.AUTO)
                 }
 
                 it("isolates ComponentBootstrap enum properties and ComponentStyle inline CSS from user-added custom classes") {

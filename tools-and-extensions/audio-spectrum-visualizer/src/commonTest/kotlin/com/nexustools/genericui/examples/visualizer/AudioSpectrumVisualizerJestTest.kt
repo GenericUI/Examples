@@ -72,7 +72,7 @@ class AudioSpectrumVisualizerJestTest {
                     expectNode(controller.findById("badge-treble")).toContainText("Treble: 50%")
                     expectNode(controller.findById("badge-rms")).toContainText("Beat: PEAK")
 
-                    // Verify float and byte FFT / time-domain extraction from AudioAnalyzerExt
+                    // Verify float and byte FFT / time-domain extraction from AudioAnalyzer
                     val floatFreq = FloatArray(64)
                     val byteTime = ByteArray(64)
                     controller.fragment.audioAnalyzer.getFloatFrequencyData(floatFreq)

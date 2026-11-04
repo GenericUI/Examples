@@ -15,16 +15,22 @@ import com.nexustools.genericui.window.TitleBar
  */
 @AppApplication
 class RegistrationWizardApp(
-    val preferenceStore: PreferenceStore = PreferenceStore(RegistrationProfile.DEFAULT_STORE_NAME),
-    val wizardFragment: RegistrationWizardFragment = RegistrationWizardFragment(preferenceStore)
+    private val customPreferenceStore: PreferenceStore? = null,
+    val wizardFragment: RegistrationWizardFragment = RegistrationWizardFragment(customPreferenceStore)
 ) : FragmentApplication(
     initialFragment = wizardFragment,
     title = "GenericUI — Validated Registration Wizard",
     initialThemeColor = "#10B981"
 ) {
 
+    override fun getPreferenceStore(): PreferenceStore =
+        customPreferenceStore ?: super.getPreferenceStore()
+
+    val preferenceStore: PreferenceStore
+        get() = getPreferenceStore()
+
     init {
-        setTheme(ThemeMode.AUTO)
+        setThemeMode(ThemeMode.AUTO)
         setThemeColor("#10B981")
         addStyleSheet(StylesPrecompiledStyleSheet)
         val titleBar = TitleBar(
