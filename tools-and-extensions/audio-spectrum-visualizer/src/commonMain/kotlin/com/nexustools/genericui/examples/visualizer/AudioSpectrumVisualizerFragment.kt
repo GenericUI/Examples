@@ -409,7 +409,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
                         TableCell("Video Codec"),
                         TableCell(videoCodec.wireName.uppercase()),
                         TableCell(level.name),
-                        TableCell(videoCodec.standardMimeCodecs.joinToString(", "))
+                        TableCell(videoCodec.html5CanPlayProbes.joinToString(", "))
                     )
                 )
             )
@@ -422,7 +422,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
                         TableCell("Audio Codec"),
                         TableCell(audioCodec.wireName.uppercase()),
                         TableCell(level.name),
-                        TableCell(audioCodec.standardMimeCodecs.joinToString(", "))
+                        TableCell(audioCodec.html5CanPlayProbes.joinToString(", "))
                     )
                 )
             )
