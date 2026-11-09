@@ -14,7 +14,7 @@ data class BrowserBookmark(
     val id: String,
     val title: String,
     val url: String,
-    val iconLabel: String = "🌐"
+    val iconLabel: String = "*"
 ) : PreferenceSerializable {
 
     override fun toPreferenceMap(): Map<String, Any?> = linkedMapOf(
@@ -51,7 +51,7 @@ data class BrowserBookmark(
             id = fields["id"]?.asString("bm-default") ?: "bm-default",
             title = fields["title"]?.asString("Bookmark") ?: "Bookmark",
             url = fields["url"]?.asString("https://one.google.com/ai/activity") ?: "https://one.google.com/ai/activity",
-            iconLabel = fields["iconLabel"]?.asString("🌐") ?: "🌐"
+            iconLabel = fields["iconLabel"]?.asString("*") ?: "*"
         )
 
         /**
@@ -61,7 +61,7 @@ data class BrowserBookmark(
             id = readUtf8Field(readable),
             title = readUtf8Field(readable),
             url = readUtf8Field(readable),
-            iconLabel = readUtf8Field(readable).ifEmpty { "🌐" }
+            iconLabel = readUtf8Field(readable).ifEmpty { "*" }
         )
 
         /**
@@ -95,25 +95,25 @@ data class BrowserBookmark(
                 id = "bm-ai-credits",
                 title = "AI credits activity",
                 url = "https://one.google.com/ai/activity",
-                iconLabel = "🔵"
+                iconLabel = "✦"
             ),
             BrowserBookmark(
                 id = "bm-github-berth",
                 title = "T-Crypt/berth",
                 url = "https://github.com/T-Crypt/berth",
-                iconLabel = "🐙"
+                iconLabel = "</>"
             ),
             BrowserBookmark(
                 id = "bm-keep",
                 title = "Google Keep",
                 url = "https://keep.google.com",
-                iconLabel = "💡"
+                iconLabel = "[!]"
             ),
             BrowserBookmark(
                 id = "bm-gemini",
                 title = "Ask Gemini",
                 url = "https://gemini.google.com/app",
-                iconLabel = "✦"
+                iconLabel = "★"
             )
         )
 

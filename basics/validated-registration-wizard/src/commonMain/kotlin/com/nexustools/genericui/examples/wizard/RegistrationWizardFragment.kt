@@ -12,16 +12,20 @@ import com.nexustools.genericui.component.form.TextField
 import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
 import com.nexustools.genericui.component.fragment.MainAppFragment
+import com.nexustools.genericui.component.layout.ColumnContainer
 import com.nexustools.genericui.component.layout.HStack
 import com.nexustools.genericui.component.layout.VStack
 import com.nexustools.genericui.component.surface.Card
+import com.nexustools.genericui.component.surface.CollapsiblePanel
 import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Heading
+import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.component.typography.Text
 import com.nexustools.genericui.enums.bootstrap.BorderRadiusStyle
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FlexWrap
 import com.nexustools.genericui.enums.bootstrap.FontWeight
 import com.nexustools.genericui.enums.bootstrap.ShadowElevation
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
@@ -43,9 +47,6 @@ class RegistrationWizardFragment(
     override fun getPreferenceStore(): PreferenceStore =
         customPreferenceStore ?: super.getPreferenceStore()
 
-    val preferenceStore: PreferenceStore
-        get() = getPreferenceStore()
-
     var currentStep: Int = 1
         private set
 
@@ -61,7 +62,8 @@ class RegistrationWizardFragment(
         type = BootstrapType.PRIMARY
     ).apply {
         id = "wizard-progress"
-        label = "Step 1 of 3"
+        label = "Step 1 of 3 (33%)"
+        heightPx = 22
     }
 
     val currentStepBadge: Badge = Badge(
@@ -84,7 +86,27 @@ class RegistrationWizardFragment(
         type = BootstrapType.INFO
     ).apply {
         id = "validation-alert"
+        heightPx = 36
     }
+
+    // Step roadmap pill badges
+    private val step1RoadmapBadge: Badge = Badge(
+        text = "1. Account Credentials [Active]",
+        type = BootstrapType.PRIMARY,
+        pill = true
+    )
+
+    private val step2RoadmapBadge: Badge = Badge(
+        text = "2. Developer Profile [Pending]",
+        type = BootstrapType.SECONDARY,
+        pill = true
+    )
+
+    private val step3RoadmapBadge: Badge = Badge(
+        text = "3. Review & Terms [Pending]",
+        type = BootstrapType.SECONDARY,
+        pill = true
+    )
 
     // Step 1 controls
     val usernameInput: TextField = TextField(
@@ -114,6 +136,7 @@ class RegistrationWizardFragment(
         selectedValue = profile.role
     ).apply {
         id = "select-role"
+        widthPx = 220
     }
 
     val experienceSlider: RangeSlider = RangeSlider(
@@ -124,6 +147,7 @@ class RegistrationWizardFragment(
         step = 1.0
     ).apply {
         id = "slider-experience"
+        widthPx = 220
         getStyle().apply {
             accentColor = RgbaColor.fromHex("#10B981")
         }
@@ -154,6 +178,22 @@ class RegistrationWizardFragment(
         id = "summary-experience"
     }
 
+    // Live sidebar preview labels
+    private val liveDraftUsernameText: Text = Text("Username: (not set)")
+    private val liveDraftEmailText: Text = Text("Email: (not set)")
+    private val liveDraftRoleText: Text = Text("Primary Role: ${profile.role}")
+    private val liveDraftExperienceText: Text = Text("Experience: ${profile.experienceYears} years")
+    private val liveDraftTermsBadge: Badge = Badge(
+        text = "Terms: Awaiting Acceptance",
+        type = BootstrapType.WARNING
+    )
+    private val footerStepHintBadge: Badge = Badge(
+        text = "Step 1 of 3 — Fill in Username, Email & Password, then click Next",
+        type = BootstrapType.DARK
+    ).apply {
+        widthPx = 430
+    }
+
     val termsCheckBox: CheckBox = CheckBox(
         label = "I accept the Terms of Service & Privacy Policy",
         checked = profile.acceptedTerms
@@ -170,6 +210,7 @@ class RegistrationWizardFragment(
         size = BootstrapSize.MD
     ).apply {
         id = "btn-submit"
+        widthPx = 210
         getBootstrap().apply {
             type = BootstrapType.SUCCESS
             size = BootstrapSize.MD
@@ -184,6 +225,7 @@ class RegistrationWizardFragment(
         size = BootstrapSize.MD
     ).apply {
         id = "btn-back"
+        widthPx = 120
         getBootstrap().apply {
             type = BootstrapType.SECONDARY
             size = BootstrapSize.MD
@@ -196,6 +238,7 @@ class RegistrationWizardFragment(
         size = BootstrapSize.MD
     ).apply {
         id = "btn-next"
+        widthPx = 140
         getBootstrap().apply {
             type = BootstrapType.PRIMARY
             size = BootstrapSize.MD
@@ -203,8 +246,18 @@ class RegistrationWizardFragment(
         }
     }
 
+    private val resetWizardButton: Button = Button(
+        text = "Reset Wizard",
+        type = BootstrapType.SECONDARY,
+        size = BootstrapSize.MD,
+        outline = true
+    ).apply {
+        widthPx = 140
+    }
+
     val step1Panel: VStack = VStack(gap = SpacingScale.TWO).apply {
         id = "step-1-panel"
+        heightPx = 470
         addClass("wizard-step-panel")
         getBootstrap().apply {
             padding = SpacingScale.THREE
@@ -214,6 +267,7 @@ class RegistrationWizardFragment(
 
     val step2Panel: VStack = VStack(gap = SpacingScale.TWO).apply {
         id = "step-2-panel"
+        heightPx = 470
         addClass("wizard-step-panel")
         getBootstrap().apply {
             padding = SpacingScale.THREE
@@ -223,6 +277,7 @@ class RegistrationWizardFragment(
 
     val step3Panel: VStack = VStack(gap = SpacingScale.TWO).apply {
         id = "step-3-panel"
+        heightPx = 470
         addClass("wizard-step-panel")
         getBootstrap().apply {
             padding = SpacingScale.THREE
@@ -270,13 +325,32 @@ class RegistrationWizardFragment(
         clearChildren()
         addClass("wizard-root")
 
-        val rootStack = VStack(gap = SpacingScale.THREE)
+        val rootStack = VStack(gap = SpacingScale.TWO)
 
-        val headerRow = HStack(gap = SpacingScale.TWO)
-        headerRow.addChild(Heading("Developer Onboarding Wizard", level = 3))
+        val headerRow = HStack(gap = SpacingScale.TWO).apply {
+            heightPx = 32
+            flexWrap = FlexWrap.WRAP
+        }
+        headerRow.addChild(Heading("Developer Onboarding Wizard", level = 3).apply {
+            widthPx = 370
+        })
         headerRow.addChild(currentStepBadge)
         headerRow.addChild(validationMessageBadge)
         rootStack.addChild(headerRow)
+
+        val roadmapRow = HStack(gap = SpacingScale.TWO).apply {
+            heightPx = 28
+            flexWrap = FlexWrap.WRAP
+            addClass("wizard-roadmap-row")
+        }
+        roadmapRow.addChild(Label("Wizard Roadmap:").apply {
+            widthPx = 130
+        })
+        roadmapRow.addChild(step1RoadmapBadge)
+        roadmapRow.addChild(step2RoadmapBadge)
+        roadmapRow.addChild(step3RoadmapBadge)
+        rootStack.addChild(roadmapRow)
+
         rootStack.addChild(wizardProgress)
         rootStack.addChild(validationAlert)
 
@@ -284,28 +358,84 @@ class RegistrationWizardFragment(
         step1Panel.clearChildren()
         step1Panel.addChild(Heading("Step 1: Account Credentials", level = 4))
         step1Panel.addChild(Text("Choose a unique username, valid email address, and secure password."))
-        step1Panel.addChild(usernameInput)
-        step1Panel.addChild(emailInput)
-        step1Panel.addChild(passwordInput)
+
+        val usernameRow = HStack(gap = SpacingScale.TWO).apply {
+            heightPx = 36
+            flexWrap = FlexWrap.WRAP
+        }
+        usernameRow.addChild(Label("Username *").apply { widthPx = 135 })
+        usernameRow.addChild(usernameInput)
+        usernameRow.addChild(Badge("Min 3 chars", type = BootstrapType.SECONDARY).apply { widthPx = 115 })
+        step1Panel.addChild(usernameRow)
+
+        val emailRow = HStack(gap = SpacingScale.TWO).apply {
+            heightPx = 36
+            flexWrap = FlexWrap.WRAP
+        }
+        emailRow.addChild(Label("Work Email *").apply { widthPx = 135 })
+        emailRow.addChild(emailInput)
+        emailRow.addChild(Badge("Valid @ email", type = BootstrapType.SECONDARY).apply { widthPx = 115 })
+        step1Panel.addChild(emailRow)
+
+        val passwordRow = HStack(gap = SpacingScale.TWO).apply {
+            heightPx = 36
+            flexWrap = FlexWrap.WRAP
+        }
+        passwordRow.addChild(Label("Password *").apply { widthPx = 135 })
+        passwordRow.addChild(passwordInput)
+        passwordRow.addChild(Badge("Min 6 chars", type = BootstrapType.SECONDARY).apply { widthPx = 115 })
+        step1Panel.addChild(passwordRow)
+
+        val step1RulesCard = Card("Credential Validation Rules").apply {
+            heightPx = 175
+            getBootstrap().apply {
+                borderRadius = BorderRadiusStyle.MEDIUM
+                padding = SpacingScale.TWO
+            }
+        }
+        step1RulesCard.addChild(Text("* Username must contain at least 3 characters."))
+        step1RulesCard.addChild(Text("* Email address must include '@' and a valid domain."))
+        step1RulesCard.addChild(Text("* Password must be at least 6 characters long."))
+        step1RulesCard.addChild(Text("* Live validation updates the status banner as you type."))
+        step1Panel.addChild(step1RulesCard)
 
         // Step 2 Card Content
         step2Panel.clearChildren()
         step2Panel.addChild(Heading("Step 2: Developer Profile", level = 4))
         step2Panel.addChild(Text("Select your primary engineering role and years of experience."))
-        val roleRow = HStack(gap = SpacingScale.TWO)
-        roleRow.addChild(Text("Primary Role:"))
+        val roleRow = HStack(gap = SpacingScale.TWO).apply {
+            heightPx = 36
+            flexWrap = FlexWrap.WRAP
+        }
+        roleRow.addChild(Label("Primary Role:").apply { widthPx = 150 })
         roleRow.addChild(roleSelect)
+        roleRow.addChild(Badge("5 Tracks", type = BootstrapType.INFO))
         step2Panel.addChild(roleRow)
 
-        val expRow = HStack(gap = SpacingScale.TWO)
-        expRow.addChild(Text("Experience (Years):"))
+        val expRow = HStack(gap = SpacingScale.TWO).apply {
+            heightPx = 36
+            flexWrap = FlexWrap.WRAP
+        }
+        expRow.addChild(Label("Experience (Years):").apply { widthPx = 150 })
         expRow.addChild(experienceSlider)
         expRow.addChild(experienceYearsBadge)
         step2Panel.addChild(expRow)
 
+        val step2InfoCard = Card("Engineering Role Tracks").apply {
+            heightPx = 160
+            getBootstrap().apply {
+                borderRadius = BorderRadiusStyle.MEDIUM
+                padding = SpacingScale.TWO
+            }
+        }
+        step2InfoCard.addChild(Text("* Available Roles: Developer, Designer, Product Manager, QA Engineer, DevOps Architect."))
+        step2InfoCard.addChild(Text("* Experience slider spans 0 to 30 years with instant review synchronization."))
+        step2Panel.addChild(step2InfoCard)
+
         // Step 3 Card Content
         step3Panel.clearChildren()
         step3Panel.addChild(Heading("Step 3: Review & Terms", level = 4))
+        step3Panel.addChild(Text("Verify your onboarding profile details below and accept the Terms of Service."))
         step3Panel.addChild(summaryUsernameText)
         step3Panel.addChild(summaryEmailText)
         step3Panel.addChild(summaryRoleText)
@@ -314,6 +444,7 @@ class RegistrationWizardFragment(
         step3Panel.addChild(submitButton)
 
         val wizardCard = Card("Onboarding Steps").apply {
+            heightPx = 530
             addClass("wizard-card")
             getBootstrap().apply {
                 borderRadius = BorderRadiusStyle.LARGE
@@ -324,13 +455,63 @@ class RegistrationWizardFragment(
         wizardCard.addChild(step1Panel)
         wizardCard.addChild(step2Panel)
         wizardCard.addChild(step3Panel)
-        rootStack.addChild(wizardCard)
+
+        val sidebarCard = Card("Live Profile Preview & Persistence").apply {
+            heightPx = 530
+            addClass("wizard-card")
+            getBootstrap().apply {
+                borderRadius = BorderRadiusStyle.LARGE
+                shadow = ShadowElevation.SMALL
+                padding = SpacingScale.THREE
+            }
+        }
+
+        val draftPanel = CollapsiblePanel("Current Draft Profile", expanded = true).apply {
+            heightPx = 225
+        }
+        draftPanel.addChild(liveDraftUsernameText)
+        draftPanel.addChild(liveDraftEmailText)
+        draftPanel.addChild(liveDraftRoleText)
+        draftPanel.addChild(liveDraftExperienceText)
+        val draftTermsRow = HStack(gap = SpacingScale.TWO).apply {
+            heightPx = 28
+            flexWrap = FlexWrap.WRAP
+        }
+        draftTermsRow.addChild(Label("Terms Status:").apply { widthPx = 120 })
+        draftTermsRow.addChild(liveDraftTermsBadge)
+        draftPanel.addChild(draftTermsRow)
+        sidebarCard.addChild(draftPanel)
+
+        val persistencePanel = CollapsiblePanel("PreferenceStore Persistence", expanded = true).apply {
+            heightPx = 215
+        }
+        persistencePanel.addChild(Text("Store Name: ${RegistrationProfile.DEFAULT_STORE_NAME}"))
+        persistencePanel.addChild(Text("Profile Key: ${RegistrationProfile.PROFILE_KEY}"))
+        persistencePanel.addChild(Text("Codec: PreferenceObjectCodec (BSON / Plist)"))
+        val persistenceBadgeRow = HStack(gap = SpacingScale.TWO).apply {
+            heightPx = 28
+            flexWrap = FlexWrap.WRAP
+        }
+        persistenceBadgeRow.addChild(Label("Storage Status:").apply { widthPx = 120 })
+        persistenceBadgeRow.addChild(Badge("Backed by PreferenceStore", type = BootstrapType.SUCCESS))
+        persistenceBadgeRow.addChild(Badge("Auto-Sync", type = BootstrapType.INFO))
+        persistencePanel.addChild(persistenceBadgeRow)
+        sidebarCard.addChild(persistencePanel)
+
+        val mainGrid = ColumnContainer(gutter = SpacingScale.THREE)
+        mainGrid.addColumn(span = 12, lg = 7, content = wizardCard)
+        mainGrid.addColumn(span = 12, lg = 5, content = sidebarCard)
+        rootStack.addChild(mainGrid)
 
         val footerRow = HStack(gap = SpacingScale.TWO).apply {
+            heightPx = 42
+            flexWrap = FlexWrap.WRAP
             addClass("wizard-footer")
         }
         footerRow.addChild(backButton)
         footerRow.addChild(nextButton)
+        footerRow.addChild(resetWizardButton)
+        footerRow.addChild(footerStepHintBadge)
         rootStack.addChild(footerRow)
 
         addChild(rootStack)
@@ -376,6 +557,9 @@ class RegistrationWizardFragment(
         }
         nextButton.setOnClick {
             goToNextStep()
+        }
+        resetWizardButton.setOnClick {
+            resetWizard()
         }
         submitButton.setOnClick {
             submitRegistration()
@@ -465,7 +649,7 @@ class RegistrationWizardFragment(
             return false
         }
         isSubmitted = true
-        RegistrationProfile.saveTo(preferenceStore, profile)
+        RegistrationProfile.saveTo(getPreferenceStore(), profile)
         setValidationStatus("Registration complete! Profile saved for ${profile.username}.", BootstrapType.SUCCESS)
         return true
     }
@@ -543,21 +727,70 @@ class RegistrationWizardFragment(
         step2Panel.isVisible = (currentStep == 2)
         step3Panel.isVisible = (currentStep == 3)
 
+        val pct = (currentStep * 100) / 3
         wizardProgress.progress = currentStep.toFloat() / 3.0f
-        wizardProgress.label = "Step $currentStep of 3"
+        wizardProgress.label = "Step $currentStep of 3 ($pct%)"
         currentStepBadge.text = when (currentStep) {
             1 -> "Step 1 of 3: Account Credentials"
             2 -> "Step 2 of 3: Developer Profile"
             else -> "Step 3 of 3: Review & Terms"
         }
 
+        step1RoadmapBadge.text = when {
+            currentStep == 1 -> "1. Account Credentials [Active]"
+            else -> "1. Account Credentials [Done]"
+        }
+        step1RoadmapBadge.type = if (currentStep == 1) BootstrapType.PRIMARY else BootstrapType.SUCCESS
+
+        step2RoadmapBadge.text = when {
+            currentStep < 2 -> "2. Developer Profile [Pending]"
+            currentStep == 2 -> "2. Developer Profile [Active]"
+            else -> "2. Developer Profile [Done]"
+        }
+        step2RoadmapBadge.type = when {
+            currentStep < 2 -> BootstrapType.SECONDARY
+            currentStep == 2 -> BootstrapType.PRIMARY
+            else -> BootstrapType.SUCCESS
+        }
+
+        step3RoadmapBadge.text = when {
+            currentStep < 3 -> "3. Review & Terms [Pending]"
+            isSubmitted -> "3. Review & Terms [Submitted]"
+            else -> "3. Review & Terms [Active]"
+        }
+        step3RoadmapBadge.type = when {
+            currentStep < 3 -> BootstrapType.SECONDARY
+            isSubmitted -> BootstrapType.SUCCESS
+            else -> BootstrapType.PRIMARY
+        }
+
+        footerStepHintBadge.text = when (currentStep) {
+            1 -> "Step 1 of 3 — Fill in Username, Email & Password, then click Next"
+            2 -> "Step 2 of 3 — Choose Role & Experience, then click Next"
+            else -> "Step 3 of 3 — Accept Terms of Service and click Submit Registration"
+        }
+
         refreshReviewSummary()
     }
 
     private fun refreshReviewSummary() {
-        summaryUsernameText.text = "Username: ${profile.username.ifEmpty { "-" }}"
-        summaryEmailText.text = "Email: ${profile.email.ifEmpty { "-" }}"
+        val unameDisplay = profile.username.ifEmpty { "-" }
+        val emailDisplay = profile.email.ifEmpty { "-" }
+        summaryUsernameText.text = "Username: $unameDisplay"
+        summaryEmailText.text = "Email: $emailDisplay"
         summaryRoleText.text = "Role: ${profile.role}"
         summaryExperienceText.text = "Experience: ${profile.experienceYears} years"
+
+        liveDraftUsernameText.text = "Username: ${profile.username.ifEmpty { "(not set)" }}"
+        liveDraftEmailText.text = "Email: ${profile.email.ifEmpty { "(not set)" }}"
+        liveDraftRoleText.text = "Primary Role: ${profile.role}"
+        liveDraftExperienceText.text = "Experience: ${profile.experienceYears} years"
+        if (profile.acceptedTerms) {
+            liveDraftTermsBadge.text = "Terms: Accepted"
+            liveDraftTermsBadge.type = BootstrapType.SUCCESS
+        } else {
+            liveDraftTermsBadge.text = "Terms: Awaiting Acceptance"
+            liveDraftTermsBadge.type = BootstrapType.WARNING
+        }
     }
 }

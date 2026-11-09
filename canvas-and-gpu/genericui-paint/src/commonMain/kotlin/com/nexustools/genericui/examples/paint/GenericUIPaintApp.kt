@@ -5,12 +5,12 @@ import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.component.shell.Menu
 import com.nexustools.genericui.component.shell.MenuBar
 import com.nexustools.genericui.examples.paint.res.GeneratedResourceRegistry
-import com.nexustools.genericui.examples.paint.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.paint.res.Resource
 import com.nexustools.genericui.window.TitleBar
 
 /**
  * Multiplatform [FragmentApplication] hosting [GenericUIPaintFragment] (`Untitled - Paint`),
- * configuring the dark-mode Windows 11 Paint [TitleBar], [MenuBar], [StylesPrecompiledStyleSheet],
+ * configuring the dark-mode Windows 11 Paint [TitleBar], [MenuBar], [Resource.style.styles],
  * and [getPreferenceStore].
  */
 @AppApplication
@@ -19,13 +19,13 @@ class GenericUIPaintApp(
 ) : FragmentApplication(
     initialFragment = paintFragment,
     title = "Untitled - Paint",
-    initialThemeColor = "#202024"
+    initialThemeColor = "#38BDF8"
 ) {
     init {
         GeneratedResourceRegistry.ensureInitialized()
         PaintPreferences.registerFactory()
         setThemeMode(GeneratedResourceRegistry.DEFAULT_THEME_MODE)
-        addStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
 
         val titleBar = TitleBar(
             embedMenuBar = false,
@@ -71,7 +71,6 @@ class GenericUIPaintApp(
         paintFragment.setMenuBar(menuBar)
         mainWindow.setTitleBar(titleBar)
         mainWindow.setMenuBar(menuBar)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
 
         // Ensure application PreferenceStore is initialized
         getPreferenceStore()

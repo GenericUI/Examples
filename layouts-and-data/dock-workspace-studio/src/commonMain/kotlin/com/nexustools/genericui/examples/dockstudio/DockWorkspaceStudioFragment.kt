@@ -1,6 +1,11 @@
 package com.nexustools.genericui.examples.dockstudio
 
 import com.nexustools.genericui.component.action.Button
+import com.nexustools.genericui.component.content.Table
+import com.nexustools.genericui.component.content.TableCell
+import com.nexustools.genericui.component.content.TableColumn
+import com.nexustools.genericui.component.content.TableRow
+import com.nexustools.genericui.component.dock.ColorSwatchBox
 import com.nexustools.genericui.component.dock.DockHeaderAction
 import com.nexustools.genericui.component.dock.DockPanel
 import com.nexustools.genericui.component.dock.StudioDocument as DockStudioDocument
@@ -10,13 +15,14 @@ import com.nexustools.genericui.component.fragment.helper.OverlayDockWorkspaceFr
 import com.nexustools.genericui.component.layout.Container
 import com.nexustools.genericui.component.layout.HStack
 import com.nexustools.genericui.component.layout.VStack
+import com.nexustools.genericui.component.navigation.Navbar
 import com.nexustools.genericui.component.surface.Card
 import com.nexustools.genericui.component.typography.Badge
-import com.nexustools.genericui.component.typography.Heading
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BorderRadiusStyle
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FlexWrap
 import com.nexustools.genericui.enums.bootstrap.FontWeight
 import com.nexustools.genericui.enums.bootstrap.ShadowElevation
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
@@ -55,6 +61,7 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
         private set
 
     private val consoleEvents = mutableListOf<String>()
+    private val toolButtons = linkedMapOf<String, Button>()
 
     val newDocTabButton: Button = Button("New Document Tab", BootstrapType.PRIMARY, BootstrapSize.SM).apply {
         id = "btn-new-doc-tab"
@@ -166,7 +173,7 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
     val hudOverlayPanel: DockPanel = DockPanel(
         panelId = "panel-hud-overlay",
         title = "Floating Viewport HUD",
-        preferredPosition = DockPosition.FLOATING
+        preferredPosition = DockPosition.BOTTOM
     ).apply {
         id = "hud-overlay-panel"
         setTitleBar(
@@ -207,15 +214,14 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
     override fun onCreate(savedState: FragmentBundle?) {
         super.onCreate(savedState)
 
-        // Build top toolbar above dock areas
-        val studioToolbar = HStack(gap = SpacingScale.S2).apply {
+        // Mount top studio action & status bar in Fragment Navbar
+        val studioToolbar = Navbar(brandTitle = "").apply {
             id = "studio-top-toolbar"
             addClass("studio-toolbar")
             bootstrap {
                 padding = SpacingScale.S2
                 borderRadius = BorderRadiusStyle.SMALL
             }
-            addChild(Heading("Dock Workspace Studio", level = 5))
             addChild(newDocTabButton)
             addChild(closeActiveDocButton)
             addChild(toggleWindowModeButton)
@@ -225,7 +231,7 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
             addChild(activeDocBadge)
             addChild(activeToolBadge)
         }
-        dockWorkspace.topArea.addChild(studioToolbar)
+        setNavBar(studioToolbar)
 
         populateToolboxPanel()
         populatePropertiesPanel()
@@ -235,7 +241,7 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
         addDockPanel(toolboxPanel, DockPosition.LEFT)
         addDockPanel(propertiesPanel, DockPosition.RIGHT)
         addDockPanel(consolePanel, DockPosition.BOTTOM)
-        registerOverlayPanel(hudOverlayPanel, DockPosition.FLOATING, xOffsetPx = 280, yOffsetPx = 64)
+        registerOverlayPanel(hudOverlayPanel, DockPosition.BOTTOM, xOffsetPx = 280, yOffsetPx = 64)
 
         addOnActiveDocumentChangedListener {
             syncStudioStatus()
@@ -335,6 +341,9 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
     fun selectTool(toolName: String) {
         activeToolName = toolName
         activeToolBadge.text = "Tool: $toolName"
+        for ((name, btn) in toolButtons) {
+            btn.outline = (name != toolName)
+        }
         logConsoleEvent("Selected tool: $toolName")
         syncStudioStatus()
     }
@@ -379,7 +388,6 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
         activeDocument?.documentId?.let { _studioModels[it] }
 
     private fun populateToolboxPanel() {
-        val toolsStack = VStack(gap = SpacingScale.S2)
         val tools = listOf(
             "Move" to "btn-tool-move",
             "Brush" to "btn-tool-brush",
@@ -387,13 +395,65 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
             "Zoom" to "btn-tool-zoom"
         )
         for ((toolLabel, btnId) in tools) {
-            val btn = Button(toolLabel, BootstrapType.PRIMARY, BootstrapSize.SM, outline = true).apply {
+            val isInitialActive = toolLabel == activeToolName
+            val btn = Button(toolLabel, BootstrapType.PRIMARY, BootstrapSize.SM, outline = !isInitialActive).apply {
                 id = btnId
                 onClick = { selectTool(toolLabel) }
             }
-            toolsStack.addChild(btn)
+            toolButtons[toolLabel] = btn
+            toolboxPanel.addChild(btn)
         }
-        toolboxPanel.addChild(toolsStack)
+
+        val swatchBox = ColorSwatchBox(
+            foreground = RgbaColor.fromHex("#0EA5E9"),
+            background = RgbaColor.fromHex("#0F172A")
+        ).apply {
+            id = "toolbox-color-swatches"
+            heightPx = 36
+            setPaletteSwatches(
+                listOf(
+                    RgbaColor.fromHex("#38BDF8"),
+                    RgbaColor.fromHex("#F472B6"),
+                    RgbaColor.fromHex("#4ADE80"),
+                    RgbaColor.fromHex("#FACC15"),
+                    RgbaColor.fromHex("#A78BFA"),
+                    RgbaColor.fromHex("#F87171")
+                )
+            )
+        }
+        toolboxPanel.addChild(swatchBox)
+
+        val brushPresetCard = Card("Tool Presets").apply {
+            bootstrap {
+                borderRadius = BorderRadiusStyle.SMALL
+                padding = SpacingScale.S2
+            }
+            addChild(Label("Snap: 8px Vector Grid"))
+            addChild(Label("Blend: Normal (100%)"))
+            addChild(Label("AA: Bicubic Crisp"))
+        }
+        toolboxPanel.addChild(brushPresetCard)
+
+        val shortcutTable = Table().apply {
+            id = "toolbox-shortcuts-table"
+            isStriped = true
+            setColumns(
+                listOf(
+                    TableColumn("tool", "Tool"),
+                    TableColumn("key", "Key")
+                )
+            )
+            setColumnWeights(1.4f, 0.8f)
+            setRows(
+                listOf(
+                    TableRow("k1", listOf(TableCell("Move"), TableCell("V"))),
+                    TableRow("k2", listOf(TableCell("Brush"), TableCell("B"))),
+                    TableRow("k3", listOf(TableCell("Vector"), TableCell("P"))),
+                    TableRow("k4", listOf(TableCell("Zoom"), TableCell("Z")))
+                )
+            )
+        }
+        toolboxPanel.addChild(shortcutTable)
     }
 
     private fun populatePropertiesPanel() {
@@ -403,7 +463,8 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
         propsStack.addChild(propZoomLabel)
         propsStack.addChild(propNotesLabel)
 
-        val actionRow = HStack(gap = SpacingScale.S2).apply {
+        val actionRow = HStack(gap = SpacingScale.S1).apply {
+            flexWrap = FlexWrap.WRAP
             val zoomInBtn = Button("Zoom +25%", BootstrapType.INFO, BootstrapSize.SM, outline = true).apply {
                 id = "btn-zoom-in"
                 onClick = {
@@ -411,7 +472,7 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
                     updateActiveDocumentZoom(current + 25)
                 }
             }
-            val zoomOutBtn = Button("Zoom -25%", BootstrapType.SECONDARY, BootstrapSize.SM, outline = true).apply {
+            val zoomOutBtn = Button("Zoom -25%", BootstrapType.PRIMARY, BootstrapSize.SM, outline = true).apply {
                 id = "btn-zoom-out"
                 onClick = {
                     val current = getActiveStudioDocumentModel()?.zoomPercent ?: 100
@@ -427,21 +488,57 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
             addChild(addLayerBtn)
         }
         propsStack.addChild(actionRow)
+
+        val layerStackTable = Table().apply {
+            id = "inspector-layer-table"
+            isStriped = true
+            setColumns(
+                listOf(
+                    TableColumn("layer", "Layer"),
+                    TableColumn("mode", "Mode"),
+                    TableColumn("alpha", "Alpha")
+                )
+            )
+            setColumnWeights(1.4f, 1.0f, 0.8f)
+            setRows(
+                listOf(
+                    TableRow("r1", listOf(TableCell("Hero Vector"), TableCell("Normal"), TableCell("100%"))),
+                    TableRow("r2", listOf(TableCell("Accent Glow"), TableCell("Screen"), TableCell("85%"))),
+                    TableRow("r3", listOf(TableCell("Pixel Grid"), TableCell("Multiply"), TableCell("40%"))),
+                    TableRow("r4", listOf(TableCell("Base Canvas"), TableCell("Locked"), TableCell("100%")))
+                )
+            )
+        }
+        propsStack.addChild(layerStackTable)
+
         propertiesPanel.addChild(propsStack)
     }
 
     private fun populateConsolePanel() {
-        val consoleStack = HStack(gap = SpacingScale.S2).apply {
-            addChild(Badge("CONSOLE", BootstrapType.INFO))
+        val consoleLayout = VStack(gap = SpacingScale.S1).apply {
+            val headerRow = HStack(gap = SpacingScale.S2).apply {
+                flexWrap = FlexWrap.WRAP
+                addChild(Badge("CONSOLE", BootstrapType.INFO))
+                addChild(hudStatusBadge)
+                addChild(Badge("READY", BootstrapType.SUCCESS, pill = true))
+            }
+            addChild(headerRow)
             addChild(consoleLastEventLabel)
-            addChild(hudStatusBadge)
+            addChild(Label("Workspace docked: LEFT Toolbox, RIGHT Inspector, BOTTOM Console + HUD."))
         }
-        consolePanel.addChild(consoleStack)
+        consolePanel.addChild(consoleLayout)
     }
 
     private fun populateHudOverlayPanel() {
         val hudContent = VStack(gap = SpacingScale.S1).apply {
             addClass("studio-hud-overlay")
+            val telemetryBadges = HStack(gap = SpacingScale.S2).apply {
+                flexWrap = FlexWrap.WRAP
+                addChild(Badge("60 FPS", BootstrapType.SUCCESS, pill = true))
+                addChild(Badge("GPU: Vulkan", BootstrapType.INFO, pill = true))
+                addChild(Badge("RGBA8", BootstrapType.PRIMARY, pill = true))
+            }
+            addChild(telemetryBadges)
             addChild(hudTelemetryLabel)
         }
         hudOverlayPanel.addChild(hudContent)
@@ -458,24 +555,34 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
                 shadow = ShadowElevation.SMALL
                 padding = SpacingScale.S2
             }
-            addChild(Label("Document ID: ${model.id}"))
-            addChild(Label("Initial Layers: ${model.layerCount} | Initial Zoom: ${model.zoomPercent}%"))
-            addChild(Label(model.notes))
-            val activateBtn = Button(
-                text = "Focus ${model.title}",
-                type = BootstrapType.PRIMARY,
-                size = BootstrapSize.SM,
-                outline = true
-            ).apply {
-                id = "btn-focus-${model.id}"
-                onClick = {
-                    activateDocument(model.id)
-                    syncStudioStatus()
+            val metaRow = HStack(gap = SpacingScale.S2).apply {
+                flexWrap = FlexWrap.WRAP
+                addChild(Badge("ID: ${model.id}", BootstrapType.SECONDARY, pill = true))
+                addChild(Badge("${model.layerCount} Layers", BootstrapType.INFO, pill = true))
+                addChild(Badge("${model.zoomPercent}% Zoom", BootstrapType.PRIMARY, pill = true))
+                val activateBtn = Button(
+                    text = "Focus ${model.title}",
+                    type = BootstrapType.PRIMARY,
+                    size = BootstrapSize.SM,
+                    outline = true
+                ).apply {
+                    id = "btn-focus-${model.id}"
+                    onClick = {
+                        activateDocument(model.id)
+                        syncStudioStatus()
+                    }
                 }
+                addChild(activateBtn)
             }
-            addChild(activateBtn)
+            addChild(metaRow)
+            addChild(Label(model.notes))
         }
         pane.addChild(card)
+
+        val artboardSurface = Container("div", "studio-artboard-canvas").apply {
+            id = "artboard-canvas-${model.id}"
+        }
+        pane.addChild(artboardSurface)
         return pane
     }
 

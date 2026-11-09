@@ -27,6 +27,7 @@ import com.nexustools.genericui.component.typography.Heading
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FlexWrap
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.enums.ui.Orientation
 import com.nexustools.genericui.ext.codeeditor.CodeDiagnostic
@@ -51,10 +52,8 @@ class CodeEditorRegexFragment(
     override fun getPreferenceStore(): PreferenceStore =
         customPreferenceStore ?: super.getPreferenceStore()
 
-    val preferenceStore: PreferenceStore
-        get() = getPreferenceStore()
-
     private val snippetRegistry = linkedMapOf<String, CodeSnippetPreset>()
+    private val tabContentHosts = linkedMapOf<String, VStack>()
     var activeSnippetId: String = CodeSnippetPreset.BUILT_IN_PRESETS.first().id
         private set
 
@@ -82,6 +81,7 @@ class CodeEditorRegexFragment(
         selectedValue = CodeLanguage.KOTLIN.name
     ).apply {
         id = "select-language"
+        widthPx = 135
     }
 
     val editorThemeSelect: Select = Select(
@@ -94,6 +94,7 @@ class CodeEditorRegexFragment(
         selectedValue = "DARK_IDE"
     ).apply {
         id = "select-editor-theme"
+        widthPx = 120
     }
 
     val snippetPresetSelect: Select = Select(
@@ -101,6 +102,7 @@ class CodeEditorRegexFragment(
         selectedValue = CodeSnippetPreset.BUILT_IN_PRESETS.first().id
     ).apply {
         id = "select-snippet-preset"
+        widthPx = 225
     }
 
     val snippetTitleInput: TextField = TextField(
@@ -108,6 +110,7 @@ class CodeEditorRegexFragment(
         placeholder = "Custom snippet title..."
     ).apply {
         id = "input-snippet-title"
+        widthPx = 225
     }
 
     val saveSnippetButton: Button = Button(
@@ -135,7 +138,7 @@ class CodeEditorRegexFragment(
     // Main Split Workspace: Left = IdeCodeEditor, Right = Live Regex Tester & Capture Group Table
     val workspaceSplitPane: SplitPane = SplitPane(
         orientation = Orientation.HORIZONTAL,
-        dividerPosition = 0.56f
+        dividerPosition = 0.50f
     ).apply {
         id = "split-editor-regex"
     }
@@ -144,10 +147,11 @@ class CodeEditorRegexFragment(
         initialText = CodeSnippetPreset.BUILT_IN_PRESETS.first().code,
         language = CodeLanguage.KOTLIN,
         theme = CodeEditorTheme.DARK_IDE,
-        width = 680,
+        width = 620,
         height = 520
     ).apply {
         id = "ide-code-editor"
+        htmlTag = "canvas:codeeditor"
     }
 
     val activeLanguageBadge: Badge = Badge(
@@ -221,6 +225,7 @@ class CodeEditorRegexFragment(
     val statusBar: StatusBar = StatusBar()
     val statusMessageLabel: Label = Label("Ready").apply {
         id = "label-status-bar"
+        widthPx = 900
     }
 
     init {
@@ -242,9 +247,9 @@ class CodeEditorRegexFragment(
         for (preset in CodeSnippetPreset.BUILT_IN_PRESETS) {
             snippetRegistry[preset.id] = preset
         }
-        val savedIds = preferenceStore.getStringSet(KEY_SAVED_SNIPPET_IDS, emptySet())
+        val savedIds = getPreferenceStore().getStringSet(KEY_SAVED_SNIPPET_IDS, emptySet())
         for (savedId in savedIds) {
-            val loaded = preferenceStore.get<CodeSnippetPreset>("$KEY_SNIPPET_PREFIX$savedId")
+            val loaded = getPreferenceStore().get<CodeSnippetPreset>("$KEY_SNIPPET_PREFIX$savedId")
             if (loaded != null) {
                 snippetRegistry[loaded.id] = loaded
             }
@@ -262,6 +267,7 @@ class CodeEditorRegexFragment(
         val rootStack = VStack(gap = SpacingScale.S2)
 
         // 1. Top Toolbar
+        topToolbar.addClass("regex-toolbar")
         topToolbar.getStyle().apply {
             padding = CssEdgeLengths.px(6, 10)
             borderRadiusPx = 8f
@@ -269,36 +275,24 @@ class CodeEditorRegexFragment(
         codeEditor.getStyle().apply {
             borderRadiusPx = 6f
         }
-        val toolbarRow = HStack(gap = SpacingScale.S2)
-        toolbarRow.addClass("regex-toolbar")
-        toolbarRow.addChild(Label("Language:"))
-        toolbarRow.addChild(languageSelect)
-        toolbarRow.addChild(Label("Theme:"))
-        toolbarRow.addChild(editorThemeSelect)
-        toolbarRow.addChild(Label("Preset:"))
-        toolbarRow.addChild(snippetPresetSelect)
-        toolbarRow.addChild(loadSnippetButton)
-        toolbarRow.addChild(snippetTitleInput)
-        toolbarRow.addChild(saveSnippetButton)
-        topToolbar.addChild(toolbarRow)
+        topToolbar.addChild(Label("Language:"))
+        topToolbar.addChild(languageSelect)
+        topToolbar.addChild(Label("Theme:"))
+        topToolbar.addChild(editorThemeSelect)
+        topToolbar.addChild(Label("Preset:"))
+        topToolbar.addChild(snippetPresetSelect)
+        topToolbar.addChild(loadSnippetButton)
+        topToolbar.addChild(snippetTitleInput)
+        topToolbar.addChild(saveSnippetButton)
         rootStack.addChild(topToolbar)
 
-        // 2. Buffer Tabs
-        for (preset in snippetRegistry.values) {
-            val tab = CloseableTab(
-                tabId = preset.id,
-                title = preset.title,
-                isCloseable = preset.id !in CodeSnippetPreset.BUILT_IN_PRESETS.map { it.id }
-            )
-            bufferTabContainer.addTab(tab, HStack())
-        }
-        rootStack.addChild(bufferTabContainer)
-
-        // 3. Left Pane: Syntax-Highlighted IdeCodeEditor
+        // 2. Left Pane: Syntax-Highlighted IdeCodeEditor
         val editorCard = Card("Syntax-Highlighted Code Buffer")
         editorCard.addClass("editor-pane-card")
         val editorStack = VStack(gap = SpacingScale.S2)
-        val editorMetaRow = HStack(gap = SpacingScale.S2)
+        val editorMetaRow = HStack(gap = SpacingScale.S2).apply {
+            flexWrap = FlexWrap.WRAP
+        }
         editorMetaRow.addChild(Label("Active Syntax:"))
         editorMetaRow.addChild(activeLanguageBadge)
         editorMetaRow.addChild(lineCountBadge)
@@ -306,7 +300,7 @@ class CodeEditorRegexFragment(
         editorStack.addChild(codeEditor)
         editorCard.addChild(editorStack)
 
-        // 4. Right Pane: Regular Expression Tester & Capture Group Table
+        // 3. Right Pane: Regular Expression Tester & Capture Group Table
         val rightScroll = ScrollView()
         val rightStack = VStack(gap = SpacingScale.S2)
 
@@ -314,13 +308,17 @@ class CodeEditorRegexFragment(
         regexControlsCard.addClass("regex-inspector-card")
         val regexFormStack = VStack(gap = SpacingScale.S2)
 
-        val patternRow = HStack(gap = SpacingScale.S2)
+        val patternRow = HStack(gap = SpacingScale.S2).apply {
+            flexWrap = FlexWrap.WRAP
+        }
         patternRow.addChild(Label("Pattern:"))
         patternRow.addChild(regexPatternInput)
         patternRow.addChild(runRegexButton)
         regexFormStack.addChild(patternRow)
 
-        val flagsRow = HStack(gap = SpacingScale.S2)
+        val flagsRow = HStack(gap = SpacingScale.S2).apply {
+            flexWrap = FlexWrap.WRAP
+        }
         flagsRow.addChild(ignoreCaseCheckBox)
         flagsRow.addChild(multilineCheckBox)
         flagsRow.addChild(matchCountBadge)
@@ -341,6 +339,7 @@ class CodeEditorRegexFragment(
                 TableColumn(id = "groups", headerText = "Capture Groups")
             )
         )
+        captureGroupsTable.setColumnWeights(0.5f, 1.4f, 1.1f, 1.8f)
         captureStack.addChild(captureGroupsTable)
         captureStack.addChild(Heading("Match Detail Badges", level = 6))
         captureStack.addChild(matchesListStack)
@@ -349,7 +348,21 @@ class CodeEditorRegexFragment(
 
         rightScroll.addChild(rightStack)
         workspaceSplitPane.setPanes(editorCard, rightScroll)
-        rootStack.addChild(workspaceSplitPane)
+
+        // 4. Buffer Tabs hosting the Split Workspace
+        tabContentHosts.clear()
+        for (preset in snippetRegistry.values) {
+            val tab = CloseableTab(
+                tabId = preset.id,
+                title = preset.title,
+                isCloseable = preset.id !in CodeSnippetPreset.BUILT_IN_PRESETS.map { it.id }
+            )
+            val host = VStack(gap = SpacingScale.S1)
+            tabContentHosts[preset.id] = host
+            bufferTabContainer.addTab(tab, host)
+        }
+        tabContentHosts[activeSnippetId]?.addChild(workspaceSplitPane)
+        rootStack.addChild(bufferTabContainer)
 
         // 5. Status Bar
         statusBar.addClass("status-bar")
@@ -451,12 +464,23 @@ class CodeEditorRegexFragment(
      */
     fun loadPresetById(presetId: String): CodeSnippetPreset? {
         val preset = snippetRegistry[presetId]
-            ?: preferenceStore.get<CodeSnippetPreset>("$KEY_SNIPPET_PREFIX$presetId")
+            ?: getPreferenceStore().get<CodeSnippetPreset>("$KEY_SNIPPET_PREFIX$presetId")
             ?: return null
         snippetRegistry[preset.id] = preset
         activeSnippetId = preset.id
         snippetPresetSelect.selectedValue = preset.id
         snippetTitleInput.value = preset.title
+        val host = tabContentHosts.getOrPut(preset.id) {
+            val newHost = VStack(gap = SpacingScale.S1)
+            if (bufferTabContainer.getTab(preset.id) == null) {
+                val tab = CloseableTab(tabId = preset.id, title = preset.title, isCloseable = true)
+                bufferTabContainer.addTab(tab, newHost)
+            }
+            newHost
+        }
+        if (workspaceSplitPane.parent !== host) {
+            host.addChild(workspaceSplitPane)
+        }
         bufferTabContainer.setActiveTab(preset.id)
 
         val resolvedLanguage = CodeLanguage.entries.firstOrNull {
@@ -536,7 +560,7 @@ class CodeEditorRegexFragment(
                 emptyList()
             }
 
-            val rangeLabel = "L${startPos.line + 1}:C${startPos.column + 1}..L${endPos.line + 1}:C${endPos.column + 1} ($startOffset..$endOffsetExclusive)"
+            val rangeLabel = "L${startPos.line + 1}:C${startPos.column + 1}..L${endPos.line + 1}:C${endPos.column + 1}"
             records.add(
                 RegexMatchRecord(
                     matchIndex = index,
@@ -583,9 +607,10 @@ class CodeEditorRegexFragment(
 
         matchesListStack.clearChildren()
         for (rec in records) {
-            val row = HStack(gap = SpacingScale.S1)
+            val row = HStack(gap = SpacingScale.S1).apply {
+                flexWrap = FlexWrap.WRAP
+            }
             row.addChild(Badge("#${rec.matchIndex + 1}", type = BootstrapType.PRIMARY, pill = true))
-            row.addChild(Label(rec.fullMatch))
             row.addChild(Badge(rec.rangeText, type = BootstrapType.SECONDARY))
             for ((gIdx, groupVal) in rec.groups.withIndex()) {
                 row.addChild(Badge("$${gIdx + 1}: $groupVal", type = BootstrapType.INFO, pill = true))
@@ -619,18 +644,25 @@ class CodeEditorRegexFragment(
         snippetRegistry[preset.id] = preset
         activeSnippetId = preset.id
 
-        val savedIds = preferenceStore.getStringSet(KEY_SAVED_SNIPPET_IDS, emptySet()).toMutableSet()
+        val savedIds = getPreferenceStore().getStringSet(KEY_SAVED_SNIPPET_IDS, emptySet()).toMutableSet()
         savedIds.add(preset.id)
-        preferenceStore.putStringSet(KEY_SAVED_SNIPPET_IDS, savedIds)
-        preferenceStore.put("$KEY_SNIPPET_PREFIX${preset.id}", preset)
-        preferenceStore.putString(KEY_LAST_ACTIVE_SNIPPET_ID, preset.id)
-        preferenceStore.flush()
+        getPreferenceStore().putStringSet(KEY_SAVED_SNIPPET_IDS, savedIds)
+        getPreferenceStore().put("$KEY_SNIPPET_PREFIX${preset.id}", preset)
+        getPreferenceStore().putString(KEY_LAST_ACTIVE_SNIPPET_ID, preset.id)
+        getPreferenceStore().flush()
 
         rebuildPresetSelectorOptions()
         snippetPresetSelect.selectedValue = preset.id
-        if (bufferTabContainer.getTab(preset.id) == null) {
-            val tab = CloseableTab(tabId = preset.id, title = preset.title, isCloseable = true)
-            bufferTabContainer.addTab(tab, HStack())
+        val host = tabContentHosts.getOrPut(preset.id) {
+            val newHost = VStack(gap = SpacingScale.S1)
+            if (bufferTabContainer.getTab(preset.id) == null) {
+                val tab = CloseableTab(tabId = preset.id, title = preset.title, isCloseable = true)
+                bufferTabContainer.addTab(tab, newHost)
+            }
+            newHost
+        }
+        if (workspaceSplitPane.parent !== host) {
+            host.addChild(workspaceSplitPane)
         }
         bufferTabContainer.setActiveTab(preset.id)
         statusMessageLabel.text = "Saved snippet '${preset.title}' (${preset.id}) to PreferenceStore."
@@ -641,7 +673,7 @@ class CodeEditorRegexFragment(
      * Loads a previously persisted [CodeSnippetPreset] directly from [preferenceStore].
      */
     fun loadSavedSnippetFromStore(snippetId: String): CodeSnippetPreset? =
-        preferenceStore.get<CodeSnippetPreset>("$KEY_SNIPPET_PREFIX$snippetId")
+        getPreferenceStore().get<CodeSnippetPreset>("$KEY_SNIPPET_PREFIX$snippetId")
 
     private fun updateLineCountBadge() {
         lineCountBadge.text = "${codeEditor.document.lineCount} lines"

@@ -30,6 +30,10 @@ html, body, #genericui-app, .genericui-window {
     }
 
     .sketchpad-workspace {
+        margin-top: 4px;
+    }
+
+    .sketchpad-canvas-card {
         background-color: $bg-surface;
         border-radius: 8px;
         padding: 12px;
@@ -44,5 +48,14 @@ html, body, #genericui-app, .genericui-window {
         background-color: $bg-elevated;
         border-radius: 8px;
         padding: 12px;
+    }
+
+    .curve-editor-canvas {
+        background-color: #0b1120;
+        border-radius: 6px;
+    }
+
+    .sketchpad-command-table {
+        border-radius: 6px;
     }
 }

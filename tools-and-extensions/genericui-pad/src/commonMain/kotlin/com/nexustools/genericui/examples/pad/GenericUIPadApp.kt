@@ -7,7 +7,7 @@ import com.nexustools.genericui.component.shell.MenuBar
 import com.nexustools.genericui.component.shell.MenuItem
 import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.examples.pad.res.GeneratedResourceRegistry
-import com.nexustools.genericui.examples.pad.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.pad.res.Resource
 import com.nexustools.genericui.window.TitleBar
 
 /**
@@ -18,8 +18,8 @@ class GenericUIPadApp(
     val padFragment: GenericUIPadFragment = GenericUIPadFragment()
 ) : FragmentApplication(
     initialFragment = padFragment,
-    title = "GenericUIPad",
-    initialThemeColor = "#1E1E1E"
+    title = "CharG - Notepad",
+    initialThemeColor = "#38BDF8"
 ) {
 
     constructor(preferenceStore: PreferenceStore) : this(GenericUIPadFragment(preferenceStore))
@@ -30,7 +30,7 @@ class GenericUIPadApp(
     init {
         GeneratedResourceRegistry.ensureInitialized()
         setThemeMode(GeneratedResourceRegistry.DEFAULT_THEME_MODE)
-        addStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
 
         val titleBar = TitleBar(
             embedMenuBar = true,
@@ -45,7 +45,6 @@ class GenericUIPadApp(
         padFragment.setMenuBar(menuBar)
         mainWindow.setTitleBar(titleBar)
         mainWindow.setMenuBar(menuBar)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
     }
 
     private fun buildNotepadMenuBar(): MenuBar {

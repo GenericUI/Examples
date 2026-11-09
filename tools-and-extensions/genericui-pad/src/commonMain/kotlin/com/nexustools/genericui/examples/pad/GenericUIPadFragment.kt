@@ -13,6 +13,7 @@ import com.nexustools.genericui.component.fragment.helper.TabbedFragment
 import com.nexustools.genericui.component.fragment.helper.TabbedFragmentConfig
 import com.nexustools.genericui.component.layout.FlexBox
 import com.nexustools.genericui.component.layout.HStack
+import com.nexustools.genericui.component.layout.VStack
 import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.component.system.StatusBar
 import com.nexustools.genericui.component.typography.Badge
@@ -21,6 +22,7 @@ import com.nexustools.genericui.enums.bootstrap.AlignItems
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.enums.bootstrap.FlexDirection
+import com.nexustools.genericui.enums.bootstrap.FlexWrap
 import com.nexustools.genericui.enums.bootstrap.JustifyContent
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.io.Readable
@@ -84,12 +86,15 @@ class GenericUIPadFragment(
     // Left menu action buttons
     val fileMenuButton: Button = Button("File", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
         addClass("pad-menu-btn")
+        widthPx = 48
     }
     val editMenuButton: Button = Button("Edit", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
         addClass("pad-menu-btn")
+        widthPx = 48
     }
     val viewMenuButton: Button = Button("View", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
         addClass("pad-menu-btn")
+        widthPx = 48
     }
 
     // Center rich formatting controls
@@ -103,34 +108,61 @@ class GenericUIPadFragment(
         selectedValue = "H1"
     ).apply {
         addClass("pad-heading-select")
+        widthPx = 64
     }
 
     val listSelect: Select = Select(
         options = listOf(
-            SelectOption("BULLET", "List • Bullet"),
-            SelectOption("NUMBERED", "List 1. Numbered")
+            SelectOption("BULLET", "• Bullet"),
+            SelectOption("NUMBERED", "1. Numbered")
         ),
         selectedValue = "BULLET"
     ).apply {
         addClass("pad-list-select")
+        widthPx = 104
     }
 
-    val bulletListButton: Button = Button("• List", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val numberedListButton: Button = Button("1. List", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val boldButton: Button = Button("B", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val italicButton: Button = Button("I", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val strikethroughButton: Button = Button("S", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val linkButton: Button = Button("🔗", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val tableButton: Button = Button("⊞", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val clearFormattingButton: Button = Button("Aₓ", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val modeToggleButton: Button = Button("Markdown Preview", type = BootstrapType.INFO, size = BootstrapSize.SM, outline = true)
+    val bulletListButton: Button = Button("• List", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true).apply {
+        widthPx = 58
+    }
+    val numberedListButton: Button = Button("1. List", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true).apply {
+        widthPx = 64
+    }
+    val boldButton: Button = Button("B", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true).apply {
+        widthPx = 32
+    }
+    val italicButton: Button = Button("I", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true).apply {
+        widthPx = 32
+    }
+    val strikethroughButton: Button = Button("S", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true).apply {
+        widthPx = 32
+    }
+    val linkButton: Button = Button("Link", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true).apply {
+        widthPx = 48
+    }
+    val tableButton: Button = Button("Table", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true).apply {
+        widthPx = 54
+    }
+    val clearFormattingButton: Button = Button("Clear", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true).apply {
+        widthPx = 54
+    }
+    val modeToggleButton: Button = Button("Markdown", type = BootstrapType.INFO, size = BootstrapSize.SM, outline = true).apply {
+        widthPx = 74
+    }
 
     // Right action controls
-    val findToggleButton: Button = Button("🔍", type = BootstrapType.DARK, size = BootstrapSize.SM)
-    val whatsNewBellButton: Button = Button("🔔", type = BootstrapType.DARK, size = BootstrapSize.SM)
-    val settingsGearButton: Button = Button("⚙", type = BootstrapType.DARK, size = BootstrapSize.SM)
+    val findToggleButton: Button = Button("Find", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
+        widthPx = 50
+    }
+    val whatsNewBellButton: Button = Button("Alerts", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
+        widthPx = 58
+    }
+    val settingsGearButton: Button = Button("Settings", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
+        widthPx = 70
+    }
     val notificationBadge: Badge = Badge("Win11 Pad", type = BootstrapType.INFO, pill = true).apply {
         isVisible = false
+        widthPx = 78
     }
 
     // --- Collapsible Find & Replace Bar ---
@@ -157,6 +189,7 @@ class GenericUIPadFragment(
 
     val findReplaceBar: HStack = HStack(gap = SpacingScale.S2).apply {
         addClass("pad-find-replace-bar")
+        flexWrap = FlexWrap.WRAP
         isVisible = false
     }
     val findQueryField: TextField = TextField(value = "", placeholder = "Find in document...")
@@ -169,6 +202,7 @@ class GenericUIPadFragment(
 
     val settingsPanel: HStack = HStack(gap = SpacingScale.S3).apply {
         addClass("pad-settings-panel")
+        flexWrap = FlexWrap.WRAP
         isVisible = false
     }
     val wordWrapCheckBox: CheckBox = CheckBox(label = "Word wrap", checked = true, switchStyle = true)
@@ -180,12 +214,30 @@ class GenericUIPadFragment(
     val statusBar: StatusBar = StatusBar().apply {
         addClass("pad-status-bar")
     }
-    val cursorStatusLabel: Label = Label("Ln 1, Col 343").apply { addClass("pad-status-cell") }
-    val charCountStatusLabel: Label = Label("342 characters").apply { addClass("pad-status-cell") }
-    val modeStatusLabel: Label = Label("Plain text").apply { addClass("pad-status-cell") }
-    val zoomStatusLabel: Label = Label("100%").apply { addClass("pad-status-cell") }
-    val lineEndingStatusLabel: Label = Label("Windows (CRLF)").apply { addClass("pad-status-cell") }
-    val encodingStatusLabel: Label = Label("UTF-8").apply { addClass("pad-status-cell") }
+    val cursorStatusLabel: Label = Label("Ln 1, Col 343").apply {
+        addClass("pad-status-cell")
+        widthPx = 210
+    }
+    val charCountStatusLabel: Label = Label("342 characters").apply {
+        addClass("pad-status-cell")
+        widthPx = 210
+    }
+    val modeStatusLabel: Label = Label("Plain text").apply {
+        addClass("pad-status-cell")
+        widthPx = 180
+    }
+    val zoomStatusLabel: Label = Label("100%").apply {
+        addClass("pad-status-cell")
+        widthPx = 140
+    }
+    val lineEndingStatusLabel: Label = Label("Windows (CRLF)").apply {
+        addClass("pad-status-cell")
+        widthPx = 220
+    }
+    val encodingStatusLabel: Label = Label("UTF-8").apply {
+        addClass("pad-status-cell")
+        widthPx = 140
+    }
 
     init {
         addClass("genericui-pad-root")
@@ -193,6 +245,8 @@ class GenericUIPadFragment(
         buildChromeAndToolbars()
         wireCommandAndFindEvents()
         populateInitialSixWindows11Tabs()
+        syncDesktopTabStripStyles()
+        syncHeaderSlotHeight()
         syncStatusBarFromActiveDocument()
     }
 
@@ -201,19 +255,21 @@ class GenericUIPadFragment(
         if (tabCount == 0) {
             populateInitialSixWindows11Tabs()
         }
+        syncDesktopTabStripStyles()
+        syncHeaderSlotHeight()
         syncStatusBarFromActiveDocument()
     }
 
-    private fun buildChromeAndToolbars() {
-        val commandRow = FlexBox().apply {
-            flexDirection = FlexDirection.ROW
-            alignItems = AlignItems.CENTER
-            justifyContent = JustifyContent.BETWEEN
-            addClass("w-100", "gap-2")
-        }
+    override fun onResize(viewportWidth: Int, viewportHeight: Int) {
+        super.onResize(viewportWidth, viewportHeight)
+        syncDesktopTabStripStyles()
+        syncHeaderSlotHeight()
+    }
 
+    private fun buildChromeAndToolbars() {
         val leftMenusGroup = HStack(gap = SpacingScale.S1).apply {
             addClass("pad-menu-triggers")
+            widthPx = 160
             addChild(fileMenuButton)
             addChild(editMenuButton)
             addChild(viewMenuButton)
@@ -221,6 +277,8 @@ class GenericUIPadFragment(
 
         val centerFormattingGroup = HStack(gap = SpacingScale.S1).apply {
             addClass("pad-format-toolbar")
+            flexWrap = FlexWrap.WRAP
+            widthPx = 680
             addChild(headingSelect)
             addChild(listSelect)
             addChild(bulletListButton)
@@ -236,16 +294,18 @@ class GenericUIPadFragment(
 
         val rightActionsGroup = HStack(gap = SpacingScale.S1).apply {
             addClass("pad-right-actions")
+            widthPx = 196
             addChild(findToggleButton)
             addChild(whatsNewBellButton)
             addChild(notificationBadge)
             addChild(settingsGearButton)
         }
 
-        commandRow.addChild(leftMenusGroup)
-        commandRow.addChild(centerFormattingGroup)
-        commandRow.addChild(rightActionsGroup)
-        commandBar.addChild(commandRow)
+        commandBar.addChild(leftMenusGroup)
+        commandBar.addChild(VStack())
+        commandBar.addChild(centerFormattingGroup)
+        commandBar.addChild(VStack())
+        commandBar.addChild(rightActionsGroup)
 
         findReplaceBar.addChild(Label("Find:"))
         findReplaceBar.addChild(findQueryField)
@@ -265,20 +325,13 @@ class GenericUIPadFragment(
         headerSlotContainer.addChild(findReplaceBar)
         headerSlotContainer.addChild(settingsPanel)
 
-        // Build 6-column bottom status bar
-        val statusRow = FlexBox().apply {
-            flexDirection = FlexDirection.ROW
-            alignItems = AlignItems.CENTER
-            justifyContent = JustifyContent.BETWEEN
-            addClass("w-100", "gap-3")
-        }
-        statusRow.addChild(cursorStatusLabel)
-        statusRow.addChild(charCountStatusLabel)
-        statusRow.addChild(modeStatusLabel)
-        statusRow.addChild(zoomStatusLabel)
-        statusRow.addChild(lineEndingStatusLabel)
-        statusRow.addChild(encodingStatusLabel)
-        statusBar.addChild(statusRow)
+        // Mount 6-column bottom status bar cells directly inside statusBar so all 6 columns span the bar
+        statusBar.addChild(cursorStatusLabel)
+        statusBar.addChild(charCountStatusLabel)
+        statusBar.addChild(modeStatusLabel)
+        statusBar.addChild(zoomStatusLabel)
+        statusBar.addChild(lineEndingStatusLabel)
+        statusBar.addChild(encodingStatusLabel)
         addChild(statusBar)
     }
 
@@ -307,11 +360,13 @@ class GenericUIPadFragment(
                     openTabCount = tabCount
                 )
             }
+            syncDesktopTabStripStyles()
             syncStatusBarFromActiveDocument()
         }
 
         onTabOpened = { _ ->
             sessionSettings = sessionSettings.copy(openTabCount = tabCount)
+            syncDesktopTabStripStyles()
         }
 
         onTabClosed = { closedSpec ->
@@ -321,6 +376,7 @@ class GenericUIPadFragment(
                 activeTabId = activeTabId ?: "",
                 openTabCount = tabCount
             )
+            syncDesktopTabStripStyles()
             syncStatusBarFromActiveDocument()
         }
 
@@ -485,6 +541,7 @@ class GenericUIPadFragment(
         tabFrag.onDocumentChanged = { updatedDoc ->
             documentsById[updatedDoc.docId] = updatedDoc
             updateTabBadge(updatedDoc.docId, if (updatedDoc.isModified) "•" else null)
+            syncDesktopTabStripStyles()
             if (activeTabId == updatedDoc.docId) {
                 syncStatusBarFromDocument(updatedDoc)
             }
@@ -516,6 +573,7 @@ class GenericUIPadFragment(
      */
     fun toggleFindReplaceBar(): Boolean {
         findReplaceBar.isVisible = !findReplaceBar.isVisible
+        syncHeaderSlotHeight()
         return findReplaceBar.isVisible
     }
 
@@ -524,6 +582,7 @@ class GenericUIPadFragment(
      */
     fun toggleSettingsPanel(): Boolean {
         settingsPanel.isVisible = !settingsPanel.isVisible
+        syncHeaderSlotHeight()
         return settingsPanel.isVisible
     }
 
@@ -746,6 +805,42 @@ class GenericUIPadFragment(
             selectTab(loaded.activeTabId)
         }
         syncStatusBarFromActiveDocument()
+    }
+
+    private fun syncDesktopTabStripStyles() {
+        for (child in desktopTabStripContainer.children) {
+            if (child === newTabButton) {
+                newTabButton.type = BootstrapType.SECONDARY
+                newTabButton.widthPx = 34
+            } else if (child is FlexBox) {
+                val isActive = child.hasClass("active")
+                val selectBtn = child.children.getOrNull(0) as? Button
+                val closeBtn = child.children.getOrNull(1) as? Button
+                val selectW = if (selectBtn != null) {
+                    selectBtn.type = if (isActive) BootstrapType.PRIMARY else BootstrapType.DARK
+                    val w = (selectBtn.text.length * 6 + 28).coerceAtLeast(60)
+                    selectBtn.widthPx = w
+                    w
+                } else {
+                    84
+                }
+                val closeW = if (closeBtn != null) {
+                    closeBtn.type = if (isActive) BootstrapType.PRIMARY else BootstrapType.DARK
+                    closeBtn.widthPx = 28
+                    36
+                } else {
+                    0
+                }
+                child.widthPx = selectW + closeW
+            }
+        }
+    }
+
+    private fun syncHeaderSlotHeight() {
+        var totalH = 76
+        if (findReplaceBar.isVisible) totalH += 40
+        if (settingsPanel.isVisible) totalH += 40
+        headerSlotContainer.heightPx = totalH
     }
 
     private fun syncStatusBarFromActiveDocument() {

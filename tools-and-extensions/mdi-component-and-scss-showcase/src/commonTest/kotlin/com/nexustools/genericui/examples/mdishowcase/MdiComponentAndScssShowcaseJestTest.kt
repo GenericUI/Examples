@@ -4,7 +4,7 @@ import com.nexustools.genericui.component.shell.MdiWindowState
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.enums.dock.StudioWindowMode
 import com.nexustools.genericui.enums.ui.ThemeMode
-import com.nexustools.genericui.examples.mdishowcase.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.mdishowcase.res.Resource
 import com.nexustools.genericui.ext.codeeditor.CodeLanguage
 import com.nexustools.genericui.ext.codeeditor.CursorPosition
 import com.nexustools.genericui.ext.codeeditor.ScssLanguageSupport
@@ -30,6 +30,10 @@ class MdiComponentAndScssShowcaseJestTest {
             describe("MDI Component & Live SCSS Stylesheet Showcase") {
 
                 it("mounts 2 main tabs, 6 category MdiWindows, and preloads Rainbow Prism SCSS scoped strictly to MdiContainer") {
+                    val appController = launchApp(visualOnWindows = false) { MdiComponentAndScssShowcaseApp() }
+                    appController.takeScreenshot("mdi-component-and-scss-showcase.jpg")
+                    appController.destroy()
+
                     val controller = launchFragment {
                         MdiComponentAndScssShowcaseFragment()
                     }
@@ -332,7 +336,7 @@ class MdiComponentAndScssShowcaseJestTest {
 
                     // Verify initial ThemeMode.AUTO and global precompiled stylesheet registration
                     expect(app.getThemeMode()).toBe(ThemeMode.AUTO)
-                    assertTrue(app.hasStyleSheet(StylesPrecompiledStyleSheet))
+                    assertTrue(app.hasStyleSheet(Resource.style.styles))
                     assertTrue(frag.hasClass("mdi-showcase-root"))
 
                     // Switch theme mode between DARK, LIGHT, and AUTO
@@ -349,9 +353,9 @@ class MdiComponentAndScssShowcaseJestTest {
 
                     // Toggle global stylesheet via removeStyleSheet / addStyleSheet
                     assertTrue(app.setGlobalStyleSheetEnabled(false))
-                    assertFalse(app.hasStyleSheet(StylesPrecompiledStyleSheet))
+                    assertFalse(app.hasStyleSheet(Resource.style.styles))
                     assertTrue(app.setGlobalStyleSheetEnabled(true))
-                    assertTrue(app.hasStyleSheet(StylesPrecompiledStyleSheet))
+                    assertTrue(app.hasStyleSheet(Resource.style.styles))
 
                     // Verify getBootstrap() and getStyle() on showcase controls
                     expect(frag.scssStatusBadge.getBootstrap().type).toBe(BootstrapType.SUCCESS)

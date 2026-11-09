@@ -1,5 +1,6 @@
 $explorer-bg: #0f172a;
 $explorer-surface: #1e293b;
+$explorer-elevated: #172033;
 $explorer-accent: #2563eb;
 $explorer-border: #334155;
 $explorer-text: #f8fafc;
@@ -8,30 +9,58 @@ $explorer-muted: #94a3b8;
 .explorer-root {
   background-color: $explorer-bg;
   color: $explorer-text;
-  padding: 16px;
+  padding: 12px;
 }
 
 .explorer-toolbar {
   background-color: $explorer-surface;
   border-color: $explorer-border;
   border-radius: 10px;
-  padding: 12px;
+  padding: 10px;
 }
 
 .explorer-telemetry-bar {
-  background-color: #172033;
+  background-color: $explorer-elevated;
   border-radius: 8px;
   padding: 8px;
 }
 
-.explorer-row-item {
-  background-color: $explorer-surface;
+.explorer-column-header {
+  background-color: $explorer-elevated;
+  color: $explorer-muted;
   border-radius: 6px;
-  padding: 8px;
+  padding: 6px 8px;
+}
+
+.explorer-sidebar-card {
+  background-color: $explorer-surface;
+  border-color: $explorer-border;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.explorer-viewport-card {
+  background-color: $explorer-surface;
+  border-color: $explorer-border;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.explorer-inspector-card {
+  background-color: $explorer-surface;
+  border-color: $explorer-border;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.explorer-row-item {
+  background-color: $explorer-elevated;
+  border-radius: 6px;
+  padding: 6px 8px;
 }
 
 .explorer-grid-card {
-  background-color: $explorer-surface;
+  background-color: $explorer-elevated;
   border-radius: 8px;
   padding: 10px;
 }

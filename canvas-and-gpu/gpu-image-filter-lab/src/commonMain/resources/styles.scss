@@ -30,6 +30,10 @@ html, body, #genericui-app, .genericui-window {
     }
 
     .filter-workspace {
+        width: 100%;
+    }
+
+    .filter-preview-card {
         background-color: $bg-surface;
         border-radius: 8px;
         padding: 12px;

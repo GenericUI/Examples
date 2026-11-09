@@ -7,7 +7,7 @@ import com.nexustools.genericui.component.shell.MenuBar
 import com.nexustools.genericui.component.shell.MenuItem
 import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.enums.ui.ThemeMode
-import com.nexustools.genericui.examples.dataeditor.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.dataeditor.res.Resource
 import com.nexustools.genericui.window.TitleBar
 
 /**
@@ -21,7 +21,7 @@ class DataEditorApp(
 ) : FragmentApplication(
     initialFragment = editorFragment,
     title = "BSON / JSON / Binary Plist Visual Editor",
-    initialThemeColor = "#1E293B"
+    initialThemeColor = "#38BDF8"
 ) {
 
     constructor(preferenceStore: PreferenceStore) : this(
@@ -37,7 +37,7 @@ class DataEditorApp(
 
     init {
         setThemeMode(ThemeMode.DARK)
-        addStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
         val titleBar = TitleBar(
             embedMenuBar = true,
             showWindowTitle = true,
@@ -49,7 +49,6 @@ class DataEditorApp(
         editorFragment.setMenuBar(menuBar)
         mainWindow.setTitleBar(titleBar)
         mainWindow.setMenuBar(menuBar)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
     }
 
     private fun buildApplicationMenuBar(): MenuBar {

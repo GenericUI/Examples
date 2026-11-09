@@ -25,6 +25,7 @@ class NotesJestTest {
                 it("creates notes, edits title and markdown body, updates live preview, and pins notes") {
                     val store = PreferenceStore("MarkdownNotesTest_1").apply { clear() }
                     val controller = launchApp(visualOnWindows = false) { NotesApp(store) }.setup()
+                    controller.takeScreenshot("markdown-notes-and-preferences.jpg")
 
                     // Starter note is automatically created on first launch
                     expectNode(controller.findById("badge-note-count")).toHaveText("1 notes")

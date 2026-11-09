@@ -3,7 +3,7 @@ package com.nexustools.genericui.examples.mediacatalog
 import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.enums.ui.ThemeMode
-import com.nexustools.genericui.examples.mediacatalog.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.mediacatalog.res.Resource
 
 /**
  * Multiplatform [FragmentApplication] hosting [AdaptiveMediaCatalogFragment].
@@ -19,8 +19,7 @@ class AdaptiveMediaCatalogApp(
     init {
         setThemeMode(ThemeMode.AUTO)
         setThemeColor("#7C3AED")
-        addStyleSheet(StylesPrecompiledStyleSheet)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
     }
 }
 

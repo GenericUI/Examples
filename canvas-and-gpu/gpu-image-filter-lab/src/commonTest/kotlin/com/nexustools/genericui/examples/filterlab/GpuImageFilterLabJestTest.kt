@@ -22,6 +22,7 @@ class GpuImageFilterLabJestTest {
             describe("Initial procedural image and histogram state") {
                 it("mounts controls, verifies getStyle() and getBootstrap(), and computes initial 256-bin histogram") {
                     val controller = launchApp(visualOnWindows = false) { GpuImageFilterLabApp() }
+                    controller.takeScreenshot("gpu-image-filter-lab.jpg")
                     val fragment = controller.app.filterLabFragment
 
                     expectNode(controller.findById("lbl-title")).toHaveText("GPU Image Filter Lab")
@@ -38,6 +39,7 @@ class GpuImageFilterLabJestTest {
             describe("Brightness, saturation, and Gaussian blur filter adjustments") {
                 it("shifts mean luminance when brightness slider increases") {
                     val controller = launchApp(visualOnWindows = false) { GpuImageFilterLabApp() }
+                    controller.takeScreenshot("gpu-image-filter-lab.jpg")
                     val fragment = controller.app.filterLabFragment
 
                     val baselineLuma = fragment.meanLuminance
@@ -50,6 +52,7 @@ class GpuImageFilterLabJestTest {
 
                 it("desaturates pixels to grayscale when Noir preset is clicked") {
                     val controller = launchApp(visualOnWindows = false) { GpuImageFilterLabApp() }
+                    controller.takeScreenshot("gpu-image-filter-lab.jpg")
                     val fragment = controller.app.filterLabFragment
 
                     controller.findById("btn-preset-noir").performClick()
@@ -68,6 +71,7 @@ class GpuImageFilterLabJestTest {
 
                 it("applies Gaussian blur and resets back to baseline") {
                     val controller = launchApp(visualOnWindows = false) { GpuImageFilterLabApp() }
+                    controller.takeScreenshot("gpu-image-filter-lab.jpg")
                     val fragment = controller.app.filterLabFragment
                     val baselineLuma = fragment.meanLuminance
 

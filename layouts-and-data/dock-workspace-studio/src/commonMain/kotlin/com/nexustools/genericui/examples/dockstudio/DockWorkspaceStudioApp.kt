@@ -3,7 +3,7 @@ package com.nexustools.genericui.examples.dockstudio
 import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.enums.ui.ThemeMode
-import com.nexustools.genericui.examples.dockstudio.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.dockstudio.res.Resource
 
 /**
  * Multiplatform [FragmentApplication] hosting [DockWorkspaceStudioFragment].
@@ -19,8 +19,7 @@ class DockWorkspaceStudioApp(
     init {
         setThemeMode(ThemeMode.AUTO)
         setThemeColor("#0EA5E9")
-        addStyleSheet(StylesPrecompiledStyleSheet)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
     }
 }
 

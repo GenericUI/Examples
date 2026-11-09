@@ -17,6 +17,8 @@ import com.nexustools.genericui.ext.dsl.badge
 import com.nexustools.genericui.ext.dsl.build
 import com.nexustools.genericui.ext.dsl.button
 import com.nexustools.genericui.ext.dsl.card
+import com.nexustools.genericui.ext.dsl.column
+import com.nexustools.genericui.ext.dsl.columnLayout
 import com.nexustools.genericui.ext.dsl.h5
 import com.nexustools.genericui.ext.dsl.hstack
 import com.nexustools.genericui.ext.dsl.label
@@ -138,110 +140,113 @@ class GpuImageFilterLabFragment : Fragment() {
                     }
                 }
 
-                hstack(classes = "filter-workspace gap-3 align-items-start") {
-                    vstack(classes = "gap-2") {
-                        label("Filtered Output Preview (160x120 Buffer)", id = "lbl-preview-heading")
-                        self.previewSurface = canvas2D(
-                            width = 320,
-                            height = 240,
-                            id = "filter-preview-canvas",
-                            classes = "filter-preview-canvas",
-                            onRender = { ctx, _, _, _ ->
-                                self.renderPreviewToContext(ctx)
+                columnLayout(classes = "filter-workspace") {
+                    column(span = 7, md = 7, lg = 7) {
+                        card(classes = "filter-preview-card") {
+                            label("Filtered Output Preview (160x120 Buffer)", id = "lbl-preview-heading")
+                            self.previewSurface = canvas2D(
+                                width = 320,
+                                height = 240,
+                                id = "filter-preview-canvas",
+                                classes = "filter-preview-canvas",
+                                onRender = { ctx, _, _, _ ->
+                                    self.renderPreviewToContext(ctx)
+                                }
+                            ) {
+                                getStyle().apply {
+                                    borderRadiusPx = 8f
+                                    setCursor(CssCursor.CROSSHAIR)
+                                }
                             }
-                        ) {
-                            getStyle().apply {
-                                borderRadiusPx = 8f
-                                setCursor(CssCursor.CROSSHAIR)
-                            }
+                            self.statusLabel = label(
+                                text = "Pipeline ready — BrightnessContrast -> HSL -> GaussianBlur -> Vignette",
+                                id = "lbl-status"
+                            )
                         }
                     }
 
-                    vstack(classes = "filter-controls-card gap-2") {
-                        label("Filter Pipeline Controls", id = "lbl-controls-heading")
+                    column(span = 5, md = 5, lg = 5) {
+                        card(classes = "filter-controls-card") {
+                            label("Filter Pipeline Controls", id = "lbl-controls-heading")
 
-                        label("Brightness (-0.8 to +0.8)", id = "lbl-brightness")
-                        self.brightnessSlider = rangeSlider(
-                            minValue = self.filterState.brightness.toDouble(),
-                            maxValue = 0.8,
-                            min = -0.8,
-                            max = 0.8,
-                            step = 0.05,
-                            id = "slider-brightness"
-                        ) {
-                            onValueChanged = { updated ->
-                                self.updateState(self.filterState.copy(brightness = updated.toFloat(), activePresetName = "Custom"))
+                            label("Brightness (-0.8 to +0.8)", id = "lbl-brightness")
+                            self.brightnessSlider = rangeSlider(
+                                minValue = self.filterState.brightness.toDouble(),
+                                maxValue = 0.8,
+                                min = -0.8,
+                                max = 0.8,
+                                step = 0.05,
+                                id = "slider-brightness"
+                            ) {
+                                onValueChanged = { updated ->
+                                    self.updateState(self.filterState.copy(brightness = updated.toFloat(), activePresetName = "Custom"))
+                                }
                             }
-                        }
 
-                        label("Contrast (0.2 to 2.5)", id = "lbl-contrast")
-                        self.contrastSlider = rangeSlider(
-                            minValue = self.filterState.contrast.toDouble(),
-                            maxValue = 2.5,
-                            min = 0.2,
-                            max = 2.5,
-                            step = 0.05,
-                            id = "slider-contrast"
-                        ) {
-                            onValueChanged = { updated ->
-                                self.updateState(self.filterState.copy(contrast = updated.toFloat(), activePresetName = "Custom"))
+                            label("Contrast (0.2 to 2.5)", id = "lbl-contrast")
+                            self.contrastSlider = rangeSlider(
+                                minValue = self.filterState.contrast.toDouble(),
+                                maxValue = 2.5,
+                                min = 0.2,
+                                max = 2.5,
+                                step = 0.05,
+                                id = "slider-contrast"
+                            ) {
+                                onValueChanged = { updated ->
+                                    self.updateState(self.filterState.copy(contrast = updated.toFloat(), activePresetName = "Custom"))
+                                }
                             }
-                        }
 
-                        label("Saturation (0.0 to 2.5)", id = "lbl-saturation")
-                        self.saturationSlider = rangeSlider(
-                            minValue = self.filterState.saturation.toDouble(),
-                            maxValue = 2.5,
-                            min = 0.0,
-                            max = 2.5,
-                            step = 0.05,
-                            id = "slider-saturation"
-                        ) {
-                            onValueChanged = { updated ->
-                                self.updateState(self.filterState.copy(saturation = updated.toFloat(), activePresetName = "Custom"))
+                            label("Saturation (0.0 to 2.5)", id = "lbl-saturation")
+                            self.saturationSlider = rangeSlider(
+                                minValue = self.filterState.saturation.toDouble(),
+                                maxValue = 2.5,
+                                min = 0.0,
+                                max = 2.5,
+                                step = 0.05,
+                                id = "slider-saturation"
+                            ) {
+                                onValueChanged = { updated ->
+                                    self.updateState(self.filterState.copy(saturation = updated.toFloat(), activePresetName = "Custom"))
+                                }
                             }
-                        }
 
-                        label("Gaussian Blur Radius (0 to 8 px)", id = "lbl-blur")
-                        self.blurSlider = rangeSlider(
-                            minValue = self.filterState.blurRadius.toDouble(),
-                            maxValue = 8.0,
-                            min = 0.0,
-                            max = 8.0,
-                            step = 1.0,
-                            id = "slider-blur"
-                        ) {
-                            onValueChanged = { updated ->
-                                self.updateState(
-                                    self.filterState.copy(
-                                        blurRadius = updated.roundToInt().coerceIn(0, 8),
-                                        activePresetName = "Custom"
+                            label("Gaussian Blur Radius (0 to 8 px)", id = "lbl-blur")
+                            self.blurSlider = rangeSlider(
+                                minValue = self.filterState.blurRadius.toDouble(),
+                                maxValue = 8.0,
+                                min = 0.0,
+                                max = 8.0,
+                                step = 1.0,
+                                id = "slider-blur"
+                            ) {
+                                onValueChanged = { updated ->
+                                    self.updateState(
+                                        self.filterState.copy(
+                                            blurRadius = updated.roundToInt().coerceIn(0, 8),
+                                            activePresetName = "Custom"
+                                        )
                                     )
-                                )
+                                }
                             }
-                        }
 
-                        label("256-Bin Luminance & RGB Histogram", id = "lbl-histogram-heading")
-                        self.histogramSurface = canvas2D(
-                            width = 256,
-                            height = 100,
-                            id = "histogram-canvas",
-                            classes = "filter-preview-canvas",
-                            onRender = { ctx, _, _, _ ->
-                                self.renderHistogramToContext(ctx)
-                            }
-                        ) {
-                            getStyle().apply {
-                                borderRadiusPx = 6f
+                            label("256-Bin Luminance & RGB Histogram", id = "lbl-histogram-heading")
+                            self.histogramSurface = canvas2D(
+                                width = 256,
+                                height = 100,
+                                id = "histogram-canvas",
+                                classes = "filter-preview-canvas",
+                                onRender = { ctx, _, _, _ ->
+                                    self.renderHistogramToContext(ctx)
+                                }
+                            ) {
+                                getStyle().apply {
+                                    borderRadiusPx = 6f
+                                }
                             }
                         }
                     }
                 }
-
-                self.statusLabel = label(
-                    text = "Pipeline ready — BrightnessContrast -> HSL -> GaussianBlur -> Vignette",
-                    id = "lbl-status"
-                )
             }
         }
     }

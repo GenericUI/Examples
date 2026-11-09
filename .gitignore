@@ -1,12 +1,10 @@
 .gradle/
-**/.gradle/
 .kotlin/
-**/.kotlin/
 .idea/
-**/.idea/
 build/
 **/build/
-**/kotlin-js-store/
 *.iml
+*.hprof
 local.properties
-**/local.properties
+screenshots/
+

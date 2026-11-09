@@ -23,6 +23,12 @@ html, body, #genericui-app, .genericui-window {
     background-color: $bg-dark;
     color: $text-light;
 
+    .wizard-roadmap-row {
+        background-color: $bg-card;
+        border-radius: 8px;
+        padding: 6px 12px;
+    }
+
     .wizard-card {
         background-color: $bg-card;
         border-radius: 12px;

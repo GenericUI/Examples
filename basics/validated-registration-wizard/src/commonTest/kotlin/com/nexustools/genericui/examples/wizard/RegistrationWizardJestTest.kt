@@ -24,6 +24,7 @@ class RegistrationWizardJestTest {
                 it("blocks navigation when Step 1 credentials are empty or invalid") {
                     val store = PreferenceStore("WizardTestStore_1").apply { clear() }
                     val controller = launchApp(visualOnWindows = false) { RegistrationWizardApp(store) }
+                    controller.takeScreenshot("validated-registration-wizard.jpg")
 
                     expect(controller.app.wizardFragment.currentStep).toBe(1)
                     expectNode(controller.findById("wizard-progress")).toBeVisible()

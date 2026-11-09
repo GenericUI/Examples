@@ -1,7 +1,7 @@
 package com.nexustools.genericui.examples.pad
 
 import com.nexustools.genericui.component.system.PreferenceStore
-import com.nexustools.genericui.examples.pad.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.pad.res.Resource
 import com.nexustools.genericui.io.ReadableByteBuffer
 import com.nexustools.genericui.io.WritableByteBuffer
 import com.nexustools.genericui.tests.JestElectricRunner
@@ -19,9 +19,10 @@ class GenericUIPadJestTest {
             describe("Initial 6 Windows 11 Notepad Tabs, Active 'CharG' Tab & 6-Column Status Bar") {
                 test("launches GenericUIPadApp with 6 tabs and active 'CharG' tab showing 342 characters and 'Ln 1, Col 343'") {
                     val controller = launchApp(visualOnWindows = false) { GenericUIPadApp() }
+                    controller.takeScreenshot("genericui-pad.jpg")
                     val frag = controller.app.fragment
 
-                    assertTrue(controller.app.hasStyleSheet(StylesPrecompiledStyleSheet))
+                    assertTrue(controller.app.hasStyleSheet(Resource.style.styles))
                     assertTrue(frag.hasClass("genericui-pad-root"))
 
                     expect(frag.tabCount).toBe(6)

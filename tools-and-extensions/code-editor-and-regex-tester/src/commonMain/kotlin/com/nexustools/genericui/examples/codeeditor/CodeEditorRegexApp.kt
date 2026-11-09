@@ -7,7 +7,7 @@ import com.nexustools.genericui.component.shell.MenuBar
 import com.nexustools.genericui.component.shell.MenuItem
 import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.enums.ui.ThemeMode
-import com.nexustools.genericui.examples.codeeditor.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.codeeditor.res.Resource
 import com.nexustools.genericui.ext.codeeditor.CodeLanguage
 import com.nexustools.genericui.window.TitleBar
 
@@ -20,7 +20,7 @@ class CodeEditorRegexApp(
     val regexFragment: CodeEditorRegexFragment = CodeEditorRegexFragment(customPreferenceStore)
 ) : FragmentApplication(
     initialFragment = regexFragment,
-    title = "GenericUI — Syntax-Highlighted CodeEditor & Regex Playground",
+    title = "GenericUI — CodeEditor & Regex Playground",
     initialThemeColor = "#6366F1"
 ) {
 
@@ -29,7 +29,7 @@ class CodeEditorRegexApp(
 
     init {
         setThemeMode(ThemeMode.DARK)
-        addStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
         val titleBar = TitleBar(
             embedMenuBar = true,
             showWindowTitle = true,
@@ -41,7 +41,6 @@ class CodeEditorRegexApp(
         regexFragment.setMenuBar(menuBar)
         mainWindow.setTitleBar(titleBar)
         mainWindow.setMenuBar(menuBar)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
     }
 
     private fun buildMenuBar(): MenuBar {

@@ -21,6 +21,7 @@ class Box2DPhysicsPlaygroundJestTest {
             describe("Initial Pyramid Stack scene") {
                 it("mounts controls, verifies getStyle() and getBootstrap(), and creates static boundaries plus 6 pyramid boxes") {
                     val controller = launchApp(visualOnWindows = false) { Box2DPhysicsPlaygroundApp() }
+                    controller.takeScreenshot("box2d-physics-playground.jpg")
                     val fragment = controller.app.physicsFragment
 
                     expectNode(controller.findById("lbl-title")).toHaveText("Box2D Physics Playground")
@@ -39,6 +40,7 @@ class Box2DPhysicsPlaygroundJestTest {
             describe("Spawning bodies and stepping rigid-body gravity simulation") {
                 it("spawns dynamic boxes and circles and descends under gravity until resting on floor") {
                     val controller = launchApp(visualOnWindows = false) { Box2DPhysicsPlaygroundApp() }
+                    controller.takeScreenshot("box2d-physics-playground.jpg")
                     val fragment = controller.app.physicsFragment
 
                     val spawnedCircle = fragment.spawnDynamicCircle(x = 0f, y = 2.8f, radius = 0.35f)
@@ -64,6 +66,7 @@ class Box2DPhysicsPlaygroundJestTest {
 
                 it("switches scene presets, creates revolute joints, and supports pause/resume and gravity slider") {
                     val controller = launchApp(visualOnWindows = false) { Box2DPhysicsPlaygroundApp() }
+                    controller.takeScreenshot("box2d-physics-playground.jpg")
                     val fragment = controller.app.physicsFragment
 
                     controller.findById("btn-preset-pendulum").performClick()

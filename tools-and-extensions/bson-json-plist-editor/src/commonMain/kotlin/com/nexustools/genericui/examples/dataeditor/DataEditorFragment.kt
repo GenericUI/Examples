@@ -30,6 +30,7 @@ import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FlexWrap
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.style.css.CssEdgeLengths
 
@@ -74,19 +75,21 @@ class DataEditorFragment(
     val newJsonTabButton: Button = Button("+ JSON Tab", type = BootstrapType.PRIMARY, size = BootstrapSize.SM)
     val newBsonTabButton: Button = Button("+ BSON Tab", type = BootstrapType.INFO, size = BootstrapSize.SM)
     val newPlistTabButton: Button = Button("+ Plist Tab", type = BootstrapType.SUCCESS, size = BootstrapSize.SM)
-    val openFileButton: Button = Button("Open File...", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
+    val openFileButton: Button = Button("Open File...", type = BootstrapType.SECONDARY, size = BootstrapSize.SM)
     val saveFileButton: Button = Button("Save As...", type = BootstrapType.PRIMARY, size = BootstrapSize.SM, outline = true)
-    val loadUserProfileSampleButton: Button = Button("Sample: Profile", type = BootstrapType.DARK, size = BootstrapSize.SM, outline = true)
-    val loadManifestSampleButton: Button = Button("Sample: Manifest", type = BootstrapType.DARK, size = BootstrapSize.SM, outline = true)
-    val loadGameSaveSampleButton: Button = Button("Sample: Game Save", type = BootstrapType.DARK, size = BootstrapSize.SM, outline = true)
+    val loadUserProfileSampleButton: Button = Button("Sample: Profile", type = BootstrapType.PRIMARY, size = BootstrapSize.SM, outline = true)
+    val loadManifestSampleButton: Button = Button("Sample: Manifest", type = BootstrapType.INFO, size = BootstrapSize.SM, outline = true)
+    val loadGameSaveSampleButton: Button = Button("Sample: Game Save", type = BootstrapType.SUCCESS, size = BootstrapSize.SM, outline = true)
 
-    // Multi-Tab Document Bar
+    // Multi-Tab Document Bar & Shared Workspace Host
     val documentTabContainer: TabContainer = TabContainer(fadeTransition = true)
+    private val tabPaneHostsByTabId = linkedMapOf<String, VStack>()
+    private val editorWorkspaceStack: VStack = VStack(gap = SpacingScale.S1)
 
     // Filter & Tree Controls Bar
     val treeFilterField: TextField = TextField(value = "", placeholder = "Filter nodes by key, value, or path...")
-    val clearFilterButton: Button = Button("Clear", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val expandAllButton: Button = Button("Expand All", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
+    val clearFilterButton: Button = Button("Clear", type = BootstrapType.SECONDARY, size = BootstrapSize.SM)
+    val expandAllButton: Button = Button("Expand All", type = BootstrapType.INFO, size = BootstrapSize.SM, outline = true)
     val collapseAllButton: Button = Button("Collapse All", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
     val addRootLeafButton: Button = Button("+ Root Leaf", type = BootstrapType.SUCCESS, size = BootstrapSize.SM)
     val addRootBranchButton: Button = Button("+ Root Branch", type = BootstrapType.PRIMARY, size = BootstrapSize.SM, outline = true)
@@ -232,32 +235,32 @@ class DataEditorFragment(
     }
 
     private fun buildVisualWorkspaceLayout() {
-        val rootStack = VStack(gap = SpacingScale.S2)
+        val rootStack = VStack(gap = SpacingScale.S1)
 
-        // 1. Top Toolbar
+        // 1. Top Toolbar (add buttons directly so Toolbar lays out all 8 controls across full width)
+        topToolbar.addClass("editor-toolbar")
+        topToolbar.heightPx = 32
         topToolbar.getStyle().apply {
             padding = CssEdgeLengths.px(4, 8)
             borderRadiusPx = 6f
         }
-        val toolbarRow = HStack(gap = SpacingScale.S1)
-        toolbarRow.addClass("editor-toolbar")
-        toolbarRow.addChild(newJsonTabButton)
-        toolbarRow.addChild(newBsonTabButton)
-        toolbarRow.addChild(newPlistTabButton)
-        toolbarRow.addChild(openFileButton)
-        toolbarRow.addChild(saveFileButton)
-        toolbarRow.addChild(loadUserProfileSampleButton)
-        toolbarRow.addChild(loadManifestSampleButton)
-        toolbarRow.addChild(loadGameSaveSampleButton)
-        topToolbar.addChild(toolbarRow)
+        topToolbar.addChild(newJsonTabButton)
+        topToolbar.addChild(newBsonTabButton)
+        topToolbar.addChild(newPlistTabButton)
+        topToolbar.addChild(openFileButton)
+        topToolbar.addChild(saveFileButton)
+        topToolbar.addChild(loadUserProfileSampleButton)
+        topToolbar.addChild(loadManifestSampleButton)
+        topToolbar.addChild(loadGameSaveSampleButton)
         rootStack.addChild(topToolbar)
 
-        // 2. Multi-Tab Document Bar
-        rootStack.addChild(documentTabContainer)
-
-        // 3. Filter, Tree Controls & Quick Root Actions Bar
-        val filterAndActionsRow = HStack(gap = SpacingScale.S1)
+        // 2. Shared Editor Workspace hosted inside the active tab of documentTabContainer
+        treeFilterField.widthPx = 310
+        val filterAndActionsRow = HStack(gap = SpacingScale.S1).apply {
+            flexWrap = FlexWrap.WRAP
+        }
         filterAndActionsRow.addClass("grid-tree-toolbar")
+        filterAndActionsRow.heightPx = 28
         filterAndActionsRow.addChild(treeFilterField)
         filterAndActionsRow.addChild(clearFilterButton)
         filterAndActionsRow.addChild(expandAllButton)
@@ -265,36 +268,65 @@ class DataEditorFragment(
         filterAndActionsRow.addChild(addRootLeafButton)
         filterAndActionsRow.addChild(addRootBranchButton)
         filterAndActionsRow.addChild(treeSummaryLabel)
-        rootStack.addChild(filterAndActionsRow)
+        editorWorkspaceStack.addChild(filterAndActionsRow)
 
-        // 4. Primary Visual LazyGridTree Editor Card
-        val gridTreeCard = Card("Visual Structured Document Tree-Grid (LazyGridTree)")
-        gridTreeCard.addClass("node-tree-panel")
-        gridTreeCard.addChild(documentGridTree)
-        rootStack.addChild(gridTreeCard)
+        documentGridTree.addClass("node-tree-panel")
+        editorWorkspaceStack.addChild(documentGridTree)
 
-        // 5. Visual Format & Storage Comparison Card
+        // Selected-Node Quick Inspector Bar
+        nodeKeyField.widthPx = 130
+        nodeTypeSelect.widthPx = 155
+        nodeValueField.widthPx = 150
+        val inspectorRow = HStack(gap = SpacingScale.S1).apply {
+            flexWrap = FlexWrap.WRAP
+        }
+        inspectorRow.addClass("inspector-toolbar")
+        inspectorRow.heightPx = 28
+        inspectorRow.addChild(Label("Node Inspector:"))
+        inspectorRow.addChild(nodeKeyField)
+        inspectorRow.addChild(nodeTypeSelect)
+        inspectorRow.addChild(nodeValueField)
+        inspectorRow.addChild(nodeBooleanCheckBox)
+        inspectorRow.addChild(applyNodeChangesButton)
+        inspectorRow.addChild(selectParentNodeButton)
+        inspectorRow.addChild(duplicateNodeButton)
+        inspectorRow.addChild(deleteNodeButton)
+        editorWorkspaceStack.addChild(inspectorRow)
+
+        rootStack.addChild(documentTabContainer)
+
+        // 3. Visual Format & Storage Comparison Card
         val formatCard = Card("Document Format & Binary Size Comparison")
         formatCard.addClass("format-comparison-card")
-        val formatStack = VStack(gap = SpacingScale.S2)
+        formatCard.heightPx = 104
 
-        val formatHeaderRow = HStack(gap = SpacingScale.S2)
+        formatSelector.widthPx = 210
+        val formatHeaderRow = HStack(gap = SpacingScale.S2).apply {
+            flexWrap = FlexWrap.WRAP
+        }
+        formatHeaderRow.heightPx = 26
         formatHeaderRow.addChild(Label("Active Document Format:"))
         formatHeaderRow.addChild(activeFormatBadge)
         formatHeaderRow.addChild(formatSelector)
         formatHeaderRow.addChild(convertToJsonButton)
         formatHeaderRow.addChild(convertToBsonButton)
         formatHeaderRow.addChild(convertToPlistButton)
-        formatStack.addChild(formatHeaderRow)
+        formatCard.addChild(formatHeaderRow)
 
-        formatStack.addChild(sizeComparisonSummaryLabel)
-        val barsRow = HStack(gap = SpacingScale.S2)
+        formatCard.addChild(sizeComparisonSummaryLabel)
+
+        jsonSizeBar.widthPx = 395
+        bsonSizeBar.widthPx = 395
+        plistSizeBar.widthPx = 395
+        val barsRow = HStack(gap = SpacingScale.S2).apply {
+            flexWrap = FlexWrap.WRAP
+        }
+        barsRow.heightPx = 20
         barsRow.addChild(jsonSizeBar)
         barsRow.addChild(bsonSizeBar)
         barsRow.addChild(plistSizeBar)
-        formatStack.addChild(barsRow)
+        formatCard.addChild(barsRow)
 
-        formatCard.addChild(formatStack)
         rootStack.addChild(formatCard)
 
         // Configure auxiliary children table columns
@@ -306,19 +338,20 @@ class DataEditorFragment(
                 TableColumn(id = "path", headerText = "Node Path")
             )
         )
+        containerChildrenTable.setColumnWeights(1.2f, 0.8f, 1.6f, 1.4f)
 
-        // 6. Status Bar
+        // 4. Status Bar (add children directly so StatusBar lays them out across full width)
         statusBar.addClass("status-bar")
+        statusBar.heightPx = 28
         statusBar.getStyle().padding = com.nexustools.genericui.style.css.CssEdgeLengths.symmetric(
             vertical = com.nexustools.genericui.style.css.CssLength.px(4f),
             horizontal = com.nexustools.genericui.style.css.CssLength.px(8f)
         )
-        val statusRow = HStack(gap = SpacingScale.S2)
-        statusRow.addChild(Label("Selected:"))
-        statusRow.addChild(selectedPathBadge)
-        statusRow.addChild(selectedTypeBadge)
-        statusRow.addChild(statusMessageLabel)
-        statusBar.addChild(statusRow)
+        statusMessageLabel.widthPx = 560
+        statusBar.addChild(Label("Selected:"))
+        statusBar.addChild(selectedPathBadge)
+        statusBar.addChild(selectedTypeBadge)
+        statusBar.addChild(statusMessageLabel)
         rootStack.addChild(statusBar)
 
         addChild(rootStack)
@@ -830,7 +863,8 @@ class DataEditorFragment(
         openTabsMap[state.tabId] = state
         activeTabId = state.tabId
 
-        val tabPlaceholderContent = HStack()
+        val tabPaneHost = VStack(gap = SpacingScale.S1)
+        tabPaneHostsByTabId[state.tabId] = tabPaneHost
         val tabHeader = CloseableTab(
             tabId = state.tabId,
             title = state.displayTabTitle(),
@@ -840,7 +874,7 @@ class DataEditorFragment(
                 handleTabCloseRequested(state.tabId)
             }
         )
-        documentTabContainer.addTab(tabHeader, tabPlaceholderContent)
+        documentTabContainer.addTab(tabHeader, tabPaneHost)
         documentTabContainer.setActiveTab(state.tabId)
         refreshActiveTabWorkspace()
         setStatus(statusNote)
@@ -848,6 +882,7 @@ class DataEditorFragment(
 
     private fun handleTabCloseRequested(tabId: String): Boolean {
         val removed = openTabsMap.remove(tabId) ?: return false
+        tabPaneHostsByTabId.remove(tabId)
         documentTabContainer.removeTab(tabId)
         if (openTabsMap.isEmpty()) {
             createNewEmptyTab(DataFormat.JSON)
@@ -870,6 +905,10 @@ class DataEditorFragment(
 
     fun refreshActiveTabWorkspace() {
         val tab = activeTabState ?: return
+        val host = tabPaneHostsByTabId[tab.tabId]
+        if (host != null && editorWorkspaceStack.parent !== host) {
+            host.addChild(editorWorkspaceStack)
+        }
         syncTabHeader(tab)
         refreshTreePane()
         val selected = tab.selectedNode()
@@ -984,7 +1023,7 @@ class DataEditorFragment(
                 id = "grid-key-badge-$path"
             }
             val selectBtn = Button(
-                text = if (isRoot) "root" else node.keyOrIndex,
+                text = "Select",
                 type = if (tab.selectedNodePath == path) BootstrapType.PRIMARY else BootstrapType.SECONDARY,
                 size = BootstrapSize.SM,
                 outline = (tab.selectedNodePath != path)
@@ -1117,7 +1156,7 @@ class DataEditorFragment(
         }
 
         val moveUpBtn = Button(
-            text = "↑",
+            text = "Up",
             type = BootstrapType.SECONDARY,
             size = BootstrapSize.SM,
             outline = true
@@ -1130,7 +1169,7 @@ class DataEditorFragment(
             }
         }
         val moveDownBtn = Button(
-            text = "↓",
+            text = "Dn",
             type = BootstrapType.SECONDARY,
             size = BootstrapSize.SM,
             outline = true
@@ -1427,7 +1466,8 @@ class DataEditorFragment(
         DataNodeValueType.STRING -> BootstrapType.SUCCESS
         DataNodeValueType.BOOLEAN -> BootstrapType.WARNING
         DataNodeValueType.NULL -> BootstrapType.SECONDARY
-        else -> BootstrapType.DARK
+        DataNodeValueType.BYTE, DataNodeValueType.SHORT, DataNodeValueType.INT, DataNodeValueType.LONG -> BootstrapType.INFO
+        DataNodeValueType.FLOAT, DataNodeValueType.DOUBLE -> BootstrapType.SECONDARY
     }
 
     private fun nextTabId(): String {

@@ -24,6 +24,7 @@ class CounterJestTest {
                 it("increments, decrements, and resets the counter via native button clicks") {
                     val store = PreferenceStore("CounterTestStore_1").apply { clear() }
                     val controller = launchApp(visualOnWindows = false) { CounterApp(store) }
+                    controller.takeScreenshot("counter-and-theme-switcher.jpg")
 
                     expectNode(controller.findById("counter-value-badge")).toBeVisible()
                     expectNode(controller.findById("counter-value-badge")).toHaveText("0")

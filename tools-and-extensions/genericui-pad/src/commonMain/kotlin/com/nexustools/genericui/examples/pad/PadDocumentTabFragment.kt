@@ -9,6 +9,7 @@ import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.component.typography.MarkdownView
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FlexWrap
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 
 /**
@@ -66,6 +67,7 @@ class PadDocumentTabFragment(
     /** Spell-check findings bar highlighting technical identifiers with red wavy underlines. */
     val spellCheckBar: HStack = HStack(gap = SpacingScale.S2).apply {
         addClass("pad-spellcheck-bar")
+        flexWrap = FlexWrap.WRAP
     }
 
     private val _spellCheckBadges = mutableListOf<Badge>()
@@ -83,7 +85,7 @@ class PadDocumentTabFragment(
     init {
         addClass("pad-tab-fragment")
         routeKey = document.docId
-        pageTitle = document.title
+        pageTitle = "${document.title} - Notepad"
 
         val rootStack = VStack(gap = SpacingScale.S2)
         rootStack.addChild(editorTextArea)
@@ -294,10 +296,12 @@ class PadDocumentTabFragment(
         spellCheckBar.isVisible = true
         spellCheckBar.addChild(Label("Spell check:").apply {
             addClass("pad-spellcheck-label")
+            widthPx = 92
         })
         for (word in findings) {
             val badge = Badge(word, type = BootstrapType.DANGER, pill = true).apply {
                 addClass("pad-spellcheck-token")
+                widthPx = (word.length * 6 + 22).coerceAtLeast(64)
             }
             _spellCheckBadges.add(badge)
             spellCheckBar.addChild(badge)

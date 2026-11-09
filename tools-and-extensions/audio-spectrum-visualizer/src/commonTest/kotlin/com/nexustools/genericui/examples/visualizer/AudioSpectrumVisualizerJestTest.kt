@@ -24,6 +24,10 @@ class AudioSpectrumVisualizerJestTest {
             describe("MediaCapabilitiesReport, Transport Controls, FFT Energy Bands & WebVTT Subtitles") {
 
                 it("populates MediaCapabilitiesReport hardware/software codec table on launch and verifies getStyle() / getBootstrap()") {
+                    val appController = launchApp(visualOnWindows = false) { AudioSpectrumVisualizerApp() }
+                    appController.takeScreenshot("audio-spectrum-visualizer.jpg")
+                    appController.destroy()
+
                     val controller = launchFragment {
                         AudioSpectrumVisualizerFragment()
                     }

@@ -24,6 +24,7 @@ class DockWorkspaceStudioJestTest {
             describe("Dock Areas, DockPanels & Panel TitleBars") {
                 it("mounts LEFT Toolbox, RIGHT Properties, BOTTOM Console, and Floating HUD DockPanels with TitleBars") {
                     val controller = launchApp(visualOnWindows = false) { DockWorkspaceStudioApp() }
+                    controller.takeScreenshot("dock-workspace-studio.jpg")
                     val fragment = controller.app.studioFragment
 
                     expectComponent(fragment.toolboxPanel).toBeVisible()
@@ -49,6 +50,7 @@ class DockWorkspaceStudioJestTest {
             describe("Document Tab Management (Open, Switch, Inspect, Close)") {
                 it("opens new StudioDocument tabs, switches active tabs, updates properties, and closes tabs") {
                     val controller = launchApp(visualOnWindows = false) { DockWorkspaceStudioApp() }
+                    controller.takeScreenshot("dock-workspace-studio.jpg")
                     val fragment = controller.app.studioFragment
 
                     expect(fragment.documents.size).toBe(2)
@@ -84,6 +86,7 @@ class DockWorkspaceStudioJestTest {
             describe("SINGLE_WINDOW vs MULTI_WINDOW Mode & Floating HUD Overlay") {
                 it("toggles between SINGLE_WINDOW and MULTI_WINDOW mode and detaches/re-attaches PanelWindows") {
                     val controller = launchApp(visualOnWindows = false) { DockWorkspaceStudioApp() }
+                    controller.takeScreenshot("dock-workspace-studio.jpg")
                     val fragment = controller.app.studioFragment
 
                     expect(fragment.windowMode).toBe(StudioWindowMode.SINGLE_WINDOW_MODE)
@@ -108,6 +111,7 @@ class DockWorkspaceStudioJestTest {
 
                 it("toggles the floating HUD overlay panel visibility") {
                     val controller = launchApp(visualOnWindows = false) { DockWorkspaceStudioApp() }
+                    controller.takeScreenshot("dock-workspace-studio.jpg")
                     val fragment = controller.app.studioFragment
 
                     expect(fragment.isHudOverlayVisible).toBe(true)

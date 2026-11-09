@@ -31,7 +31,6 @@ import com.nexustools.genericui.ext.dsl.label
 import com.nexustools.genericui.ext.dsl.rangeSlider
 import com.nexustools.genericui.ext.dsl.scrollView
 import com.nexustools.genericui.ext.dsl.select
-import com.nexustools.genericui.ext.dsl.span
 import com.nexustools.genericui.ext.dsl.vstack
 import com.nexustools.genericui.ext.imageprocessing.context2d.ImageBuffer2DContext
 import com.nexustools.genericui.image.ImageBuffer
@@ -190,8 +189,10 @@ class GenericUIPaintFragment : Fragment() {
     private val paletteButtons = mutableListOf<Button>()
     private val customSwatchButtons = mutableListOf<Button>()
     lateinit var editColorsButton: Button
-    val customColorPicker: ColorPicker = ColorPicker(RgbaColor.fromHex("#000000")).apply {
+    val customColorPicker: ColorPicker = ColorPicker(RgbaColor.fromHex("#38BDF8")).apply {
         id = "picker-custom-color"
+        widthPx = 56
+        heightPx = 28
     }
 
     lateinit var copilotButton: Button
@@ -236,121 +237,164 @@ class GenericUIPaintFragment : Fragment() {
             vstack(classes = "paint-main-layout gap-0") {
                 // 1. Top Command Row (File, Edit, View + Save/Export/Undo/Redo + Feedback/Profile/Settings)
                 hstack(classes = "paint-command-bar justify-content-between align-items-center", id = "paint-command-bar") {
+                    heightPx = 32
+                    gapPx = 6
+
                     hstack(classes = "gap-1 align-items-center") {
+                        widthPx = 468
+                        heightPx = 28
+                        gapPx = 4
+
                         self.fileMenuButton = button(
                             text = "File",
                             type = BootstrapType.DARK,
                             size = BootstrapSize.SM,
                             id = "btn-menu-file",
                             onClick = { self.handleNewCanvas() }
-                        )
+                        ) { widthPx = 46; heightPx = 24 }
+
                         self.editMenuButton = button(
                             text = "Edit",
                             type = BootstrapType.DARK,
                             size = BootstrapSize.SM,
                             id = "btn-menu-edit",
                             onClick = { self.clearActiveLayer() }
-                        )
+                        ) { widthPx = 46; heightPx = 24 }
+
                         self.viewMenuButton = button(
                             text = "View",
                             type = BootstrapType.DARK,
                             size = BootstrapSize.SM,
                             id = "btn-menu-view",
                             onClick = { self.fitToWindow() }
-                        )
+                        ) { widthPx = 48; heightPx = 24 }
 
-                        span(text = "|", classes = "mx-1")
+                        label(text = "|", classes = "mx-1") { widthPx = 14; heightPx = 18 }
 
                         self.saveButton = button(
-                            text = "💾",
+                            text = "Save",
                             tooltipText = "Save preferences & project",
                             type = BootstrapType.SECONDARY,
                             size = BootstrapSize.SM,
                             outline = true,
                             id = "btn-cmd-save",
                             onClick = { self.savePreferencesToStore() }
-                        )
+                        ) { widthPx = 54; heightPx = 24 }
+
                         self.exportButton = button(
-                            text = "📤",
+                            text = "Export",
                             tooltipText = "Export PNG",
                             type = BootstrapType.SECONDARY,
                             size = BootstrapSize.SM,
                             outline = true,
                             id = "btn-cmd-export",
                             onClick = { self.promptExportPng() }
-                        )
+                        ) { widthPx = 62; heightPx = 24 }
+
                         self.undoButton = button(
-                            text = "↶",
+                            text = "< Undo",
                             tooltipText = "Undo (Ctrl+Z)",
                             type = BootstrapType.SECONDARY,
                             size = BootstrapSize.SM,
                             outline = true,
                             id = "btn-undo",
                             onClick = { self.undo() }
-                        )
+                        ) { widthPx = 60; heightPx = 24 }
+
                         self.redoButton = button(
-                            text = "↷",
+                            text = "Redo >",
                             tooltipText = "Redo (Ctrl+Y)",
                             type = BootstrapType.SECONDARY,
                             size = BootstrapSize.SM,
                             outline = true,
                             id = "btn-redo",
                             onClick = { self.redo() }
-                        )
+                        ) { widthPx = 60; heightPx = 24 }
                     }
 
-                    self.statusMessageLabel = label(
-                        text = "Untitled - Paint",
-                        classes = "mb-0",
-                        id = "label-paint-status"
-                    )
+                    vstack(classes = "align-items-center justify-content-center") {
+                        heightPx = 24
+                        self.statusMessageLabel = label(
+                            text = "Untitled - Paint  |  131 × 128px Workspace",
+                            classes = "mb-0",
+                            id = "label-paint-status"
+                        ) { heightPx = 18 }
+                    }
 
-                    hstack(classes = "gap-1 align-items-center") {
+                    hstack(classes = "gap-1 align-items-center justify-content-end") {
+                        widthPx = 228
+                        heightPx = 28
+                        gapPx = 4
+
                         button(
-                            text = "📣",
+                            text = "Feedback",
                             tooltipText = "Feedback",
                             type = BootstrapType.DARK,
                             size = BootstrapSize.SM,
                             id = "btn-cmd-feedback",
                             onClick = { self.statusMessageLabel.text = "Feedback ready" }
-                        )
+                        ) { widthPx = 74; heightPx = 24 }
+
                         button(
-                            text = "👤",
+                            text = "Profile",
                             tooltipText = "Profile",
                             type = BootstrapType.DARK,
                             size = BootstrapSize.SM,
                             id = "btn-cmd-profile",
                             onClick = { self.statusMessageLabel.text = "Signed in to GenericUIPaint" }
-                        )
+                        ) { widthPx = 66; heightPx = 24 }
+
                         button(
-                            text = "⚙",
+                            text = "Settings",
                             tooltipText = "Settings",
                             type = BootstrapType.DARK,
                             size = BootstrapSize.SM,
                             id = "btn-cmd-settings",
                             onClick = { self.savePreferencesToStore() }
-                        )
+                        ) { widthPx = 74; heightPx = 24 }
                     }
                 }
 
                 // 2. Grouped Windows 11 Paint Ribbon Bar
                 hstack(classes = "paint-ribbon-bar gap-2 align-items-stretch flex-wrap", id = "paint-ribbon-bar") {
+                    heightPx = 104
+                    gapPx = 6
+
                     // Selection Group
-                    vstack(classes = "paint-ribbon-group justify-content-between align-items-center") {
+                    div(classes = "paint-ribbon-group d-flex flex-column justify-content-between align-items-center") {
+                        widthPx = 102
+                        heightPx = 100
+
                         self.selectionToolButton = button(
-                            text = "⬚ Selection ▾",
+                            text = "Select ▾",
                             type = BootstrapType.SECONDARY,
                             size = BootstrapSize.SM,
                             outline = true,
                             id = "btn-tool-selection",
                             onClick = { self.selectTool(PaintTool.SELECTION) }
-                        )
-                        span(text = "Selection", classes = "paint-ribbon-section-label")
+                        ) { widthPx = 94; heightPx = 32 }
+
+                        label(text = "Rect / Free", classes = "paint-ribbon-section-label") {
+                            widthPx = 94
+                            heightPx = 32
+                        }
+
+                        label(text = "Selection", classes = "paint-ribbon-section-label") {
+                            widthPx = 94
+                            heightPx = 16
+                        }
                     }
 
                     // Image Group
-                    vstack(classes = "paint-ribbon-group justify-content-between align-items-center") {
+                    div(classes = "paint-ribbon-group d-flex flex-column justify-content-between align-items-center") {
+                        widthPx = 152
+                        heightPx = 100
+
                         hstack(classes = "gap-1 align-items-center") {
+                            widthPx = 144
+                            heightPx = 32
+                            gapPx = 4
+
                             self.cropButton = button(
                                 text = "Crop",
                                 type = BootstrapType.SECONDARY,
@@ -358,7 +402,8 @@ class GenericUIPaintFragment : Fragment() {
                                 outline = true,
                                 id = "btn-image-crop",
                                 onClick = { self.cropToSelectionOrTrim() }
-                            )
+                            ) { widthPx = 64; heightPx = 28 }
+
                             self.rotateButton = button(
                                 text = "Rotate ▾",
                                 type = BootstrapType.SECONDARY,
@@ -366,9 +411,14 @@ class GenericUIPaintFragment : Fragment() {
                                 outline = true,
                                 id = "btn-image-rotate",
                                 onClick = { self.rotateCanvas90Clockwise() }
-                            )
+                            ) { widthPx = 74; heightPx = 28 }
                         }
-                        hstack(classes = "gap-1 align-items-center mt-1") {
+
+                        hstack(classes = "gap-1 align-items-center") {
+                            widthPx = 144
+                            heightPx = 32
+                            gapPx = 4
+
                             self.flipButton = button(
                                 text = "Flip ▾",
                                 type = BootstrapType.SECONDARY,
@@ -376,93 +426,120 @@ class GenericUIPaintFragment : Fragment() {
                                 outline = true,
                                 id = "btn-image-flip",
                                 onClick = { self.flipCanvasHorizontal() }
-                            )
+                            ) { widthPx = 64; heightPx = 28 }
+
                             self.removeBgButton = button(
-                                text = "Remove BG",
+                                text = "Clean BG",
                                 type = BootstrapType.SECONDARY,
                                 size = BootstrapSize.SM,
                                 outline = true,
                                 id = "btn-image-remove-bg",
                                 onClick = { self.removeBackground() }
-                            )
+                            ) { widthPx = 74; heightPx = 28 }
                         }
-                        span(text = "Image", classes = "paint-ribbon-section-label")
+
+                        label(text = "Image", classes = "paint-ribbon-section-label") {
+                            widthPx = 144
+                            heightPx = 16
+                        }
                     }
 
                     // Tools Group (2x3 Grid: Pencil, Fill Bucket, Text 'A', Eraser, Color Picker, Magnifier)
-                    vstack(classes = "paint-ribbon-group justify-content-between align-items-center") {
-                        vstack(classes = "paint-tools-grid gap-1") {
-                            hstack(classes = "gap-1") {
-                                self.pencilToolButton = button(
-                                    text = "✏",
-                                    tooltipText = "Pencil",
-                                    type = BootstrapType.SECONDARY,
-                                    size = BootstrapSize.SM,
-                                    outline = true,
-                                    id = "btn-tool-pencil",
-                                    onClick = { self.selectTool(PaintTool.PENCIL) }
-                                )
-                                self.fillToolButton = button(
-                                    text = "🪣",
-                                    tooltipText = "Fill with color",
-                                    type = BootstrapType.SECONDARY,
-                                    size = BootstrapSize.SM,
-                                    outline = true,
-                                    id = "btn-tool-fill",
-                                    onClick = { self.selectTool(PaintTool.FILL_BUCKET) }
-                                )
-                                self.textToolButton = button(
-                                    text = "A",
-                                    tooltipText = "Text",
-                                    type = BootstrapType.SECONDARY,
-                                    size = BootstrapSize.SM,
-                                    outline = true,
-                                    id = "btn-tool-text",
-                                    onClick = { self.selectTool(PaintTool.TEXT) }
-                                )
-                            }
-                            hstack(classes = "gap-1") {
-                                self.eraserToolButton = button(
-                                    text = "⌫",
-                                    tooltipText = "Eraser",
-                                    type = BootstrapType.SECONDARY,
-                                    size = BootstrapSize.SM,
-                                    outline = true,
-                                    id = "btn-tool-eraser",
-                                    onClick = { self.selectTool(PaintTool.ERASER) }
-                                )
-                                self.colorPickerToolButton = button(
-                                    text = "💧",
-                                    tooltipText = "Color picker",
-                                    type = BootstrapType.SECONDARY,
-                                    size = BootstrapSize.SM,
-                                    outline = true,
-                                    id = "btn-tool-picker",
-                                    onClick = { self.selectTool(PaintTool.COLOR_PICKER) }
-                                )
-                                self.magnifierToolButton = button(
-                                    text = "🔍",
-                                    tooltipText = "Magnifier",
-                                    type = BootstrapType.SECONDARY,
-                                    size = BootstrapSize.SM,
-                                    outline = true,
-                                    id = "btn-tool-magnifier",
-                                    onClick = { self.selectTool(PaintTool.MAGNIFIER) }
-                                )
-                            }
+                    div(classes = "paint-ribbon-group d-flex flex-column justify-content-between align-items-center") {
+                        widthPx = 154
+                        heightPx = 100
+
+                        hstack(classes = "paint-tools-grid gap-1") {
+                            widthPx = 146
+                            heightPx = 32
+                            gapPx = 4
+
+                            self.pencilToolButton = button(
+                                text = "Pen",
+                                tooltipText = "Pencil",
+                                type = BootstrapType.SECONDARY,
+                                size = BootstrapSize.SM,
+                                outline = true,
+                                id = "btn-tool-pencil",
+                                onClick = { self.selectTool(PaintTool.PENCIL) }
+                            ) { widthPx = 45; heightPx = 28 }
+
+                            self.fillToolButton = button(
+                                text = "Fill",
+                                tooltipText = "Fill with color",
+                                type = BootstrapType.SECONDARY,
+                                size = BootstrapSize.SM,
+                                outline = true,
+                                id = "btn-tool-fill",
+                                onClick = { self.selectTool(PaintTool.FILL_BUCKET) }
+                            ) { widthPx = 45; heightPx = 28 }
+
+                            self.textToolButton = button(
+                                text = "Text",
+                                tooltipText = "Text",
+                                type = BootstrapType.SECONDARY,
+                                size = BootstrapSize.SM,
+                                outline = true,
+                                id = "btn-tool-text",
+                                onClick = { self.selectTool(PaintTool.TEXT) }
+                            ) { widthPx = 45; heightPx = 28 }
                         }
-                        span(text = "Tools", classes = "paint-ribbon-section-label")
+
+                        hstack(classes = "paint-tools-grid gap-1") {
+                            widthPx = 146
+                            heightPx = 32
+                            gapPx = 4
+
+                            self.eraserToolButton = button(
+                                text = "Erase",
+                                tooltipText = "Eraser",
+                                type = BootstrapType.SECONDARY,
+                                size = BootstrapSize.SM,
+                                outline = true,
+                                id = "btn-tool-eraser",
+                                onClick = { self.selectTool(PaintTool.ERASER) }
+                            ) { widthPx = 45; heightPx = 28 }
+
+                            self.colorPickerToolButton = button(
+                                text = "Pick",
+                                tooltipText = "Color picker",
+                                type = BootstrapType.SECONDARY,
+                                size = BootstrapSize.SM,
+                                outline = true,
+                                id = "btn-tool-picker",
+                                onClick = { self.selectTool(PaintTool.COLOR_PICKER) }
+                            ) { widthPx = 45; heightPx = 28 }
+
+                            self.magnifierToolButton = button(
+                                text = "Zoom",
+                                tooltipText = "Magnifier",
+                                type = BootstrapType.SECONDARY,
+                                size = BootstrapSize.SM,
+                                outline = true,
+                                id = "btn-tool-magnifier",
+                                onClick = { self.selectTool(PaintTool.MAGNIFIER) }
+                            ) { widthPx = 45; heightPx = 28 }
+                        }
+
+                        label(text = "Tools", classes = "paint-ribbon-section-label") {
+                            widthPx = 146
+                            heightPx = 16
+                        }
                     }
 
                     // Brushes Group
-                    vstack(classes = "paint-ribbon-group justify-content-between align-items-center") {
+                    div(classes = "paint-ribbon-group d-flex flex-column justify-content-between align-items-center") {
+                        widthPx = 118
+                        heightPx = 100
+
                         self.brushToolButton = button(
-                            text = "🖌 Brush ▾",
+                            text = "Brush ▾",
                             type = BootstrapType.PRIMARY,
                             size = BootstrapSize.SM,
                             id = "btn-tool-brush",
                             onClick = { self.selectTool(PaintTool.BRUSH) }
-                        )
+                        ) { widthPx = 110; heightPx = 32 }
+
                         self.brushStyleSelect = select(
                             options = PaintBrushStyle.entries.map { SelectOption(it.name, it.label) },
                             selectedValue = self.activeBrushStyle.name,
@@ -473,58 +550,78 @@ class GenericUIPaintFragment : Fragment() {
                                     self.selectBrushStyle(parsed)
                                 }
                             }
-                        )
-                        span(text = "Brushes", classes = "paint-ribbon-section-label")
+                        ) { widthPx = 110; heightPx = 32 }
+
+                        label(text = "Brushes", classes = "paint-ribbon-section-label") {
+                            widthPx = 110
+                            heightPx = 16
+                        }
                     }
 
                     // Shapes Group (20-shape gallery + Outline & Fill toggles)
-                    vstack(classes = "paint-ribbon-group justify-content-between align-items-center") {
-                        hstack(classes = "gap-2 align-items-center") {
+                    div(classes = "paint-ribbon-group d-flex flex-column justify-content-between align-items-center") {
+                        widthPx = 302
+                        heightPx = 100
+
+                        hstack(classes = "gap-1 align-items-center") {
+                            widthPx = 294
+                            heightPx = 70
+                            gapPx = 4
+
                             self.shapeButtons.clear()
                             scrollView(classes = "paint-shapes-box", id = "scroll-shapes-gallery") {
-                                vstack(classes = "gap-1") {
-                                    val allShapes = PaintShapeType.entries
-                                    val firstRow = allShapes.take(10)
-                                    val secondRow = allShapes.drop(10)
-                                    hstack(classes = "gap-1") {
-                                        for (shape in firstRow) {
-                                            val btn = button(
-                                                text = shape.symbol,
-                                                tooltipText = shape.label,
-                                                type = BootstrapType.SECONDARY,
-                                                size = BootstrapSize.SM,
-                                                outline = true,
-                                                id = "btn-shape-${shape.name.lowercase()}",
-                                                onClick = { self.selectShape(shape) }
-                                            )
-                                            self.shapeButtons[shape] = btn
-                                        }
+                                heightPx = 68
+                                val allShapes = PaintShapeType.entries
+                                val firstRow = allShapes.take(10)
+                                val secondRow = allShapes.drop(10)
+
+                                hstack(classes = "gap-1") {
+                                    heightPx = 26
+                                    gapPx = 2
+                                    for (shape in firstRow) {
+                                        val btn = button(
+                                            text = shape.symbol,
+                                            tooltipText = shape.label,
+                                            type = BootstrapType.SECONDARY,
+                                            size = BootstrapSize.SM,
+                                            outline = true,
+                                            id = "btn-shape-${shape.name.lowercase()}",
+                                            onClick = { self.selectShape(shape) }
+                                        ) { widthPx = 18; heightPx = 24 }
+                                        self.shapeButtons[shape] = btn
                                     }
-                                    hstack(classes = "gap-1") {
-                                        for (shape in secondRow) {
-                                            val btn = button(
-                                                text = shape.symbol,
-                                                tooltipText = shape.label,
-                                                type = BootstrapType.SECONDARY,
-                                                size = BootstrapSize.SM,
-                                                outline = true,
-                                                id = "btn-shape-${shape.name.lowercase()}",
-                                                onClick = { self.selectShape(shape) }
-                                            )
-                                            self.shapeButtons[shape] = btn
-                                        }
+                                }
+
+                                hstack(classes = "gap-1") {
+                                    heightPx = 26
+                                    gapPx = 2
+                                    for (shape in secondRow) {
+                                        val btn = button(
+                                            text = shape.symbol,
+                                            tooltipText = shape.label,
+                                            type = BootstrapType.SECONDARY,
+                                            size = BootstrapSize.SM,
+                                            outline = true,
+                                            id = "btn-shape-${shape.name.lowercase()}",
+                                            onClick = { self.selectShape(shape) }
+                                        ) { widthPx = 18; heightPx = 24 }
+                                        self.shapeButtons[shape] = btn
                                     }
                                 }
                             }
 
-                            vstack(classes = "gap-1") {
+                            div(classes = "d-flex flex-column gap-1") {
+                                widthPx = 74
+                                heightPx = 68
+
                                 self.shapeOutlineButton = button(
                                     text = "Outline ▾",
                                     type = BootstrapType.PRIMARY,
                                     size = BootstrapSize.SM,
                                     id = "btn-shape-outline",
                                     onClick = { self.toggleShapeOutline() }
-                                )
+                                ) { widthPx = 72; heightPx = 28 }
+
                                 self.shapeFillButton = button(
                                     text = "Fill ▾",
                                     type = BootstrapType.SECONDARY,
@@ -532,17 +629,31 @@ class GenericUIPaintFragment : Fragment() {
                                     outline = true,
                                     id = "btn-shape-fill",
                                     onClick = { self.toggleShapeFill() }
-                                )
+                                ) { widthPx = 72; heightPx = 28 }
                             }
                         }
-                        span(text = "Shapes", classes = "paint-ribbon-section-label")
+
+                        label(text = "Shapes", classes = "paint-ribbon-section-label") {
+                            widthPx = 294
+                            heightPx = 16
+                        }
                     }
 
                     // Colours Group (Active FG/BG + 20 default palette swatches + 10 custom slots + ColorPicker)
-                    vstack(classes = "paint-ribbon-group justify-content-between align-items-center") {
-                        hstack(classes = "gap-2 align-items-center") {
-                            // Active Foreground & Background circular swatches
-                            vstack(classes = "gap-1 align-items-center") {
+                    div(classes = "paint-ribbon-group d-flex flex-column justify-content-between align-items-center") {
+                        widthPx = 276
+                        heightPx = 100
+
+                        hstack(classes = "gap-1 align-items-center") {
+                            widthPx = 268
+                            heightPx = 74
+                            gapPx = 4
+
+                            // Active Foreground & Background swatches
+                            div(classes = "d-flex flex-column gap-1 align-items-center") {
+                                widthPx = 36
+                                heightPx = 70
+
                                 self.foregroundSwatchButton = button(
                                     text = "FG",
                                     tooltipText = "Color 1 (Foreground): ${self.foregroundHex}",
@@ -551,28 +662,34 @@ class GenericUIPaintFragment : Fragment() {
                                     classes = "paint-active-swatch-fg",
                                     id = "btn-swatch-foreground",
                                     onClick = { self.selectColorSlot(foreground = true) }
-                                )
+                                ) { widthPx = 34; heightPx = 28 }
+
                                 self.backgroundSwatchButton = button(
                                     text = "BG",
                                     tooltipText = "Color 2 (Background): ${self.backgroundHex}",
-                                    type = BootstrapType.SECONDARY,
+                                    type = BootstrapType.LIGHT,
                                     size = BootstrapSize.SM,
-                                    outline = true,
                                     classes = "paint-active-swatch-bg",
                                     id = "btn-swatch-background",
                                     onClick = { self.selectColorSlot(foreground = false) }
-                                )
+                                ) { widthPx = 34; heightPx = 28 }
                             }
 
                             // 20 Default Palette Circles (2 rows of 10) + 10 Custom Swatch Slots
                             self.paletteButtons.clear()
                             self.customSwatchButtons.clear()
-                            vstack(classes = "gap-1") {
+                            div(classes = "d-flex flex-column gap-1") {
+                                widthPx = 160
+                                heightPx = 74
+
                                 hstack(classes = "gap-1") {
+                                    widthPx = 160
+                                    heightPx = 20
+                                    gapPx = 2
                                     for (i in 0 until 10) {
                                         val hex = self.defaultPaletteHex[i]
                                         val btn = button(
-                                            text = "●",
+                                            text = " ",
                                             tooltipText = hex,
                                             type = BootstrapType.DARK,
                                             size = BootstrapSize.SM,
@@ -580,6 +697,8 @@ class GenericUIPaintFragment : Fragment() {
                                             id = "btn-palette-$i",
                                             onClick = { self.applyPaletteColor(hex) }
                                         ) {
+                                            widthPx = 14
+                                            heightPx = 20
                                             getStyle().apply {
                                                 setBackgroundColor(RgbaColor.fromHex(hex))
                                                 setTextColor(RgbaColor.fromHex(hex))
@@ -589,11 +708,15 @@ class GenericUIPaintFragment : Fragment() {
                                         self.paletteButtons.add(btn)
                                     }
                                 }
+
                                 hstack(classes = "gap-1") {
+                                    widthPx = 160
+                                    heightPx = 20
+                                    gapPx = 2
                                     for (i in 10 until 20) {
                                         val hex = self.defaultPaletteHex[i]
                                         val btn = button(
-                                            text = "●",
+                                            text = " ",
                                             tooltipText = hex,
                                             type = BootstrapType.DARK,
                                             size = BootstrapSize.SM,
@@ -601,6 +724,8 @@ class GenericUIPaintFragment : Fragment() {
                                             id = "btn-palette-$i",
                                             onClick = { self.applyPaletteColor(hex) }
                                         ) {
+                                            widthPx = 14
+                                            heightPx = 20
                                             getStyle().apply {
                                                 setBackgroundColor(RgbaColor.fromHex(hex))
                                                 setTextColor(RgbaColor.fromHex(hex))
@@ -610,11 +735,15 @@ class GenericUIPaintFragment : Fragment() {
                                         self.paletteButtons.add(btn)
                                     }
                                 }
+
                                 hstack(classes = "gap-1") {
+                                    widthPx = 160
+                                    heightPx = 20
+                                    gapPx = 2
                                     for (i in 0 until 10) {
                                         val customHex = self._customPaletteHex[i]
                                         val btn = button(
-                                            text = "◌",
+                                            text = " ",
                                             tooltipText = "Custom swatch ${i + 1}: $customHex",
                                             type = BootstrapType.DARK,
                                             size = BootstrapSize.SM,
@@ -622,6 +751,8 @@ class GenericUIPaintFragment : Fragment() {
                                             id = "btn-custom-swatch-$i",
                                             onClick = { self.applyPaletteColor(self._customPaletteHex[i]) }
                                         ) {
+                                            widthPx = 14
+                                            heightPx = 20
                                             getStyle().apply {
                                                 setBackgroundColor(RgbaColor.fromHex(customHex))
                                                 setBorderRadius(CssCornerRadii.px(12f))
@@ -632,17 +763,21 @@ class GenericUIPaintFragment : Fragment() {
                                 }
                             }
 
-                            // Rainbow Edit Colors Button + ColorPicker
-                            vstack(classes = "gap-1 align-items-center") {
+                            // Edit Colors Button + ColorPicker
+                            div(classes = "d-flex flex-column gap-1 align-items-center") {
+                                widthPx = 58
+                                heightPx = 70
+
                                 self.editColorsButton = button(
-                                    text = "🌈",
+                                    text = "Edit",
                                     tooltipText = "Edit colours",
                                     type = BootstrapType.INFO,
                                     size = BootstrapSize.SM,
                                     outline = true,
                                     id = "btn-edit-colors",
                                     onClick = { self.customColorPicker.openNativeColorDialog() }
-                                )
+                                ) { widthPx = 56; heightPx = 28 }
+
                                 self.customColorPicker.onColorChanged = { chosen ->
                                     self.setCustomColor(chosen.toHex(includeAlpha = false).uppercase())
                                 }
@@ -655,83 +790,98 @@ class GenericUIPaintFragment : Fragment() {
                                 component(self.customColorPicker)
                             }
                         }
-                        span(text = "Colours", classes = "paint-ribbon-section-label")
+
+                        label(text = "Colours", classes = "paint-ribbon-section-label") {
+                            widthPx = 268
+                            heightPx = 16
+                        }
                     }
 
                     // Copilot & Layers Group
-                    vstack(classes = "paint-ribbon-group-last justify-content-between align-items-center") {
-                        hstack(classes = "gap-2 align-items-center") {
-                            self.copilotButton = button(
-                                text = "✨ Copilot ▾",
-                                tooltipText = "AI Assist: Generate sample illustration",
-                                type = BootstrapType.INFO,
-                                size = BootstrapSize.SM,
-                                outline = true,
-                                id = "btn-copilot-generate",
-                                onClick = { self.generateCopilotArtwork() }
-                            )
-                            self.layersToggleButton = button(
-                                text = "⧉ Layers",
-                                tooltipText = "Toggle Layers side panel",
-                                type = if (self.layersPanelOpen) BootstrapType.PRIMARY else BootstrapType.SECONDARY,
-                                size = BootstrapSize.SM,
-                                outline = !self.layersPanelOpen,
-                                id = "btn-toggle-layers",
-                                onClick = { self.toggleLayersPanel() }
-                            )
+                    div(classes = "paint-ribbon-group-last d-flex flex-column justify-content-between align-items-center") {
+                        widthPx = 118
+                        heightPx = 100
+
+                        self.copilotButton = button(
+                            text = "* Copilot ▾",
+                            tooltipText = "AI Assist: Generate sample illustration",
+                            type = BootstrapType.INFO,
+                            size = BootstrapSize.SM,
+                            outline = true,
+                            id = "btn-copilot-generate",
+                            onClick = { self.generateCopilotArtwork() }
+                        ) { widthPx = 110; heightPx = 32 }
+
+                        self.layersToggleButton = button(
+                            text = "[] Layers",
+                            tooltipText = "Toggle Layers side panel",
+                            type = if (self.layersPanelOpen) BootstrapType.PRIMARY else BootstrapType.SECONDARY,
+                            size = BootstrapSize.SM,
+                            outline = !self.layersPanelOpen,
+                            id = "btn-toggle-layers",
+                            onClick = { self.toggleLayersPanel() }
+                        ) { widthPx = 110; heightPx = 32 }
+
+                        label(text = "Copilot & Layers", classes = "paint-ribbon-section-label") {
+                            widthPx = 110
+                            heightPx = 16
                         }
-                        span(text = "Copilot & Layers", classes = "paint-ribbon-section-label")
                     }
                 }
 
                 // 3. Main Workspace Area: Left Vertical Sliders + Centered White Canvas + Collapsible Layers Panel
-                hstack(
-                    classes = "paint-workspace-area justify-content-between align-items-center gap-3",
+                div(
+                    classes = "paint-workspace-area d-flex flex-row justify-content-between align-items-center gap-3",
                     id = "paint-workspace-area"
                 ) {
                     // Left Floating Vertical Pill Controls (Brush Size 1..64px & Brush Opacity 1..100%)
-                    vstack(classes = "paint-floating-pill gap-3 align-items-center", id = "paint-left-sliders-pill") {
-                        vstack(classes = "gap-1 align-items-center") {
-                            label(text = "Size", classes = "mb-0")
-                            self.brushSizeBadge = badge(
-                                text = "${self.brushSizePx}px",
-                                type = BootstrapType.PRIMARY,
-                                pill = true,
-                                id = "badge-brush-size"
-                            )
-                            self.brushSizeSlider = rangeSlider(
-                                minValue = self.brushSizePx.toDouble(),
-                                maxValue = 64.0,
-                                min = 1.0,
-                                max = 64.0,
-                                step = 1.0,
-                                id = "slider-brush-size"
-                            ) {
-                                onValueChanged = { updated ->
-                                    self.updateBrushSize(updated.roundToInt())
-                                }
+                    div(classes = "paint-floating-pill d-flex flex-column gap-2 align-items-center", id = "paint-left-sliders-pill") {
+                        widthPx = 148
+                        heightPx = 216
+
+                        label(text = "Brush Size", classes = "mb-0") { widthPx = 132; heightPx = 16 }
+                        self.brushSizeBadge = badge(
+                            text = "${self.brushSizePx}px",
+                            type = BootstrapType.PRIMARY,
+                            pill = true,
+                            id = "badge-brush-size"
+                        ) { widthPx = 132; heightPx = 22 }
+
+                        self.brushSizeSlider = rangeSlider(
+                            minValue = self.brushSizePx.toDouble(),
+                            maxValue = 64.0,
+                            min = 1.0,
+                            max = 64.0,
+                            step = 1.0,
+                            id = "slider-brush-size"
+                        ) {
+                            widthPx = 132
+                            heightPx = 26
+                            onValueChanged = { updated ->
+                                self.updateBrushSize(updated.roundToInt())
                             }
                         }
 
-                        vstack(classes = "gap-1 align-items-center") {
-                            label(text = "Opacity", classes = "mb-0")
-                            self.brushOpacityBadge = badge(
-                                text = "${self.brushOpacityPercent}%",
-                                type = BootstrapType.INFO,
-                                pill = true,
-                                id = "badge-brush-opacity"
-                            )
-                            self.brushOpacitySlider = rangeSlider(
-                                minValue = self.brushOpacityPercent.toDouble(),
-                                maxValue = 100.0,
-                                min = 1.0,
-                                max = 100.0,
-                                step = 1.0,
-                                id = "slider-brush-opacity"
-                            ) {
-                                onValueChanged = { updated ->
-                                    self.updateBrushOpacity(updated.roundToInt())
-                                }
+                        label(text = "Opacity", classes = "mb-0") { widthPx = 132; heightPx = 16 }
+                        self.brushOpacityBadge = badge(
+                            text = "${self.brushOpacityPercent}%",
+                            type = BootstrapType.INFO,
+                            pill = true,
+                            id = "badge-brush-opacity"
+                        ) { widthPx = 132; heightPx = 22 }
+
+                        self.brushOpacitySlider = rangeSlider(
+                            minValue = self.brushOpacityPercent.toDouble(),
+                            maxValue = 100.0,
+                            min = 1.0,
+                            max = 100.0,
+                            step = 1.0,
+                            id = "slider-brush-opacity"
+                        ) {
+                            widthPx = 132
+                            heightPx = 26
+                            onValueChanged = { updated ->
+                                self.updateBrushOpacity(updated.roundToInt())
                             }
                         }
                     }
@@ -740,14 +890,17 @@ class GenericUIPaintFragment : Fragment() {
                     vstack(classes = "paint-canvas-stage align-items-center justify-content-center", id = "paint-canvas-stage") {
                         // Top 3 resize handles (NW, N, NE)
                         hstack(classes = "justify-content-between w-100 mb-1") {
-                            span(text = "▫", classes = "paint-resize-handle", id = "handle-resize-nw")
-                            span(text = "▫", classes = "paint-resize-handle", id = "handle-resize-n")
-                            span(text = "▫", classes = "paint-resize-handle", id = "handle-resize-ne")
+                            heightPx = 14
+                            label(text = "+", classes = "paint-resize-handle", id = "handle-resize-nw") { widthPx = 14; heightPx = 14 }
+                            vstack {}
+                            label(text = "+", classes = "paint-resize-handle", id = "handle-resize-n") { widthPx = 14; heightPx = 14 }
+                            vstack {}
+                            label(text = "+", classes = "paint-resize-handle", id = "handle-resize-ne") { widthPx = 14; heightPx = 14 }
                         }
 
                         // Middle row: W handle + Canvas2D + E handle
-                        hstack(classes = "align-items-center gap-1") {
-                            span(text = "▫", classes = "paint-resize-handle", id = "handle-resize-w")
+                        div(classes = "d-flex flex-row align-items-center gap-1") {
+                            label(text = "+", classes = "paint-resize-handle", id = "handle-resize-w") { widthPx = 14; heightPx = 14 }
 
                             div(classes = "paint-canvas-frame", id = "paint-canvas-frame") {
                                 self.paintCanvas = canvas2D(
@@ -767,22 +920,27 @@ class GenericUIPaintFragment : Fragment() {
                                 }
                             }
 
-                            span(text = "▫", classes = "paint-resize-handle", id = "handle-resize-e")
+                            label(text = "+", classes = "paint-resize-handle", id = "handle-resize-e") { widthPx = 14; heightPx = 14 }
                         }
 
                         // Bottom 3 resize handles (SW, S, SE)
                         hstack(classes = "justify-content-between w-100 mt-1") {
-                            span(text = "▫", classes = "paint-resize-handle", id = "handle-resize-sw")
-                            span(text = "▫", classes = "paint-resize-handle", id = "handle-resize-s")
-                            span(text = "▫", classes = "paint-resize-handle", id = "handle-resize-se")
+                            heightPx = 14
+                            label(text = "+", classes = "paint-resize-handle", id = "handle-resize-sw") { widthPx = 14; heightPx = 14 }
+                            vstack {}
+                            label(text = "+", classes = "paint-resize-handle", id = "handle-resize-s") { widthPx = 14; heightPx = 14 }
+                            vstack {}
+                            label(text = "+", classes = "paint-resize-handle", id = "handle-resize-se") { widthPx = 14; heightPx = 14 }
                         }
                     }
 
                     // Collapsible Right-Side Layers Panel
                     self.layersSidebar = div(classes = "paint-layers-sidebar", id = "panel-layers") {
+                        widthPx = 224
                         vstack(classes = "gap-2") {
                             hstack(classes = "justify-content-between align-items-center") {
-                                label(text = "Layers", classes = "mb-0", id = "label-layers-header")
+                                heightPx = 28
+                                label(text = "Layers", classes = "mb-0", id = "label-layers-header") { widthPx = 80; heightPx = 20 }
                                 self.addLayerButton = button(
                                     text = "+ Add",
                                     tooltipText = "Add Layer",
@@ -790,37 +948,40 @@ class GenericUIPaintFragment : Fragment() {
                                     size = BootstrapSize.SM,
                                     id = "btn-layer-add",
                                     onClick = { self.addLayer() }
-                                )
+                                ) { widthPx = 68; heightPx = 24 }
                             }
 
                             hstack(classes = "gap-1") {
+                                heightPx = 28
                                 self.toggleLayerVisibilityButton = button(
-                                    text = "👁",
+                                    text = "Vis",
                                     tooltipText = "Toggle active layer visibility",
                                     type = BootstrapType.SECONDARY,
                                     size = BootstrapSize.SM,
                                     outline = true,
                                     id = "btn-layer-toggle-visibility",
                                     onClick = { self.toggleActiveLayerVisibility() }
-                                )
+                                ) { widthPx = 56; heightPx = 24 }
+
                                 self.deleteLayerButton = button(
-                                    text = "🗑",
+                                    text = "Del",
                                     tooltipText = "Delete active layer",
                                     type = BootstrapType.DANGER,
                                     size = BootstrapSize.SM,
                                     outline = true,
                                     id = "btn-layer-delete",
                                     onClick = { self.deleteActiveLayer() }
-                                )
+                                ) { widthPx = 56; heightPx = 24 }
+
                                 self.mergeDownLayerButton = button(
-                                    text = "⤵ Merge",
+                                    text = "Merge v",
                                     tooltipText = "Merge active layer down",
                                     type = BootstrapType.INFO,
                                     size = BootstrapSize.SM,
                                     outline = true,
                                     id = "btn-layer-merge-down",
                                     onClick = { self.mergeActiveLayerDown() }
-                                )
+                                ) { widthPx = 76; heightPx = 24 }
                             }
 
                             self.layersListContainer = vstack(classes = "gap-1", id = "layers-list-container")
@@ -833,41 +994,58 @@ class GenericUIPaintFragment : Fragment() {
                     classes = "paint-status-bar justify-content-between align-items-center flex-wrap",
                     id = "paint-status-bar"
                 ) {
-                    hstack(classes = "gap-3 align-items-center") {
+                    heightPx = 32
+                    gapPx = 6
+
+                    hstack(classes = "gap-2 align-items-center") {
+                        widthPx = 560
+                        heightPx = 26
+                        gapPx = 8
+
                         self.cursorPositionLabel = label(
-                            text = "⊕ ${self.lastCursorX}, ${self.lastCursorY}px",
+                            text = "+ ${self.lastCursorX}, ${self.lastCursorY}px",
                             classes = "mb-0",
                             id = "label-cursor-pos"
-                        )
+                        ) { widthPx = 96; heightPx = 18 }
+
                         self.selectionSizeLabel = label(
-                            text = "⬚ ${self.selectionDimensionsText}",
+                            text = "[] ${self.selectionDimensionsText}",
                             classes = "mb-0",
                             id = "label-selection-size"
-                        )
+                        ) { widthPx = 136; heightPx = 18 }
+
                         self.canvasSizeBadge = badge(
                             text = "${self.canvasWidthPx} × ${self.canvasHeightPx}px",
                             type = BootstrapType.DARK,
                             pill = true,
                             id = "badge-canvas-size"
-                        )
+                        ) { widthPx = 112; heightPx = 22 }
+
                         self.activeToolBadge = badge(
                             text = "Tool: ${self.activeTool.name}",
                             type = BootstrapType.PRIMARY,
                             pill = true,
                             id = "badge-active-tool"
-                        )
+                        ) { widthPx = 136; heightPx = 22 }
                     }
 
-                    hstack(classes = "gap-2 align-items-center") {
+                    vstack {}
+
+                    hstack(classes = "gap-2 align-items-center justify-content-end") {
+                        widthPx = 416
+                        heightPx = 26
+                        gapPx = 6
+
                         self.fitToWindowButton = button(
-                            text = "[⊙]",
+                            text = "[Fit]",
                             tooltipText = "Fit to window (100%)",
                             type = BootstrapType.SECONDARY,
                             size = BootstrapSize.SM,
                             outline = true,
                             id = "btn-zoom-fit",
                             onClick = { self.fitToWindow() }
-                        )
+                        ) { widthPx = 54; heightPx = 24 }
+
                         self.zoomSelect = select(
                             options = listOf(
                                 SelectOption("25", "25%"),
@@ -882,16 +1060,18 @@ class GenericUIPaintFragment : Fragment() {
                             onSelectionChanged = { value ->
                                 value.toIntOrNull()?.let { self.updateZoomPercent(it) }
                             }
-                        )
+                        ) { widthPx = 82; heightPx = 24 }
+
                         self.zoomOutButton = button(
-                            text = "−",
+                            text = "-",
                             tooltipText = "Zoom out",
                             type = BootstrapType.SECONDARY,
                             size = BootstrapSize.SM,
                             outline = true,
                             id = "btn-zoom-out",
                             onClick = { self.updateZoomPercent((self.zoomPercent - 25).coerceAtLeast(25)) }
-                        )
+                        ) { widthPx = 34; heightPx = 24 }
+
                         self.zoomSlider = rangeSlider(
                             minValue = self.zoomPercent.toDouble(),
                             maxValue = 800.0,
@@ -900,10 +1080,13 @@ class GenericUIPaintFragment : Fragment() {
                             step = 25.0,
                             id = "slider-zoom"
                         ) {
+                            widthPx = 160
+                            heightPx = 22
                             onValueChanged = { updated ->
                                 self.updateZoomPercent(updated.roundToInt())
                             }
                         }
+
                         self.zoomInButton = button(
                             text = "+",
                             tooltipText = "Zoom in",
@@ -912,7 +1095,7 @@ class GenericUIPaintFragment : Fragment() {
                             outline = true,
                             id = "btn-zoom-in",
                             onClick = { self.updateZoomPercent((self.zoomPercent + 25).coerceAtMost(800)) }
-                        )
+                        ) { widthPx = 34; heightPx = 24 }
                     }
                 }
             }
@@ -1240,7 +1423,7 @@ class GenericUIPaintFragment : Fragment() {
                 ) {
                     hstack(classes = "justify-content-between align-items-center gap-1") {
                         button(
-                            text = "${if (layer.visible) "👁" else "🚫"} ${layer.name} (${layer.strokes.size})",
+                            text = "${if (layer.visible) "[v]" else "[ ]"} ${layer.name} (${layer.strokes.size})",
                             type = if (isSelected) BootstrapType.PRIMARY else BootstrapType.DARK,
                             size = BootstrapSize.SM,
                             outline = !isSelected,
@@ -1502,10 +1685,10 @@ class GenericUIPaintFragment : Fragment() {
             requestCanvasRender()
         }
         if (::cursorPositionLabel.isInitialized) {
-            cursorPositionLabel.text = "⊕ $lastCursorX, ${lastCursorY}px"
+            cursorPositionLabel.text = "+ $lastCursorX, ${lastCursorY}px"
         }
         if (::selectionSizeLabel.isInitialized) {
-            selectionSizeLabel.text = "⬚ $selectionDimensionsText"
+            selectionSizeLabel.text = "[] $selectionDimensionsText"
         }
     }
 
@@ -2186,18 +2369,22 @@ class GenericUIPaintFragment : Fragment() {
         }
 
         // Active Foreground / Background swatches
-        foregroundSwatchButton.getStyle().setBackgroundColor(RgbaColor.fromHex(foregroundHex))
+        val fgColor = RgbaColor.fromHex(foregroundHex)
+        val fgIsLight = (fgColor.r * 299 + fgColor.g * 587 + fgColor.b * 114) / 1000 >= 160
+        foregroundSwatchButton.getStyle().setBackgroundColor(fgColor)
         foregroundSwatchButton.tooltipText = "Color 1 (Foreground): $foregroundHex"
         foregroundSwatchButton.getBootstrap().apply {
-            type = if (editingForegroundColor) BootstrapType.PRIMARY else BootstrapType.SECONDARY
-            outline = !editingForegroundColor
+            type = if (fgIsLight) BootstrapType.LIGHT else if (editingForegroundColor) BootstrapType.PRIMARY else BootstrapType.DARK
+            outline = false
         }
 
-        backgroundSwatchButton.getStyle().setBackgroundColor(RgbaColor.fromHex(backgroundHex))
+        val bgColor = RgbaColor.fromHex(backgroundHex)
+        val bgIsLight = (bgColor.r * 299 + bgColor.g * 587 + bgColor.b * 114) / 1000 >= 160
+        backgroundSwatchButton.getStyle().setBackgroundColor(bgColor)
         backgroundSwatchButton.tooltipText = "Color 2 (Background): $backgroundHex"
         backgroundSwatchButton.getBootstrap().apply {
-            type = if (!editingForegroundColor) BootstrapType.PRIMARY else BootstrapType.SECONDARY
-            outline = editingForegroundColor
+            type = if (bgIsLight) BootstrapType.LIGHT else if (!editingForegroundColor) BootstrapType.PRIMARY else BootstrapType.DARK
+            outline = false
         }
 
         // Left vertical sliders
@@ -2209,6 +2396,7 @@ class GenericUIPaintFragment : Fragment() {
             type = if (layersPanelOpen) BootstrapType.PRIMARY else BootstrapType.SECONDARY
             outline = !layersPanelOpen
         }
+        layersSidebar.isVisible = layersPanelOpen
         layersSidebar.getStyle().setDisplay(if (layersPanelOpen) CssDisplay.BLOCK else CssDisplay.NONE)
         deleteLayerButton.isEnabled = _layers.size > 1
         mergeDownLayerButton.isEnabled = activeLayerIndex > 0 && _layers.size > 1
@@ -2218,8 +2406,8 @@ class GenericUIPaintFragment : Fragment() {
         redoButton.isEnabled = _redoStack.isNotEmpty()
 
         // Bottom Status Bar
-        cursorPositionLabel.text = "⊕ $lastCursorX, ${lastCursorY}px"
-        selectionSizeLabel.text = "⬚ $selectionDimensionsText"
+        cursorPositionLabel.text = "+ $lastCursorX, ${lastCursorY}px"
+        selectionSizeLabel.text = "[] $selectionDimensionsText"
         canvasSizeBadge.text = "$canvasWidthPx × ${canvasHeightPx}px"
         activeToolBadge.text = "Tool: ${activeTool.name}"
     }

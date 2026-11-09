@@ -22,6 +22,7 @@ class SketchpadJestTest {
             describe("Toolbar Tool Selection & Vector Shape Commands") {
                 it("switches between Freehand, Rectangle, Ellipse, Line, and Bezier Curve tools and updates CssCustomCursor and getBootstrap()") {
                     val controller = launchApp(visualOnWindows = false) { SketchpadApp() }
+                    controller.takeScreenshot("canvas2d-vector-sketchpad.jpg")
                     val fragment = controller.app.sketchpadFragment
 
                     expectNode(controller.findById("badge-active-tool")).toHaveText("Tool: FREEHAND")
@@ -81,6 +82,7 @@ class SketchpadJestTest {
 
                 it("adjusts stroke width via RangeSlider and records pointer stroke gestures") {
                     val controller = launchApp(visualOnWindows = false) { SketchpadApp() }
+                    controller.takeScreenshot("canvas2d-vector-sketchpad.jpg")
                     val fragment = controller.app.sketchpadFragment
 
                     controller.findById("slider-stroke-width").performSetSliderValue(12.0)
@@ -102,6 +104,7 @@ class SketchpadJestTest {
 
                 it("supports multi-step Undo, Redo, Clear, CurveEditor LUT sampling, and VBlank rendering") {
                     val controller = launchApp(visualOnWindows = false) { SketchpadApp() }
+                    controller.takeScreenshot("canvas2d-vector-sketchpad.jpg")
                     val fragment = controller.app.sketchpadFragment
 
                     controller.findById("btn-add-shape").performClick()
@@ -140,6 +143,7 @@ class SketchpadJestTest {
                     val snapshot = fragment.captureSnapshotBuffer()
                     expect(snapshot.width).toBe(720)
                     expect(snapshot.height).toBe(460)
+                    controller.takeScreenshot("canvas2d-vector-sketchpad.jpg")
 
                     // Clear canvas
                     controller.findById("btn-clear").performClick()

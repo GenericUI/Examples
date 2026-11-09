@@ -12,13 +12,18 @@ $studio-text: #f8fafc;
 .studio-doc-surface {
   background-color: #111827;
   color: $studio-text;
-  padding: 16px;
+  padding: 12px;
   border-radius: 8px;
+}
+
+.studio-artboard-canvas {
+  background-color: #0f172a;
+  border-radius: 6px;
 }
 
 .studio-hud-overlay {
   background-color: #172554;
   color: $studio-text;
-  padding: 12px;
-  border-radius: 10px;
+  padding: 8px;
+  border-radius: 8px;
 }

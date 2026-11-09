@@ -23,6 +23,10 @@ class CodeEditorRegexJestTest {
                 it("mounts CodeEditorRegexFragment, verifies getStyle() and getBootstrap(), and evaluates initial Kotlin regex matches and capture groups") {
                     val store = PreferenceStore("CodeEditorRegexJestTest_Init")
                     store.clear()
+                    val appController = launchApp(visualOnWindows = false) { CodeEditorRegexApp(store) }
+                    appController.takeScreenshot("code-editor-and-regex-tester.jpg")
+                    appController.destroy()
+                    store.clear()
                     val controller = launchFragment {
                         CodeEditorRegexFragment(store)
                     }

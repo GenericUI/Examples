@@ -3,7 +3,7 @@ package com.nexustools.genericui.examples.filterlab
 import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.enums.ui.ThemeMode
-import com.nexustools.genericui.examples.filterlab.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.filterlab.res.Resource
 import com.nexustools.genericui.window.TitleBar
 
 /**
@@ -19,7 +19,7 @@ class GpuImageFilterLabApp(
 ) {
     init {
         setThemeMode(ThemeMode.DARK)
-        addStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
         val titleBar = TitleBar(
             embedMenuBar = false,
             showWindowTitle = true,
@@ -28,6 +28,5 @@ class GpuImageFilterLabApp(
         )
         filterLabFragment.setTitleBar(titleBar)
         mainWindow.setTitleBar(titleBar)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
     }
 }

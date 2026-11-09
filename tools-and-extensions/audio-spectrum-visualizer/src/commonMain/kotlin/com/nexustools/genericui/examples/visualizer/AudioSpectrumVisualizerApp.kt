@@ -6,7 +6,7 @@ import com.nexustools.genericui.component.shell.Menu
 import com.nexustools.genericui.component.shell.MenuBar
 import com.nexustools.genericui.component.shell.MenuItem
 import com.nexustools.genericui.enums.ui.ThemeMode
-import com.nexustools.genericui.examples.visualizer.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.visualizer.res.Resource
 import com.nexustools.genericui.window.TitleBar
 
 /**
@@ -17,13 +17,13 @@ class AudioSpectrumVisualizerApp(
     val visualizerFragment: AudioSpectrumVisualizerFragment = AudioSpectrumVisualizerFragment()
 ) : FragmentApplication(
     initialFragment = visualizerFragment,
-    title = "GenericUI — Media Player, Codec Inspector & FFT Spectrum Visualizer",
+    title = "GenericUI — Audio Spectrum Visualizer",
     initialThemeColor = "#10B981"
 ) {
 
     init {
         setThemeMode(ThemeMode.DARK)
-        addStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
         val titleBar = TitleBar(
             embedMenuBar = true,
             showWindowTitle = true,
@@ -35,7 +35,7 @@ class AudioSpectrumVisualizerApp(
         visualizerFragment.setMenuBar(menuBar)
         mainWindow.setTitleBar(titleBar)
         mainWindow.setMenuBar(menuBar)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
+        visualizerFragment.togglePlayPause()
     }
 
     private fun buildMenuBar(): MenuBar {

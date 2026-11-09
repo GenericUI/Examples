@@ -32,19 +32,19 @@ html, body, #genericui-app, .genericui-window {
         margin-bottom: 8px;
     }
 
-    .editor-filter-bar {
+    .editor-filter-bar, .grid-tree-toolbar, .inspector-toolbar {
+        background-color: $bg-surface;
+        border-radius: 8px;
+        padding: 4px 10px;
+    }
+
+    .format-converter-strip, .format-comparison-card {
         background-color: $bg-surface;
         border-radius: 8px;
         padding: 6px 12px;
     }
 
-    .format-converter-strip {
-        background-color: $bg-elevated;
-        border-radius: 8px;
-        padding: 6px 12px;
-    }
-
-    .document-grid-tree, .lazy-grid-tree {
+    .document-grid-tree, .lazy-grid-tree, .node-tree-panel {
         background-color: $bg-surface;
         border-radius: 8px;
         padding: 4px;

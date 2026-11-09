@@ -23,6 +23,7 @@ class AdaptiveMediaCatalogJestTest {
             describe("Adaptive Layout Mode Transitions (Desktop, Phone Landscape, Phone Portrait)") {
                 it("switches layout postures cleanly while preserving the primary media stage") {
                     val controller = launchApp(visualOnWindows = false) { AdaptiveMediaCatalogApp() }
+                    controller.takeScreenshot("adaptive-media-catalog.jpg")
                     val fragment = controller.app.catalogFragment
 
                     // Initial Desktop / Tablet Landscape posture (1280x800)
@@ -64,6 +65,7 @@ class AdaptiveMediaCatalogJestTest {
             describe("Channel Selection, Playback Queue & Transport Controls") {
                 it("selects channels and updates Now Playing and Details views") {
                     val controller = launchApp(visualOnWindows = false) { AdaptiveMediaCatalogApp() }
+                    controller.takeScreenshot("adaptive-media-catalog.jpg")
                     val fragment = controller.app.catalogFragment
 
                     expectNode(controller.findById("label-now-playing-title"))
@@ -81,6 +83,7 @@ class AdaptiveMediaCatalogJestTest {
 
                 it("manages the playback queue and toggles transport controls") {
                     val controller = launchApp(visualOnWindows = false) { AdaptiveMediaCatalogApp() }
+                    controller.takeScreenshot("adaptive-media-catalog.jpg")
                     val fragment = controller.app.catalogFragment
 
                     expect(fragment.playbackQueue.size).toBe(2)

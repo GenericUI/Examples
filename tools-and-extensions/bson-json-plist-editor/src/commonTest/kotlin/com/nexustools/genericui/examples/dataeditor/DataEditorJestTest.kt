@@ -2,7 +2,7 @@ package com.nexustools.genericui.examples.dataeditor
 
 import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
-import com.nexustools.genericui.examples.dataeditor.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.dataeditor.res.Resource
 import com.nexustools.genericui.tests.JestElectricRunner
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -18,8 +18,9 @@ class DataEditorJestTest {
             describe("Visual Multi-Tab Document Lifecycle & LazyGridTree Node Editing") {
                 test("launches DataEditorApp and verifies initial LazyGridTree, getStyle(), getBootstrap(), and tab state") {
                     val controller = launchApp(visualOnWindows = false) { DataEditorApp() }.setup()
+                    controller.takeScreenshot("bson-json-plist-editor.jpg")
                     val frag = controller.app.fragment
-                    assertTrue(controller.app.hasStyleSheet(StylesPrecompiledStyleSheet))
+                    assertTrue(controller.app.hasStyleSheet(Resource.style.styles))
                     assertTrue(frag.hasClass("data-editor-root"))
                     expect(frag.topToolbar.getStyle().borderRadiusPx).toBe(6f)
                     expect(frag.openTabs.size).toBe(1)

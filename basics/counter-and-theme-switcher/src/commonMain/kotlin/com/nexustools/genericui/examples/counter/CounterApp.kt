@@ -6,7 +6,7 @@ import com.nexustools.genericui.component.shell.Menu
 import com.nexustools.genericui.component.shell.MenuBar
 import com.nexustools.genericui.component.shell.MenuItem
 import com.nexustools.genericui.component.system.PreferenceStore
-import com.nexustools.genericui.examples.counter.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.counter.res.Resource
 import com.nexustools.genericui.window.TitleBar
 
 /**
@@ -25,13 +25,9 @@ class CounterApp(
     override fun getPreferenceStore(): PreferenceStore =
         customPreferenceStore ?: super.getPreferenceStore()
 
-    val preferenceStore: PreferenceStore
-        get() = getPreferenceStore()
-
     init {
         setThemeMode(counterFragment.settings.resolvedThemeMode())
         setThemeColor(counterFragment.settings.themeColorHex)
-        addStyleSheet(StylesPrecompiledStyleSheet)
 
         counterFragment.onThemeUpdated = { mode, colorHex ->
             setThemeMode(mode)
@@ -49,7 +45,7 @@ class CounterApp(
         counterFragment.setMenuBar(menuBar)
         mainWindow.setTitleBar(titleBar)
         mainWindow.setMenuBar(menuBar)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
     }
 
     private fun buildApplicationMenuBar(): MenuBar {

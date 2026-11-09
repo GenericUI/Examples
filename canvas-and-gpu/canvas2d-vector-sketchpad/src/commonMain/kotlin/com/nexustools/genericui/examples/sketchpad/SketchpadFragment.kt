@@ -1,8 +1,13 @@
 package com.nexustools.genericui.examples.sketchpad
 
 import com.nexustools.genericui.component.action.Button
+import com.nexustools.genericui.component.content.Table
+import com.nexustools.genericui.component.content.TableCell
+import com.nexustools.genericui.component.content.TableColumn
+import com.nexustools.genericui.component.content.TableRow
 import com.nexustools.genericui.component.dialog.Dialogs
 import com.nexustools.genericui.component.dialog.FileTypeFilter
+import com.nexustools.genericui.component.dock.ColorSwatchBox
 import com.nexustools.genericui.component.form.ColorPicker
 import com.nexustools.genericui.component.form.RangeSlider
 import com.nexustools.genericui.component.fragment.Fragment
@@ -22,8 +27,12 @@ import com.nexustools.genericui.ext.dsl.badge
 import com.nexustools.genericui.ext.dsl.build
 import com.nexustools.genericui.ext.dsl.button
 import com.nexustools.genericui.ext.dsl.card
+import com.nexustools.genericui.ext.dsl.column
+import com.nexustools.genericui.ext.dsl.columnLayout
 import com.nexustools.genericui.ext.dsl.component
+import com.nexustools.genericui.ext.dsl.dataTable
 import com.nexustools.genericui.ext.dsl.h5
+import com.nexustools.genericui.ext.dsl.h6
 import com.nexustools.genericui.ext.dsl.hstack
 import com.nexustools.genericui.ext.dsl.label
 import com.nexustools.genericui.ext.dsl.rangeSlider
@@ -91,8 +100,28 @@ class SketchpadFragment : Fragment() {
     val strokeColorPicker: ColorPicker = ColorPicker(RgbaColor.fromHex("#38BDF8")).apply {
         id = "picker-stroke-color"
     }
+    val colorSwatchBox: ColorSwatchBox = ColorSwatchBox(
+        foreground = RgbaColor.fromHex("#38BDF8"),
+        background = RgbaColor.fromHex("#0B1120")
+    ).apply {
+        id = "swatch-box-palette"
+        heightPx = 36
+        setPaletteSwatches(
+            listOf(
+                RgbaColor.fromHex("#38BDF8"),
+                RgbaColor.fromHex("#A855F7"),
+                RgbaColor.fromHex("#10B981"),
+                RgbaColor.fromHex("#F59E0B"),
+                RgbaColor.fromHex("#EC4899"),
+                RgbaColor.fromHex("#EF4444"),
+                RgbaColor.fromHex("#FACC15"),
+                RgbaColor.fromHex("#F8FAFC")
+            )
+        )
+    }
     lateinit var sketchCanvas: Canvas2D
     lateinit var curveEditor: CurveEditor
+    lateinit var commandTable: Table
 
     // Status Badges & Labels
     lateinit var shapeCountBadge: Badge
@@ -200,7 +229,7 @@ class SketchpadFragment : Fragment() {
                 }
 
                 // Telemetry & Status Strip
-                hstack(classes = "gap-2 align-items-center") {
+                hstack(classes = "gap-2 flex-wrap align-items-center") {
                     self.activeToolBadge = badge(
                         text = "Tool: FREEHAND",
                         type = BootstrapType.PRIMARY,
@@ -228,78 +257,121 @@ class SketchpadFragment : Fragment() {
                     self.statusLabel = label(
                         text = "Ready to sketch on hardware-accelerated Canvas2D.",
                         id = "label-sketchpad-status"
-                    )
+                    ) {
+                        widthPx = 420
+                    }
                 }
 
-                // Main Workspace: Canvas2D Surface + Inspector Sidebar
-                hstack(classes = "sketchpad-workspace gap-3 align-items-start") {
-                    self.sketchCanvas = canvas2D(
-                        width = 720,
-                        height = 460,
-                        id = "sketchpad-canvas-surface",
-                        classes = "sketchpad-canvas",
-                        onRender = { ctx, deltaMs, _, frameNum ->
-                            self.renderedFrameCount = max(self.renderedFrameCount + 1L, frameNum)
-                            self.lastFrameDeltaMsValue = deltaMs
-                            self.vblankFrameBadge.text = "VBlank Frames: ${self.renderedFrameCount}"
-                            self.renderSketchpadScene(ctx)
+                // Main Workspace: Responsive 12-Column Layout (8-col Canvas2D Surface + 4-col Inspector Sidebar)
+                columnLayout(classes = "sketchpad-workspace") {
+                    column(md = 8, lg = 8, classes = "sketchpad-canvas-col") {
+                        card(classes = "sketchpad-canvas-card") {
+                            hstack(classes = "gap-2 flex-wrap align-items-center") {
+                                h6("Interactive Vector & Bezier Viewport (720x460)", classes = "mb-0")
+                                badge("Double-Buffered VBlank", type = BootstrapType.SECONDARY, pill = true)
+                                badge("SVG Custom Cursor", type = BootstrapType.INFO, pill = true)
+                            }
+                            self.sketchCanvas = canvas2D(
+                                width = 720,
+                                height = 460,
+                                id = "sketchpad-canvas-surface",
+                                classes = "sketchpad-canvas",
+                                onRender = { ctx, deltaMs, _, frameNum ->
+                                    self.renderedFrameCount = max(self.renderedFrameCount + 1L, frameNum)
+                                    self.lastFrameDeltaMsValue = deltaMs
+                                    self.vblankFrameBadge.text = "VBlank Frames: ${self.renderedFrameCount}"
+                                    self.renderSketchpadScene(ctx)
+                                }
+                            ) {
+                                getStyle().apply {
+                                    setCursor(self.toolCursorFor(self.activeTool))
+                                    borderRadiusPx = 8f
+                                }
+                                onPointerDown = { ev -> self.handlePointerDown(ev) }
+                                onPointerMove = { ev -> self.handlePointerMove(ev) }
+                                onPointerUp = { ev -> self.handlePointerUp(ev) }
+                            }
                         }
-                    ) {
-                        getStyle().apply {
-                            setCursor(self.toolCursorFor(self.activeTool))
-                            borderRadiusPx = 8f
-                        }
-                        onPointerDown = { ev -> self.handlePointerDown(ev) }
-                        onPointerMove = { ev -> self.handlePointerMove(ev) }
-                        onPointerUp = { ev -> self.handlePointerUp(ev) }
                     }
 
                     // Right Inspector Sidebar
-                    vstack(classes = "sketchpad-sidebar gap-2") {
-                        label("Stroke Width (1px - 24px)")
-                        self.strokeWidthSlider = rangeSlider(
-                            minValue = 4.0,
-                            maxValue = 24.0,
-                            min = 1.0,
-                            max = 24.0,
-                            step = 1.0,
-                            id = "slider-stroke-width"
-                        ) {
-                            onValueChanged = { updated ->
-                                self.activeStrokeWidth = updated.toFloat().coerceIn(1f, 24f)
+                    column(md = 4, lg = 4, classes = "sketchpad-sidebar-col") {
+                        card(classes = "sketchpad-sidebar") {
+                            h6("Brush & Curve Inspector", classes = "mb-0")
+
+                            label("Stroke Width (1px - 24px)")
+                            self.strokeWidthSlider = rangeSlider(
+                                minValue = 4.0,
+                                maxValue = 24.0,
+                                min = 1.0,
+                                max = 24.0,
+                                step = 1.0,
+                                id = "slider-stroke-width"
+                            ) {
+                                onValueChanged = { updated ->
+                                    self.activeStrokeWidth = updated.toFloat().coerceIn(1f, 24f)
+                                    self.syncStatusControls()
+                                    self.sketchCanvas.requestRender()
+                                }
+                            }
+
+                            label("Stroke Color Hex & Swatches")
+                            self.strokeColorPicker.onColorChanged = { chosen ->
+                                self.activeColorHex = chosen.toHex()
+                                self.colorSwatchBox.foregroundColor = chosen
                                 self.syncStatusControls()
                                 self.sketchCanvas.requestRender()
                             }
-                        }
-
-                        label("Stroke Color Hex")
-                        self.strokeColorPicker.onColorChanged = { chosen ->
-                            self.activeColorHex = chosen.toHex()
-                            self.syncStatusControls()
-                            self.sketchCanvas.requestRender()
-                        }
-                        self.strokeColorPicker.onValueChanged = { text ->
-                            val parsed = RgbaColor.fromCss(text)
-                            if (parsed != null) {
-                                self.activeColorHex = parsed.toHex()
+                            self.strokeColorPicker.onValueChanged = { text ->
+                                val parsed = RgbaColor.fromCss(text)
+                                if (parsed != null) {
+                                    self.activeColorHex = parsed.toHex()
+                                    self.colorSwatchBox.foregroundColor = parsed
+                                    self.syncStatusControls()
+                                    self.sketchCanvas.requestRender()
+                                }
+                            }
+                            self.colorSwatchBox.onForegroundChanged = { chosen ->
+                                self.activeColorHex = chosen.toHex()
+                                if (self.strokeColorPicker.value != self.activeColorHex) {
+                                    self.strokeColorPicker.value = self.activeColorHex
+                                }
                                 self.syncStatusControls()
                                 self.sketchCanvas.requestRender()
                             }
-                        }
-                        component(self.strokeColorPicker)
+                            component(self.strokeColorPicker)
+                            component(self.colorSwatchBox)
 
-                        label("Cubic-Bezier Taper Curve (CurveEditor)")
-                        self.curveEditor = curveEditor(
-                            width = 220,
-                            height = 180,
-                            controlPoint1 = Point(0.35f, 0.15f),
-                            controlPoint2 = Point(0.65f, 0.85f),
-                            id = "curve-editor-bezier",
-                            onCurveChanged = { cp1, cp2 ->
-                                self.statusLabel.text = "Bezier curve updated: CP1(${cp1.x}, ${cp1.y}), CP2(${cp2.x}, ${cp2.y})"
-                                self.sketchCanvas.requestRender()
+                            label("Cubic-Bezier Taper Curve (CurveEditor)")
+                            self.curveEditor = curveEditor(
+                                width = 220,
+                                height = 180,
+                                controlPoint1 = Point(0.35f, 0.15f),
+                                controlPoint2 = Point(0.65f, 0.85f),
+                                id = "curve-editor-bezier",
+                                classes = "curve-editor-canvas",
+                                onCurveChanged = { cp1, cp2 ->
+                                    self.statusLabel.text = "Bezier curve updated: CP1(${cp1.x}, ${cp1.y}), CP2(${cp2.x}, ${cp2.y})"
+                                    self.sketchCanvas.requestRender()
+                                }
+                            )
+
+                            label("Vector Command Stack")
+                            self.commandTable = dataTable(
+                                id = "table-vector-commands",
+                                classes = "sketchpad-command-table"
+                            ) {
+                                setColumns(
+                                    listOf(
+                                        TableColumn("idx", "#"),
+                                        TableColumn("tool", "Shape"),
+                                        TableColumn("color", "Color"),
+                                        TableColumn("width", "Width")
+                                    )
+                                )
+                                setColumnWeights(0.5f, 1.5f, 1.2f, 0.8f)
                             }
-                        )
+                        }
                     }
                 }
             }
@@ -543,6 +615,34 @@ class SketchpadFragment : Fragment() {
         strokeWidthBadge.text = "Stroke: ${activeStrokeWidth.toInt()}px"
         undoButton.isEnabled = _commands.isNotEmpty()
         redoButton.isEnabled = _redoStack.isNotEmpty()
+        if (::commandTable.isInitialized) {
+            val rows = if (_commands.isEmpty()) {
+                listOf(
+                    TableRow(
+                        id = "row-empty",
+                        cells = listOf(
+                            TableCell("-"),
+                            TableCell("No shapes"),
+                            TableCell(activeColorHex),
+                            TableCell("${activeStrokeWidth.toInt()}px")
+                        )
+                    )
+                )
+            } else {
+                _commands.mapIndexed { idx, cmd ->
+                    TableRow(
+                        id = "row-cmd-$idx",
+                        cells = listOf(
+                            TableCell("${idx + 1}"),
+                            TableCell(cmd.type.displayName),
+                            TableCell(cmd.colorHex),
+                            TableCell("${cmd.strokeWidth.toInt()}px")
+                        )
+                    )
+                }
+            }
+            commandTable.setRows(rows)
+        }
     }
 
     /**

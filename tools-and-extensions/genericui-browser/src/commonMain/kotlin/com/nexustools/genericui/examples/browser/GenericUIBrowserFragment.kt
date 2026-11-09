@@ -19,6 +19,7 @@ import com.nexustools.genericui.enums.bootstrap.AlignItems
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.enums.bootstrap.FlexDirection
+import com.nexustools.genericui.enums.bootstrap.FlexWrap
 import com.nexustools.genericui.enums.bootstrap.JustifyContent
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.io.ReadableByteBuffer
@@ -75,50 +76,78 @@ class GenericUIBrowserFragment(
     // --- Desktop Chrome Navigation & Omnibox Toolbar ---
     val pinnedFaviconsStrip: HStack = HStack(gap = SpacingScale.S1).apply {
         alignItems = AlignItems.CENTER
+        flexWrap = FlexWrap.WRAP
         addClass("browser-pinned-favicons-strip")
     }
 
-    val desktopToolbarRow: HStack = HStack(gap = SpacingScale.S2).apply {
+    val desktopToolbarRow: HStack = HStack(gap = SpacingScale.S1).apply {
         alignItems = AlignItems.CENTER
         justifyContent = JustifyContent.BETWEEN
+        flexWrap = FlexWrap.WRAP
         addClass("browser-desktop-toolbar")
     }
-    val navBackButton: Button = Button("←", type = BootstrapType.DARK, size = BootstrapSize.SM)
-    val navForwardButton: Button = Button("→", type = BootstrapType.DARK, size = BootstrapSize.SM)
-    val reloadButton: Button = Button("↻", type = BootstrapType.DARK, size = BootstrapSize.SM)
-    val securityLockBadge: Badge = Badge("🔒", type = BootstrapType.SECONDARY, pill = true)
+    val navBackButton: Button = Button("<", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
+        widthPx = 34
+    }
+    val navForwardButton: Button = Button(">", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
+        widthPx = 34
+    }
+    val reloadButton: Button = Button("R", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
+        widthPx = 34
+    }
+    val securityLockBadge: Badge = Badge("HTTPS", type = BootstrapType.SUCCESS, pill = true).apply {
+        widthPx = 56
+    }
     val omniboxField: TextField = TextField(
         value = BrowserTabPageFragment.URL_AI_CREDITS,
         placeholder = "Search Google or type a URL"
     ).apply {
         addClass("browser-omnibox-pill")
+        widthPx = 660
     }
-    val goOmniboxButton: Button = Button("Go", type = BootstrapType.PRIMARY, size = BootstrapSize.SM)
-    val bookmarkStarButton: Button = Button("★", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val extensionsButton: Button = Button("🧩", type = BootstrapType.DARK, size = BootstrapSize.SM)
+    val goOmniboxButton: Button = Button("Go", type = BootstrapType.PRIMARY, size = BootstrapSize.SM).apply {
+        widthPx = 46
+    }
+    val bookmarkStarButton: Button = Button("★", type = BootstrapType.SECONDARY, size = BootstrapSize.SM).apply {
+        widthPx = 36
+    }
+    val extensionsButton: Button = Button("Ext", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
+        widthPx = 48
+    }
     val askGeminiPillButton: Button = Button(
         text = "✦ Ask Gemini",
         type = BootstrapType.INFO,
         size = BootstrapSize.SM
     ).apply {
         addClass("browser-ask-gemini-btn")
+        widthPx = 112
     }
-    val profileButton: Button = Button("👤", type = BootstrapType.DARK, size = BootstrapSize.SM)
-    val desktopMenuButton: Button = Button("⋮", type = BootstrapType.DARK, size = BootstrapSize.SM)
+    val profileButton: Button = Button("Profile", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
+        widthPx = 68
+    }
+    val desktopMenuButton: Button = Button("...", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
+        widthPx = 38
+    }
 
     // --- Mobile Chrome Navigation & Pill Omnibox Toolbar ---
     val mobileToolbarRow: HStack = HStack(gap = SpacingScale.S2).apply {
         alignItems = AlignItems.CENTER
         justifyContent = JustifyContent.BETWEEN
+        flexWrap = FlexWrap.WRAP
         addClass("browser-mobile-toolbar")
     }
-    val mobileHomeButton: Button = Button("🏠", type = BootstrapType.DARK, size = BootstrapSize.SM)
-    val mobileSecurityLockBadge: Badge = Badge("🔒", type = BootstrapType.SECONDARY, pill = true)
+    val mobileHomeButton: Button = Button("Home", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
+        widthPx = 56
+    }
+    val mobileSecurityLockBadge: Badge = Badge("HTTPS", type = BootstrapType.SUCCESS, pill = true).apply {
+        widthPx = 56
+    }
     val mobileOmniboxField: TextField = TextField(
         value = BrowserTabPageFragment.URL_AI_CREDITS,
         placeholder = "Search or type URL"
     ).apply {
         addClass("browser-omnibox-pill")
+        widthPx = 200
     }
     val mobileTabCounterBadgeButton: Button = Button(
         text = "5",
@@ -127,12 +156,16 @@ class GenericUIBrowserFragment(
         outline = true
     ).apply {
         addClass("genericui-tabbed-mobile-pill")
+        widthPx = 38
     }
-    val mobileMenuButton: Button = Button("⋮", type = BootstrapType.DARK, size = BootstrapSize.SM)
+    val mobileMenuButton: Button = Button("...", type = BootstrapType.DARK, size = BootstrapSize.SM).apply {
+        widthPx = 38
+    }
 
     // --- Bookmarks Bar ---
     val bookmarksBarRow: HStack = HStack(gap = SpacingScale.S2).apply {
         alignItems = AlignItems.CENTER
+        flexWrap = FlexWrap.WRAP
         addClass("browser-bookmarks-bar")
     }
 
@@ -197,7 +230,7 @@ class GenericUIBrowserFragment(
 
     private fun buildBrowserChromeLayout() {
         // Pinned favicon badges in the desktop strip area (matching the Chrome Desktop screenshot)
-        val pinnedIcons = listOf("G", "🐙", "🌐", "📁", "✦")
+        val pinnedIcons = listOf("G", "</>", "[!]", "★", "✦")
         for (icon in pinnedIcons) {
             pinnedFaviconsStrip.addChild(
                 Badge(icon, type = BootstrapType.DARK, pill = true).apply {
@@ -206,37 +239,20 @@ class GenericUIBrowserFragment(
             )
         }
 
-        // Desktop Omnibox & Actions row
-        val leftNavControls = HStack(gap = SpacingScale.S1).apply {
-            alignItems = AlignItems.CENTER
-        }
-        leftNavControls.addChild(navBackButton)
-        leftNavControls.addChild(navForwardButton)
-        leftNavControls.addChild(reloadButton)
+        // Desktop Omnibox & Actions row (flat row with explicit widths so omnibox spans wide)
+        desktopToolbarRow.addChild(navBackButton)
+        desktopToolbarRow.addChild(navForwardButton)
+        desktopToolbarRow.addChild(reloadButton)
+        desktopToolbarRow.addChild(securityLockBadge)
+        desktopToolbarRow.addChild(omniboxField)
+        desktopToolbarRow.addChild(goOmniboxButton)
+        desktopToolbarRow.addChild(bookmarkStarButton)
+        desktopToolbarRow.addChild(extensionsButton)
+        desktopToolbarRow.addChild(askGeminiPillButton)
+        desktopToolbarRow.addChild(profileButton)
+        desktopToolbarRow.addChild(desktopMenuButton)
 
-        val centerOmniboxCluster = FlexBox().apply {
-            flexDirection = FlexDirection.ROW
-            alignItems = AlignItems.CENTER
-            addClass("gap-1", "browser-omnibox-cluster")
-        }
-        centerOmniboxCluster.addChild(securityLockBadge)
-        centerOmniboxCluster.addChild(omniboxField)
-        centerOmniboxCluster.addChild(goOmniboxButton)
-        centerOmniboxCluster.addChild(bookmarkStarButton)
-
-        val rightActionsCluster = HStack(gap = SpacingScale.S1).apply {
-            alignItems = AlignItems.CENTER
-        }
-        rightActionsCluster.addChild(extensionsButton)
-        rightActionsCluster.addChild(askGeminiPillButton)
-        rightActionsCluster.addChild(profileButton)
-        rightActionsCluster.addChild(desktopMenuButton)
-
-        desktopToolbarRow.addChild(leftNavControls)
-        desktopToolbarRow.addChild(centerOmniboxCluster)
-        desktopToolbarRow.addChild(rightActionsCluster)
-
-        // Mobile Top Bar: [🏠 Home] [🔒 Rounded Pill Omnibox] [[5] Tab Counter Badge] [⋮ Menu]
+        // Mobile Top Bar: [Home] [HTTPS] [Rounded Pill Omnibox] [[5] Tab Counter Badge] [... Menu]
         mobileToolbarRow.addChild(mobileHomeButton)
         mobileToolbarRow.addChild(mobileSecurityLockBadge)
         mobileToolbarRow.addChild(mobileOmniboxField)
@@ -286,10 +302,12 @@ class GenericUIBrowserFragment(
 
         onTabOpened = {
             syncMobileTabCounterBadges()
+            styleDesktopTabStrip()
         }
 
         onTabClosed = {
             syncMobileTabCounterBadges()
+            styleDesktopTabStrip()
         }
 
         onMobileOverviewStateChanged = {
@@ -370,7 +388,7 @@ class GenericUIBrowserFragment(
                 title = "Google Keep",
                 subtitle = "keep.google.com",
                 url = BrowserTabPageFragment.URL_KEEP,
-                iconName = "💡"
+                iconName = "[!]"
             ),
             selectImmediately = false
         )
@@ -382,7 +400,7 @@ class GenericUIBrowserFragment(
                 title = "Overcoming Overwhelming Anxiety",
                 subtitle = "gemini.google.com/app",
                 url = BrowserTabPageFragment.URL_GEMINI_DOC,
-                iconName = "✦"
+                iconName = "★"
             ),
             selectImmediately = false
         )
@@ -394,7 +412,7 @@ class GenericUIBrowserFragment(
                 title = "T-Crypt/berth",
                 subtitle = "github.com/T-Crypt/berth",
                 url = BrowserTabPageFragment.URL_GITHUB_BERTH,
-                iconName = "🐙"
+                iconName = "</>"
             ),
             selectImmediately = false
         )
@@ -406,7 +424,7 @@ class GenericUIBrowserFragment(
                 title = "New Tab",
                 subtitle = "chrome://newtab",
                 url = BrowserTabPageFragment.URL_NEW_TAB,
-                iconName = "🌐"
+                iconName = "[+]"
             ),
             selectImmediately = false
         )
@@ -418,7 +436,7 @@ class GenericUIBrowserFragment(
                 title = "AI credits activity",
                 subtitle = "one.google.com/ai/activity",
                 url = BrowserTabPageFragment.URL_AI_CREDITS,
-                iconName = "🔵"
+                iconName = "✦"
             ),
             selectImmediately = false
         )
@@ -656,6 +674,7 @@ class GenericUIBrowserFragment(
 
     private fun rebuildBookmarksBar() {
         bookmarksBarRow.clearChildren()
+        bookmarksBarRow.addChild(Badge("Bookmarks:", type = BootstrapType.SECONDARY, pill = true))
         for (bookmark in _bookmarks) {
             val btn = Button(
                 text = "${bookmark.iconLabel} ${bookmark.title}",
@@ -668,6 +687,32 @@ class GenericUIBrowserFragment(
                 }
             }
             bookmarksBarRow.addChild(btn)
+        }
+    }
+
+    private fun styleDesktopTabStrip() {
+        for (child in desktopTabStripContainer.children) {
+            if (child is FlexBox && child.hasClass("genericui-tabbed-chip")) {
+                val isActive = child.hasClass("active")
+                var selectW = 140
+                var closeW = 0
+                for (inner in child.children) {
+                    if (inner is Button && inner.hasClass("genericui-tabbed-select-btn")) {
+                        inner.type = if (isActive) BootstrapType.PRIMARY else BootstrapType.DARK
+                        selectW = (inner.text.length * 6 + 22).coerceIn(104, 232)
+                        inner.widthPx = selectW
+                    } else if (inner is Button && inner.hasClass("genericui-tabbed-close-btn")) {
+                        inner.type = if (isActive) BootstrapType.PRIMARY else BootstrapType.DARK
+                        inner.outline = false
+                        closeW = 26
+                        inner.widthPx = closeW
+                    }
+                }
+                child.widthPx = selectW + (if (closeW > 0) closeW + 6 else 0)
+            } else if (child is Button && child.hasClass("genericui-tabbed-new-tab-btn")) {
+                child.type = BootstrapType.SECONDARY
+                child.widthPx = 34
+            }
         }
     }
 
@@ -696,6 +741,11 @@ class GenericUIBrowserFragment(
         bookmarksBarRow.isVisible = isDesktop && _sessionState.showBookmarksBar
         mobileToolbarRow.isVisible = isMobile
         mobileBottomNavBar.isVisible = isMobile
+        headerSlotContainer.heightPx = when {
+            isDesktop && _sessionState.showBookmarksBar -> 108
+            else -> 72
+        }
+        styleDesktopTabStrip()
         syncMobileTabCounterBadges()
     }
 
@@ -710,8 +760,9 @@ class GenericUIBrowserFragment(
         navForwardButton.isEnabled = page?.canGoForward == true
 
         val isBookmarked = _bookmarks.any { it.url == url }
-        bookmarkStarButton.text = if (isBookmarked) "★" else "☆"
+        bookmarkStarButton.text = if (isBookmarked) "★" else "*"
         geminiContextSummaryLabel.text = "Page context: $title (${BrowserTabPageFragment.resolveSubtitleForUrl(url)})"
+        styleDesktopTabStrip()
         syncMobileTabCounterBadges()
     }
 

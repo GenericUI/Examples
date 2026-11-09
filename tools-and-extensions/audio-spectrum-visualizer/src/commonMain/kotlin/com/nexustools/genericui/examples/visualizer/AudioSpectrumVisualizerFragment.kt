@@ -13,7 +13,6 @@ import com.nexustools.genericui.component.fragment.Fragment
 import com.nexustools.genericui.component.fragment.FragmentBundle
 import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.layout.HStack
-import com.nexustools.genericui.component.layout.ScrollView
 import com.nexustools.genericui.component.layout.VStack
 import com.nexustools.genericui.component.media.AudioAnalyzer
 import com.nexustools.genericui.component.media.AudioEnergyBands
@@ -31,6 +30,7 @@ import com.nexustools.genericui.component.typography.Heading
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FlexWrap
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.enums.media.AudioCodec
 import com.nexustools.genericui.enums.media.CodecSupportLevel
@@ -128,6 +128,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         selectedValue = VisualizerDisplayMode.FFT_SPECTRUM_BARS.name
     ).apply {
         id = "select-viz-mode"
+        widthPx = 220
     }
 
     val playbackStateBadge: Badge = Badge(
@@ -136,6 +137,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         pill = true
     ).apply {
         id = "badge-playback-state"
+        widthPx = 74
     }
 
     val playbackTimeBadge: Badge = Badge(
@@ -144,12 +146,13 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         pill = true
     ).apply {
         id = "badge-playback-time"
+        widthPx = 62
     }
 
     // Main Split Workspace
     val workspaceSplitPane: SplitPane = SplitPane(
         orientation = Orientation.HORIZONTAL,
-        dividerPosition = 0.58f
+        dividerPosition = 0.56f
     ).apply {
         id = "split-visualizer-workspace"
     }
@@ -165,6 +168,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         pill = true
     ).apply {
         id = "badge-active-viz-mode"
+        widthPx = 216
     }
 
     val subtitleCueBadge: Badge = Badge(
@@ -173,6 +177,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         pill = false
     ).apply {
         id = "badge-subtitle-cue"
+        widthPx = 410
     }
 
     // Right Inspector: Real-time AudioEnergyBands Meters & MediaCapabilitiesReport Table
@@ -182,6 +187,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         pill = true
     ).apply {
         id = "badge-bass"
+        widthPx = 78
     }
 
     val midBadge: Badge = Badge(
@@ -190,6 +196,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         pill = true
     ).apply {
         id = "badge-mid"
+        widthPx = 74
     }
 
     val trebleBadge: Badge = Badge(
@@ -198,6 +205,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         pill = true
     ).apply {
         id = "badge-treble"
+        widthPx = 90
     }
 
     val rmsBadge: Badge = Badge(
@@ -206,6 +214,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         pill = true
     ).apply {
         id = "badge-rms"
+        widthPx = 148
     }
 
     val bassMeterBar: ProgressBar = ProgressBar(progress = 0f, type = BootstrapType.PRIMARY).apply {
@@ -224,15 +233,20 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         pill = true
     ).apply {
         id = "badge-codec-backend"
+        widthPx = 290
     }
 
     val capabilitiesTable: Table = Table().apply {
         id = "table-media-capabilities"
+        isStriped = true
     }
 
-    val statusBar: StatusBar = StatusBar()
+    val statusBar: StatusBar = StatusBar().apply {
+        heightPx = 28
+    }
     val statusMessageLabel: Label = Label("Ready").apply {
         id = "label-status-bar"
+        widthPx = 780
     }
 
     init {
@@ -303,7 +317,9 @@ class AudioSpectrumVisualizerFragment : Fragment() {
     private fun buildWorkspaceLayout() {
         val rootStack = VStack(gap = SpacingScale.S2)
 
-        // 1. Top Transport Toolbar
+        // 1. Top Transport Toolbar (direct children so Toolbar distributes controls across the full width)
+        topToolbar.addClass("transport-toolbar")
+        topToolbar.heightPx = 38
         topToolbar.getStyle().apply {
             padding = CssEdgeLengths.px(6, 10)
             borderRadiusPx = 8f
@@ -312,83 +328,126 @@ class AudioSpectrumVisualizerFragment : Fragment() {
             borderRadiusPx = 8f
             setCursor(CssCursor.CROSSHAIR)
         }
-        val toolbarRow = HStack(gap = SpacingScale.S2)
-        toolbarRow.addClass("transport-toolbar")
-        toolbarRow.addChild(playPauseButton)
-        toolbarRow.addChild(synthChordButton)
-        toolbarRow.addChild(seekForwardButton)
-        toolbarRow.addChild(resetTransportButton)
-        toolbarRow.addChild(Label("Visualizer Mode:"))
-        toolbarRow.addChild(modeSelect)
-        toolbarRow.addChild(playbackStateBadge)
-        toolbarRow.addChild(playbackTimeBadge)
-        topToolbar.addChild(toolbarRow)
+        topToolbar.addChild(playPauseButton)
+        topToolbar.addChild(synthChordButton)
+        topToolbar.addChild(seekForwardButton)
+        topToolbar.addChild(resetTransportButton)
+        topToolbar.addChild(Label("Visualizer Mode:").apply { widthPx = 104 })
+        topToolbar.addChild(modeSelect)
+        topToolbar.addChild(playbackStateBadge)
+        topToolbar.addChild(playbackTimeBadge)
+        topToolbar.addChild(
+            Badge(text = "FFT: 2048-pt | 44.1 kHz", type = BootstrapType.INFO, pill = true).apply {
+                widthPx = 156
+            }
+        )
         rootStack.addChild(topToolbar)
 
         // 2. Left Stage: Canvas2D Visualizer + Subtitle Cue Card
         val leftStack = VStack(gap = SpacingScale.S2)
         val canvasCard = Card("Real-Time 64-Band FFT & Waveform Stage")
         canvasCard.addClass("canvas-stage-card")
-        val canvasInner = VStack(gap = SpacingScale.S2)
-        val stageHeaderRow = HStack(gap = SpacingScale.S2)
-        stageHeaderRow.addChild(Label("Active Renderer:"))
+        val stageHeaderRow = HStack(gap = SpacingScale.S2).apply {
+            heightPx = 26
+            flexWrap = FlexWrap.WRAP
+        }
+        stageHeaderRow.addChild(Label("Active Renderer:").apply { widthPx = 106 })
         stageHeaderRow.addChild(activeModeBadge)
-        canvasInner.addChild(stageHeaderRow)
-        canvasInner.addChild(visualizerCanvas)
-        canvasCard.addChild(canvasInner)
+        stageHeaderRow.addChild(
+            Badge(text = "64 Log Bands", type = BootstrapType.SECONDARY, pill = true).apply {
+                widthPx = 92
+            }
+        )
+        stageHeaderRow.addChild(
+            Badge(text = "Window: Hann", type = BootstrapType.DARK, pill = true).apply {
+                widthPx = 92
+            }
+        )
+        canvasCard.addChild(stageHeaderRow)
+        canvasCard.addChild(visualizerCanvas)
         leftStack.addChild(canvasCard)
 
-        val subtitleCard = Card("Synchronized WebVTT / SRT Subtitle Cue Inspector")
+        val subtitleCard = Card("Synchronized WebVTT / SRT Subtitle Cue Inspector").apply {
+            heightPx = 96
+        }
         subtitleCard.addClass("subtitle-inspector-card")
-        val subtitleRow = HStack(gap = SpacingScale.S2)
-        subtitleRow.addChild(Label("Active Cue:"))
+        val subtitleRow = HStack(gap = SpacingScale.S2).apply {
+            heightPx = 26
+            flexWrap = FlexWrap.WRAP
+        }
+        subtitleRow.addChild(Label("Active Cue:").apply { widthPx = 76 })
         subtitleRow.addChild(subtitleCueBadge)
         subtitleCard.addChild(subtitleRow)
+
+        val cueScheduleRow = HStack(gap = SpacingScale.S2).apply {
+            heightPx = 24
+            flexWrap = FlexWrap.WRAP
+        }
+        cueScheduleRow.addChild(Label("Cue Track:").apply { widthPx = 76 })
+        cueScheduleRow.addChild(
+            Badge(text = "1.0s-4.5s: cue-intro", type = BootstrapType.DARK, pill = true).apply {
+                widthPx = 140
+            }
+        )
+        cueScheduleRow.addChild(
+            Badge(text = "5.0s-9.5s: cue-fft", type = BootstrapType.DARK, pill = true).apply {
+                widthPx = 128
+            }
+        )
+        cueScheduleRow.addChild(
+            Badge(text = "10.0s-15.0s: cue-gpu", type = BootstrapType.DARK, pill = true).apply {
+                widthPx = 140
+            }
+        )
+        subtitleCard.addChild(cueScheduleRow)
         leftStack.addChild(subtitleCard)
 
         // 3. Right Inspector: AudioEnergyBands Meters & MediaCapabilitiesReport
-        val rightScroll = ScrollView()
         val rightStack = VStack(gap = SpacingScale.S2)
 
-        val metersCard = Card("Decomposed AudioEnergyBands Telemetry")
+        val metersCard = Card("Decomposed AudioEnergyBands Telemetry").apply {
+            heightPx = 208
+        }
         metersCard.addClass("energy-meters-card")
-        val metersStack = VStack(gap = SpacingScale.S2)
-        val badgesRow = HStack(gap = SpacingScale.S2)
+        val badgesRow = HStack(gap = SpacingScale.S2).apply {
+            heightPx = 26
+            flexWrap = FlexWrap.WRAP
+        }
         badgesRow.addChild(bassBadge)
         badgesRow.addChild(midBadge)
         badgesRow.addChild(trebleBadge)
         badgesRow.addChild(rmsBadge)
-        metersStack.addChild(badgesRow)
-        metersStack.addChild(Label("Bass Energy (20 Hz - 250 Hz):"))
-        metersStack.addChild(bassMeterBar)
-        metersStack.addChild(Label("Midrange Energy (250 Hz - 4 kHz):"))
-        metersStack.addChild(midMeterBar)
-        metersStack.addChild(Label("Treble Energy (4 kHz - 20 kHz):"))
-        metersStack.addChild(trebleMeterBar)
-        metersCard.addChild(metersStack)
+        metersCard.addChild(badgesRow)
+        metersCard.addChild(Label("Bass Energy (20 Hz - 250 Hz):"))
+        metersCard.addChild(bassMeterBar)
+        metersCard.addChild(Label("Midrange Energy (250 Hz - 4 kHz):"))
+        metersCard.addChild(midMeterBar)
+        metersCard.addChild(Label("Treble Energy (4 kHz - 20 kHz):"))
+        metersCard.addChild(trebleMeterBar)
         rightStack.addChild(metersCard)
 
         val capabilitiesCard = Card("Platform MediaCapabilitiesReport Inspector")
         capabilitiesCard.addClass("codec-capabilities-card")
-        val capStack = VStack(gap = SpacingScale.S2)
-        val capHeaderRow = HStack(gap = SpacingScale.S2)
-        capHeaderRow.addChild(Label("Decode Pipeline:"))
+        val capHeaderRow = HStack(gap = SpacingScale.S2).apply {
+            heightPx = 26
+            flexWrap = FlexWrap.WRAP
+        }
+        capHeaderRow.addChild(Label("Decode Pipeline:").apply { widthPx = 106 })
         capHeaderRow.addChild(codecBackendBadge)
-        capStack.addChild(capHeaderRow)
+        capabilitiesCard.addChild(capHeaderRow)
         capabilitiesTable.setColumns(
             listOf(
                 TableColumn(id = "category", headerText = "Category"),
                 TableColumn(id = "codec", headerText = "Codec / Format"),
-                TableColumn(id = "support", headerText = "Support Level"),
-                TableColumn(id = "details", headerText = "MIME / Capability")
+                TableColumn(id = "support", headerText = "Acceleration"),
+                TableColumn(id = "details", headerText = "MIME / Profile")
             )
         )
-        capStack.addChild(capabilitiesTable)
-        capabilitiesCard.addChild(capStack)
+        capabilitiesTable.setColumnWeights(1.1f, 1.2f, 1.1f, 1.6f)
+        capabilitiesCard.addChild(capabilitiesTable)
         rightStack.addChild(capabilitiesCard)
 
-        rightScroll.addChild(rightStack)
-        workspaceSplitPane.setPanes(leftStack, rightScroll)
+        workspaceSplitPane.setPanes(leftStack, rightStack)
         rootStack.addChild(workspaceSplitPane)
 
         // 4. Bottom Status Bar
@@ -402,27 +461,54 @@ class AudioSpectrumVisualizerFragment : Fragment() {
     private fun populateCapabilitiesTable() {
         val rows = mutableListOf<TableRow>()
         for ((videoCodec, level) in mediaCapabilities.videoCodecs) {
+            val supportLabel = when (level) {
+                CodecSupportLevel.HARDWARE_ACCELERATED -> "HW Accelerated"
+                CodecSupportLevel.SUPPORTED -> "Software / OS"
+                CodecSupportLevel.SOFTWARE_ONLY -> "Software Only"
+                else -> "Unsupported"
+            }
+            val mimeSummary = when (videoCodec) {
+                VideoCodec.H264 -> "video/mp4 (avc1)"
+                VideoCodec.HEVC -> "video/mp4 (hvc1)"
+                VideoCodec.AV1 -> "video/mp4 (av01)"
+                VideoCodec.VP9 -> "video/webm (vp9)"
+                else -> videoCodec.html5CanPlayProbes.firstOrNull()?.substringBefore(";") ?: "video/*"
+            }
             rows.add(
                 TableRow(
                     id = "video-${videoCodec.wireName}",
                     cells = listOf(
                         TableCell("Video Codec"),
                         TableCell(videoCodec.wireName.uppercase()),
-                        TableCell(level.name),
-                        TableCell(videoCodec.html5CanPlayProbes.joinToString(", "))
+                        TableCell(supportLabel),
+                        TableCell(mimeSummary)
                     )
                 )
             )
         }
         for ((audioCodec, level) in mediaCapabilities.audioCodecs) {
+            val supportLabel = when (level) {
+                CodecSupportLevel.HARDWARE_ACCELERATED -> "HW Accelerated"
+                CodecSupportLevel.SUPPORTED -> "Software / OS"
+                CodecSupportLevel.SOFTWARE_ONLY -> "Software Only"
+                else -> "Unsupported"
+            }
+            val mimeSummary = when (audioCodec) {
+                AudioCodec.AAC -> "audio/mp4 (mp4a)"
+                AudioCodec.OPUS -> "audio/webm (opus)"
+                AudioCodec.FLAC -> "audio/flac (24b)"
+                AudioCodec.MP3 -> "audio/mpeg (mp3)"
+                AudioCodec.EAC3 -> "audio/eac3 (5.1)"
+                else -> audioCodec.html5CanPlayProbes.firstOrNull()?.substringBefore(";") ?: "audio/*"
+            }
             rows.add(
                 TableRow(
                     id = "audio-${audioCodec.wireName}",
                     cells = listOf(
                         TableCell("Audio Codec"),
                         TableCell(audioCodec.wireName.uppercase()),
-                        TableCell(level.name),
-                        TableCell(audioCodec.html5CanPlayProbes.joinToString(", "))
+                        TableCell(supportLabel),
+                        TableCell(mimeSummary)
                     )
                 )
             )
@@ -432,9 +518,31 @@ class AudioSpectrumVisualizerFragment : Fragment() {
                 id = "containers-summary",
                 cells = listOf(
                     TableCell("Containers"),
-                    TableCell(mediaCapabilities.containers.joinToString(", ") { it.wireName.uppercase() }),
-                    TableCell("SUPPORTED"),
+                    TableCell("MP4/MKV/WEBM/HLS"),
+                    TableCell("Supported"),
                     TableCell("${mediaCapabilities.maxWidth}x${mediaCapabilities.maxHeight} @ ${mediaCapabilities.maxFrameRate}fps")
+                )
+            )
+        )
+        rows.add(
+            TableRow(
+                id = "hdr-color-summary",
+                cells = listOf(
+                    TableCell("HDR Pipeline"),
+                    TableCell("HDR10 / HLG / DV"),
+                    TableCell(if (mediaCapabilities.supportsHdr10) "HW Accelerated" else "SDR Only"),
+                    TableCell("10-bit BT.2020")
+                )
+            )
+        )
+        rows.add(
+            TableRow(
+                id = "surround-audio-summary",
+                cells = listOf(
+                    TableCell("Spatial Audio"),
+                    TableCell("5.1 / 7.1 PCM"),
+                    TableCell(if (mediaCapabilities.supportsSurround71) "HW Accelerated" else "Stereo"),
+                    TableCell("8-ch Discrete")
                 )
             )
         )

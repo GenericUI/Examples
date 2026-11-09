@@ -3,7 +3,7 @@ package com.nexustools.genericui.examples.mdishowcase
 import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.enums.ui.ThemeMode
-import com.nexustools.genericui.examples.mdishowcase.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.mdishowcase.res.Resource
 import com.nexustools.genericui.window.TitleBar
 
 /**
@@ -20,7 +20,7 @@ class MdiComponentAndScssShowcaseApp(
 
     init {
         setThemeMode(ThemeMode.AUTO)
-        addStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
         val titleBar = TitleBar(
             embedMenuBar = true,
             showWindowTitle = true,
@@ -31,7 +31,6 @@ class MdiComponentAndScssShowcaseApp(
         showcaseFragment.setMenuBar(showcaseFragment.outerMenuBar)
         mainWindow.setTitleBar(titleBar)
         mainWindow.setMenuBar(showcaseFragment.outerMenuBar)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
     }
 
     /**
@@ -46,10 +45,10 @@ class MdiComponentAndScssShowcaseApp(
      */
     fun setGlobalStyleSheetEnabled(enabled: Boolean): Boolean {
         return if (enabled) {
-            addStyleSheet(StylesPrecompiledStyleSheet)
-            hasStyleSheet(StylesPrecompiledStyleSheet)
+            addStyleSheet(Resource.style.styles)
+            hasStyleSheet(Resource.style.styles)
         } else {
-            removeStyleSheet(StylesPrecompiledStyleSheet)
+            removeStyleSheet(Resource.style.styles)
         }
     }
 }

@@ -4,7 +4,7 @@ import com.nexustools.genericui.component.fragment.AppApplication
 import com.nexustools.genericui.component.shell.FragmentApplication
 import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.enums.ui.ThemeMode
-import com.nexustools.genericui.examples.notes.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.notes.res.Resource
 import com.nexustools.genericui.window.TitleBar
 
 /**
@@ -23,13 +23,10 @@ class NotesApp(
     override fun getPreferenceStore(): PreferenceStore =
         customPreferenceStore ?: super.getPreferenceStore()
 
-    val preferenceStore: PreferenceStore
-        get() = getPreferenceStore()
-
     init {
         setThemeMode(ThemeMode.AUTO)
         setThemeColor("#8B5CF6")
-        addStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
         val titleBar = TitleBar(
             embedMenuBar = false,
             showWindowTitle = true,
@@ -38,6 +35,5 @@ class NotesApp(
         )
         notesFragment.setTitleBar(titleBar)
         mainWindow.setTitleBar(titleBar)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
     }
 }

@@ -5,9 +5,12 @@ import com.nexustools.genericui.component.content.Table
 import com.nexustools.genericui.component.content.TableCell
 import com.nexustools.genericui.component.content.TableColumn
 import com.nexustools.genericui.component.content.TableRow
+import com.nexustools.genericui.component.feedback.ProgressBar
 import com.nexustools.genericui.component.form.TextField
 import com.nexustools.genericui.component.fragment.AppFragment
 import com.nexustools.genericui.component.fragment.Fragment
+import com.nexustools.genericui.component.layout.Column
+import com.nexustools.genericui.component.layout.ColumnContainer
 import com.nexustools.genericui.component.layout.Container
 import com.nexustools.genericui.component.layout.FlexBox
 import com.nexustools.genericui.component.layout.HStack
@@ -94,45 +97,57 @@ class BrowserTabPageFragment(
         get() = navigationIndex >= 0 && navigationIndex < navigationHistory.lastIndex
 
     // --- 1. Google One "AI credits activity" Surface Controls ---
-    val googleOneSurface: VStack = VStack(gap = SpacingScale.S3).apply {
+    val googleOneSurface: VStack = VStack(gap = SpacingScale.S2).apply {
         addClass("google-one-page")
     }
     val googleOneBrandLabel: Label = Label("Google One")
     val googleOneHeading: Heading = Heading(level = 2, text = "AI credits activity")
-    val googleOneSubtitleLabel: Label = Label("View your AI credit balance and recent usage across Google products")
+    val googleOneSubtitleLabel: Label = Label("View your AI credit balance and recent usage across Google products").apply {
+        widthPx = 460
+    }
     val creditsBalanceLabel: Label = Label(BrowserCreditActivityRow.formatNumberWithCommas(initialCreditsBalance)).apply {
         addClass("google-one-credits-balance")
     }
-    val creditsCaptionLabel: Label = Label("AI credits")
+    val creditsCaptionLabel: Label = Label("AI credits available (of 10,000 monthly plan)")
+    val creditsQuotaBar: ProgressBar = ProgressBar(
+        progress = (initialCreditsBalance.toFloat() / 10_000f).coerceIn(0f, 1f),
+        label = "${BrowserCreditActivityRow.formatNumberWithCommas(initialCreditsBalance)} / 10,000 credits",
+        type = BootstrapType.PRIMARY
+    ).apply {
+        widthPx = 300
+    }
     val addCreditsButton: Button = Button(
         text = "+ Add",
         type = BootstrapType.PRIMARY,
         size = BootstrapSize.SM
     ).apply {
         addClass("google-one-add-btn")
+        widthPx = 88
     }
     val recentActivityHeading: Heading = Heading(level = 4, text = "Your recent activity")
-    val activityTable: Table = Table()
+    val activityTable: Table = Table().apply {
+        isStriped = true
+    }
 
     // --- 2. GitHub "T-Crypt/berth" Dark Repository Surface Controls ---
     val githubBerthSurface: VStack = VStack(gap = SpacingScale.S3).apply {
         addClass("github-repo-page")
     }
     val githubCodeTabButton: Button = Button("<> Code", type = BootstrapType.DARK, size = BootstrapSize.SM)
-    val githubIssuesTabButton: Button = Button("⊙ Issues 9", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val githubPullRequestsTabButton: Button = Button("⑂ Pull requests", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val githubActionsTabButton: Button = Button("▶ Actions", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
+    val githubIssuesTabButton: Button = Button("(!) Issues 9", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
+    val githubPullRequestsTabButton: Button = Button("PR Pull requests", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
+    val githubActionsTabButton: Button = Button("> Actions", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
     val githubOwnerRepoHeading: Heading = Heading(level = 3, text = "T-Crypt / berth")
     val repoVisibilityBadge: Badge = Badge("Public", type = BootstrapType.SECONDARY, pill = true)
-    val notificationsButton: Button = Button("🔔 Notifications", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val forkButton: Button = Button("🍴 Fork 22", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val starButton: Button = Button("☆ Star 383", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
+    val notificationsButton: Button = Button("Notifications", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
+    val forkButton: Button = Button("Fork 22", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
+    val starButton: Button = Button("* Star 383", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
     val repoDescriptionLabel: Label = Label(
         "Decides who gets your GPU. Chat, image and voice engines lease the card in turn instead of grabbing it, so two of them never load at once and crash each other. One Go binary, nothing else to install."
     )
-    val repoWebsiteLabel: Label = Label("🔗 t-crypt.github.io/berth/")
-    val repoLicenseLabel: Label = Label("⚖️ Apache-2.0 license")
-    val repoStatsLabel: Label = Label("☆ 383 stars   ·   🍴 22 forks")
+    val repoWebsiteLabel: Label = Label("Link: t-crypt.github.io/berth/")
+    val repoLicenseLabel: Label = Label("License: Apache-2.0 license")
+    val repoStatsLabel: Label = Label("* 383 stars   |   22 forks")
     val githubTopicsContainer: FlexBox = FlexBox().apply {
         flexDirection = FlexDirection.ROW
         flexWrap = FlexWrap.WRAP
@@ -199,26 +214,35 @@ class BrowserTabPageFragment(
         val headerRow = HStack(gap = SpacingScale.S2).apply {
             alignItems = AlignItems.CENTER
             justifyContent = JustifyContent.BETWEEN
+            flexWrap = FlexWrap.WRAP
         }
         headerRow.addChild(googleOneBrandLabel)
+        headerRow.addChild(Badge("AI Premium 2 TB", type = BootstrapType.INFO, pill = true))
         headerRow.addChild(Badge("Google Account", type = BootstrapType.PRIMARY, pill = true))
+        headerRow.addChild(Badge("Auto-Top-Up: Enabled", type = BootstrapType.SUCCESS, pill = true))
         googleOneSurface.addChild(headerRow)
 
-        val titleStack = VStack(gap = SpacingScale.S1)
-        titleStack.addChild(googleOneHeading)
-        titleStack.addChild(googleOneSubtitleLabel)
-        googleOneSurface.addChild(titleStack)
-
-        val creditsCard = Container("div", "google-one-credits-card")
-        val creditsRow = HStack(gap = SpacingScale.S3).apply {
-            alignItems = AlignItems.CENTER
-            justifyContent = JustifyContent.BETWEEN
+        val creditsCard = Card().apply {
+            addClass("google-one-credits-card")
         }
-        val balanceStack = VStack(gap = SpacingScale.S1)
-        balanceStack.addChild(creditsBalanceLabel)
-        balanceStack.addChild(creditsCaptionLabel)
-        creditsRow.addChild(balanceStack)
+        val titleRow = HStack(gap = SpacingScale.S3).apply {
+            alignItems = AlignItems.CENTER
+            flexWrap = FlexWrap.WRAP
+        }
+        titleRow.addChild(googleOneHeading)
+        titleRow.addChild(googleOneSubtitleLabel)
+        creditsCard.addChild(titleRow)
+
+        val creditsRow = HStack(gap = SpacingScale.S2).apply {
+            alignItems = AlignItems.CENTER
+            flexWrap = FlexWrap.WRAP
+        }
+        creditsRow.addChild(Badge("BALANCE", type = BootstrapType.PRIMARY, pill = true))
+        creditsRow.addChild(creditsBalanceLabel)
+        creditsRow.addChild(creditsCaptionLabel)
+        creditsRow.addChild(creditsQuotaBar)
         creditsRow.addChild(addCreditsButton)
+        creditsRow.addChild(Badge("Renews Nov 27, 2026", type = BootstrapType.SECONDARY, pill = true))
         creditsCard.addChild(creditsRow)
         googleOneSurface.addChild(creditsCard)
 
@@ -226,9 +250,17 @@ class BrowserTabPageFragment(
             addAiCredits(1000)
         }
 
-        val activityCard = Container("div", "google-one-activity-card")
-        val activityStack = VStack(gap = SpacingScale.S2)
-        activityStack.addChild(recentActivityHeading)
+        val activityCard = Card().apply {
+            addClass("google-one-activity-card")
+        }
+        val activityHeaderRow = HStack(gap = SpacingScale.S2).apply {
+            alignItems = AlignItems.CENTER
+            flexWrap = FlexWrap.WRAP
+        }
+        activityHeaderRow.addChild(recentActivityHeading)
+        activityHeaderRow.addChild(Badge("Hourly Metering", type = BootstrapType.SECONDARY, pill = true))
+        activityHeaderRow.addChild(Badge("Export CSV", type = BootstrapType.INFO, pill = true))
+        activityCard.addChild(activityHeaderRow)
 
         activityTable.setColumns(
             listOf(
@@ -237,15 +269,56 @@ class BrowserTabPageFragment(
                 TableColumn(id = "amount", headerText = "AMOUNT")
             )
         )
+        activityTable.setColumnWeights(1.2f, 1.8f, 1.0f)
         refreshCreditsActivityTable()
-        activityStack.addChild(activityTable)
-        activityCard.addChild(activityStack)
+        activityCard.addChild(activityTable)
         googleOneSurface.addChild(activityCard)
+
+        // Bottom 2-column Quota Breakdown & Plan Details row so the viewport is balanced and informative
+        val benefitsGrid = ColumnContainer()
+        val breakdownCol = Column(span = 6, md = 6, lg = 6)
+        val breakdownCard = Card()
+        breakdownCard.addChild(Heading(level = 4, text = "Credit Usage by Google AI Product"))
+        val agRow = HStack(gap = SpacingScale.S2).apply { alignItems = AlignItems.CENTER }
+        agRow.addChild(Badge("Google Antigravity", type = BootstrapType.PRIMARY).apply { widthPx = 156 })
+        agRow.addChild(ProgressBar(progress = 0.72f, label = "5,230 credits (72%)", type = BootstrapType.PRIMARY).apply { widthPx = 380 })
+        breakdownCard.addChild(agRow)
+
+        val geminiRow = HStack(gap = SpacingScale.S2).apply { alignItems = AlignItems.CENTER }
+        geminiRow.addChild(Badge("Gemini 2.5 Pro", type = BootstrapType.INFO).apply { widthPx = 156 })
+        geminiRow.addChild(ProgressBar(progress = 0.18f, label = "1,310 credits (18%)", type = BootstrapType.INFO).apply { widthPx = 380 })
+        breakdownCard.addChild(geminiRow)
+
+        val veoRow = HStack(gap = SpacingScale.S2).apply { alignItems = AlignItems.CENTER }
+        veoRow.addChild(Badge("Veo 2 & Imagen 3", type = BootstrapType.SUCCESS).apply { widthPx = 156 })
+        veoRow.addChild(ProgressBar(progress = 0.10f, label = "720 credits (10%)", type = BootstrapType.SUCCESS).apply { widthPx = 380 })
+        breakdownCard.addChild(veoRow)
+        breakdownCol.addChild(breakdownCard)
+
+        val planCol = Column(span = 6, md = 6, lg = 6)
+        val planCard = Card()
+        planCard.addChild(Heading(level = 4, text = "Google One AI Plan & Credit Settings"))
+        planCard.addChild(Label("Subscription: Google One AI Premium (2 TB Cloud + 10,000 Monthly AI Credits)"))
+        planCard.addChild(Label("Instant Top-Up: Click '+ Add' above to purchase +1,000 bonus AI credits anytime"))
+        val planBadgesRow = HStack(gap = SpacingScale.S2).apply {
+            alignItems = AlignItems.CENTER
+            flexWrap = FlexWrap.WRAP
+        }
+        planBadgesRow.addChild(Badge("Status: Active", type = BootstrapType.SUCCESS, pill = true))
+        planBadgesRow.addChild(Badge("Rollover: Up to 5,000", type = BootstrapType.INFO, pill = true))
+        planBadgesRow.addChild(Badge("Family Sharing: On", type = BootstrapType.SECONDARY, pill = true))
+        planCard.addChild(planBadgesRow)
+        planCol.addChild(planCard)
+
+        benefitsGrid.addColumn(breakdownCol)
+        benefitsGrid.addColumn(planCol)
+        googleOneSurface.addChild(benefitsGrid)
     }
 
     private fun buildGithubBerthSurface() {
         val repoTabsRow = HStack(gap = SpacingScale.S2).apply {
             alignItems = AlignItems.CENTER
+            flexWrap = FlexWrap.WRAP
         }
         repoTabsRow.addChild(githubCodeTabButton)
         repoTabsRow.addChild(githubIssuesTabButton)
@@ -258,6 +331,7 @@ class BrowserTabPageFragment(
 
         val titleAndBadgeRow = HStack(gap = SpacingScale.S2).apply {
             alignItems = AlignItems.CENTER
+            flexWrap = FlexWrap.WRAP
         }
         titleAndBadgeRow.addChild(githubOwnerRepoHeading)
         titleAndBadgeRow.addChild(repoVisibilityBadge)
@@ -265,6 +339,7 @@ class BrowserTabPageFragment(
 
         val actionButtonsRow = HStack(gap = SpacingScale.S2).apply {
             alignItems = AlignItems.CENTER
+            flexWrap = FlexWrap.WRAP
         }
         actionButtonsRow.addChild(notificationsButton)
         actionButtonsRow.addChild(forkButton)
@@ -274,8 +349,8 @@ class BrowserTabPageFragment(
         starButton.setOnClick {
             githubStarred = !githubStarred
             githubStarCount = if (githubStarred) 384 else 383
-            starButton.text = if (githubStarred) "★ Starred $githubStarCount" else "☆ Star $githubStarCount"
-            repoStatsLabel.text = "☆ $githubStarCount stars   ·   🍴 22 forks"
+            starButton.text = if (githubStarred) "★ Starred $githubStarCount" else "* Star $githubStarCount"
+            repoStatsLabel.text = "* $githubStarCount stars   |   22 forks"
         }
 
         headerStack.addChild(repoDescriptionLabel)
@@ -368,7 +443,10 @@ class BrowserTabPageFragment(
     fun addAiCredits(delta: Int = 1000): BrowserCreditActivityRow {
         topUpCounter += 1
         aiCreditsBalance += delta
-        creditsBalanceLabel.text = BrowserCreditActivityRow.formatNumberWithCommas(aiCreditsBalance)
+        val formatted = BrowserCreditActivityRow.formatNumberWithCommas(aiCreditsBalance)
+        creditsBalanceLabel.text = formatted
+        creditsQuotaBar.progress = (aiCreditsBalance.toFloat() / 10_000f).coerceIn(0f, 1f)
+        creditsQuotaBar.label = "$formatted / 10,000 credits"
         val hour = (6 + topUpCounter).coerceIn(1, 12)
         val newRow = BrowserCreditActivityRow(
             date = "Oct 27, 2026, $hour:00:00 AM",
@@ -386,7 +464,10 @@ class BrowserTabPageFragment(
      */
     fun syncAiCreditsBalance(newBalance: Int) {
         aiCreditsBalance = newBalance
-        creditsBalanceLabel.text = BrowserCreditActivityRow.formatNumberWithCommas(aiCreditsBalance)
+        val formatted = BrowserCreditActivityRow.formatNumberWithCommas(aiCreditsBalance)
+        creditsBalanceLabel.text = formatted
+        creditsQuotaBar.progress = (aiCreditsBalance.toFloat() / 10_000f).coerceIn(0f, 1f)
+        creditsQuotaBar.label = "$formatted / 10,000 credits"
     }
 
     private fun refreshCreditsActivityTable() {
@@ -576,12 +657,12 @@ class BrowserTabPageFragment(
         fun resolveIconForUrl(url: String): String {
             val lower = url.lowercase()
             return when {
-                lower.contains("one.google.com") -> "🔵"
-                lower.contains("github.com") -> "🐙"
-                lower.contains("keep.google.com") -> "💡"
-                lower.contains("gemini.google.com") -> "✦"
-                lower.startsWith("chrome://newtab") -> "🌐"
-                else -> "🔒"
+                lower.contains("one.google.com") -> "✦"
+                lower.contains("github.com") -> "</>"
+                lower.contains("keep.google.com") -> "[!]"
+                lower.contains("gemini.google.com") -> "★"
+                lower.startsWith("chrome://newtab") -> "[+]"
+                else -> "HTTPS"
             }
         }
     }

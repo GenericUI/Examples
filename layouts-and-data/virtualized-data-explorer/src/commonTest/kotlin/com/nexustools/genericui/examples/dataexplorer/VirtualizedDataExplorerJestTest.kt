@@ -22,6 +22,7 @@ class VirtualizedDataExplorerJestTest {
             describe("10,000-Row Dataset Generation & Viewport Window Virtualization") {
                 it("loads 10,000 records while binding only the active viewport window") {
                     val controller = launchApp(visualOnWindows = false) { VirtualizedDataExplorerApp() }
+                    controller.takeScreenshot("virtualized-data-explorer.jpg")
                     val fragment = controller.app.explorerFragment
 
                     expect(fragment.allRecords.size).toBe(10_000)
@@ -39,6 +40,7 @@ class VirtualizedDataExplorerJestTest {
 
                 it("recycles off-screen ViewHolders when scrolling to the middle and end of the 10,000 items") {
                     val controller = launchApp(visualOnWindows = false) { VirtualizedDataExplorerApp() }
+                    controller.takeScreenshot("virtualized-data-explorer.jpg")
                     val fragment = controller.app.explorerFragment
 
                     controller.findById("btn-scroll-mid").performClick()
@@ -61,6 +63,7 @@ class VirtualizedDataExplorerJestTest {
             describe("Mode Switching (LazyList, LazyGrid, TreeView) & Item Selection") {
                 it("switches cleanly between List, Grid, and Tree modes and updates telemetry badges") {
                     val controller = launchApp(visualOnWindows = false) { VirtualizedDataExplorerApp() }
+                    controller.takeScreenshot("virtualized-data-explorer.jpg")
                     val fragment = controller.app.explorerFragment
 
                     expect(fragment.activeMode).toBe(ExplorerViewMode.LIST)
@@ -100,6 +103,7 @@ class VirtualizedDataExplorerJestTest {
             describe("Live Search & Category Filtering") {
                 it("filters the 10,000 records via performTypeText and performSelectValue and resets cleanly") {
                     val controller = launchApp(visualOnWindows = false) { VirtualizedDataExplorerApp() }
+                    controller.takeScreenshot("virtualized-data-explorer.jpg")
                     val fragment = controller.app.explorerFragment
 
                     controller.findById("select-category").performSelectValue("Network")

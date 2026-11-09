@@ -8,7 +8,7 @@ import com.nexustools.genericui.component.shell.MenuBar
 import com.nexustools.genericui.component.shell.MenuItem
 import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.examples.browser.res.GeneratedResourceRegistry
-import com.nexustools.genericui.examples.browser.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.browser.res.Resource
 import com.nexustools.genericui.window.TitleBar
 
 /**
@@ -22,7 +22,7 @@ class GenericUIBrowserApp(
 ) : FragmentApplication(
     initialFragment = browserFragment,
     title = "GenericUIBrowser",
-    initialThemeColor = "#1F2937"
+    initialThemeColor = "#1A73E8"
 ) {
 
     constructor(preferenceStore: PreferenceStore) : this(GenericUIBrowserFragment(preferenceStore))
@@ -33,7 +33,7 @@ class GenericUIBrowserApp(
     init {
         GeneratedResourceRegistry.ensureInitialized()
         setThemeMode(GeneratedResourceRegistry.DEFAULT_THEME_MODE)
-        addStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
         val titleBar = TitleBar(
             embedMenuBar = true,
             showWindowTitle = true,
@@ -45,7 +45,6 @@ class GenericUIBrowserApp(
         browserFragment.setMenuBar(menuBar)
         mainWindow.setTitleBar(titleBar)
         mainWindow.setMenuBar(menuBar)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
     }
 
     private fun buildBrowserMenuBar(): MenuBar {
@@ -109,16 +108,16 @@ class GenericUIBrowserApp(
                 browserFragment.toggleBookmarkForActiveTab()
             })
             .addSeparator()
-            .addItem(MenuItem("🔵 AI credits activity") {
+            .addItem(MenuItem("✦ AI credits activity") {
                 browserFragment.navigateActiveTabTo(BrowserTabPageFragment.URL_AI_CREDITS)
             })
-            .addItem(MenuItem("🐙 T-Crypt/berth") {
+            .addItem(MenuItem("</> T-Crypt/berth") {
                 browserFragment.navigateActiveTabTo(BrowserTabPageFragment.URL_GITHUB_BERTH)
             })
-            .addItem(MenuItem("💡 Google Keep") {
+            .addItem(MenuItem("[!] Google Keep") {
                 browserFragment.navigateActiveTabTo(BrowserTabPageFragment.URL_KEEP)
             })
-            .addItem(MenuItem("✦ Ask Gemini") {
+            .addItem(MenuItem("★ Ask Gemini") {
                 browserFragment.navigateActiveTabTo(BrowserTabPageFragment.URL_GEMINI_DOC)
             })
 

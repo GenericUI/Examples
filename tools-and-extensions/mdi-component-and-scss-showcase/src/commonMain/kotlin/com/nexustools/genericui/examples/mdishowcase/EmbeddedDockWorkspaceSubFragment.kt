@@ -18,6 +18,7 @@ import com.nexustools.genericui.component.typography.Badge
 import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FlexWrap
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.enums.dock.DockPosition
 import com.nexustools.genericui.enums.dock.StudioWindowMode
@@ -34,15 +35,15 @@ class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
     initialMode = StudioWindowMode.SINGLE_WINDOW_MODE
 ) {
 
-    val toolPalette: ToolPalette = ToolPalette(columns = 2).apply {
+    val toolPalette: ToolPalette = ToolPalette(columns = 3).apply {
         id = "dock-tool-palette"
         setTools(
             listOf(
                 ToolPaletteItem("tool-move", "Move", "move"),
                 ToolPaletteItem("tool-brush", "Brush", "brush"),
-                ToolPaletteItem("tool-pen", "Bezier Pen", "pen"),
-                ToolPaletteItem("tool-gradient", "Gradient", "gradient"),
-                ToolPaletteItem("tool-eyedropper", "Eyedropper", "eyedropper"),
+                ToolPaletteItem("tool-pen", "Pen", "pen"),
+                ToolPaletteItem("tool-gradient", "Grad", "gradient"),
+                ToolPaletteItem("tool-eyedropper", "Pick", "eyedropper"),
                 ToolPaletteItem("tool-zoom", "Zoom", "zoom")
             )
         )
@@ -73,6 +74,8 @@ class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
         addCategoryItem("Layers", "layer-background", "Rainbow Gradient Backdrop")
         addCategoryItem("Shared Objects", "obj-button-rig", "Reusable Button Component")
         selectItem("filter-bloom")
+        addChild(Label("v Filters: Prism Neon Bloom"))
+        addChild(Label("v Layers: Vector UI Overlay"))
     }
 
     val toolsDockPanel: DockPanel = DockPanel(
@@ -86,7 +89,7 @@ class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
     val inspectorDockPanel: DockPanel = DockPanel(
         panelId = "dock-panel-inspector",
         title = "Inspector & Filter Presets",
-        preferredPosition = DockPosition.RIGHT
+        preferredPosition = DockPosition.LEFT
     ).apply {
         id = "dock-panel-inspector"
     }
@@ -94,13 +97,13 @@ class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
     val consoleDockPanel: DockPanel = DockPanel(
         panelId = "dock-panel-console",
         title = "Studio Event Console",
-        preferredPosition = DockPosition.BOTTOM
+        preferredPosition = DockPosition.TOP
     ).apply {
         id = "dock-panel-console"
     }
 
     val toggleModeButton: Button = Button(
-        text = "Toggle Single/Multi Window",
+        text = "Toggle Mode",
         type = BootstrapType.INFO,
         size = BootstrapSize.SM
     ).apply {
@@ -108,7 +111,7 @@ class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
     }
 
     val addTabButton: Button = Button(
-        text = "+ New Studio Canvas Tab",
+        text = "+ Canvas Tab",
         type = BootstrapType.SUCCESS,
         size = BootstrapSize.SM
     ).apply {
@@ -142,7 +145,7 @@ class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
         id = "embedded-dock-workspace-fragment"
         dockWorkspace.id = "embedded-dock-workspace"
 
-        // Configure LEFT DockPanel with custom TitleBar, ToolPalette, and ColorSwatchBox
+        // Configure LEFT DockPanels with custom TitleBars, ToolPalette, ColorSwatchBox, and CategorizedTreeView
         val toolsTitleBar = TitleBar(showWindowTitle = true, customTitleBar = true)
             .addLeading(Badge("TOOLS", BootstrapType.PRIMARY, pill = true))
             .addTrailing(Badge("6", BootstrapType.SECONDARY, pill = true))
@@ -153,41 +156,40 @@ class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
                 consoleLogLabel.text = "Swapped foreground/background swatches."
             }
         )
-        val toolsStack = VStack(gap = SpacingScale.S2).apply {
+        val toolsRow = HStack(gap = SpacingScale.S1).apply {
+            heightPx = 56
+            flexWrap = FlexWrap.WRAP
+            toolPalette.widthPx = 122
+            toolPalette.heightPx = 56
+            colorSwatchBox.widthPx = 56
+            colorSwatchBox.heightPx = 56
             addChild(toolPalette)
             addChild(colorSwatchBox)
         }
-        toolsDockPanel.addChild(toolsStack)
-        setToolPalette(toolPalette)
+        toolsDockPanel.addChild(toolsRow)
         addDockPanel(toolsDockPanel, DockPosition.LEFT)
 
-        // Configure RIGHT DockPanel with custom TitleBar and CategorizedTreeView
         val inspectorTitleBar = TitleBar(showWindowTitle = true, customTitleBar = true)
             .addLeading(Badge("INSPECTOR", BootstrapType.INFO, pill = true))
         inspectorDockPanel.setTitleBar(inspectorTitleBar)
-        val inspectorStack = VStack(gap = SpacingScale.S2).apply {
-            addChild(Label("Categorized Layer & Filter Preset Tree:"))
-            addChild(categorizedInspectorTree)
-        }
-        inspectorDockPanel.addChild(inspectorStack)
-        addDockPanel(inspectorDockPanel, DockPosition.RIGHT)
+        inspectorDockPanel.addChild(categorizedInspectorTree)
+        addDockPanel(inspectorDockPanel, DockPosition.LEFT)
 
-        // Configure BOTTOM DockPanel with controls and live console log
+        // Configure TOP DockPanel with studio mode controls and live console log
         val consoleTitleBar = TitleBar(showWindowTitle = true, customTitleBar = true)
             .addLeading(Badge("CONSOLE", BootstrapType.SUCCESS, pill = true))
         consoleDockPanel.setTitleBar(consoleTitleBar)
-        val consoleControlsRow = HStack(gap = SpacingScale.S2).apply {
+        val consoleControlsRow = HStack(gap = SpacingScale.S1).apply {
+            heightPx = 24
+            flexWrap = FlexWrap.WRAP
             addChild(toggleModeButton)
             addChild(addTabButton)
             addChild(windowModeBadge)
             addChild(tabCountBadge)
         }
-        val consoleStack = VStack(gap = SpacingScale.S1).apply {
-            addChild(consoleControlsRow)
-            addChild(consoleLogLabel)
-        }
-        consoleDockPanel.addChild(consoleStack)
-        addDockPanel(consoleDockPanel, DockPosition.BOTTOM)
+        consoleDockPanel.addChild(consoleControlsRow)
+        consoleDockPanel.addChild(consoleLogLabel)
+        addDockPanel(consoleDockPanel, DockPosition.TOP)
 
         // Open initial StudioDocuments in the central TabContainer
         openStudioCanvasDocument("doc-main-canvas", "Main Vector Canvas.svg", activate = true)
@@ -222,7 +224,7 @@ class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
         val card = Card(title).apply {
             id = "studio-card-$docId"
             addChild(Label("Active Viewport Document: $title"))
-            addChild(Badge("Hybrid Raster + Vector Surface", BootstrapType.PRIMARY, pill = true))
+            addChild(Badge("Hybrid Raster + Vector", BootstrapType.PRIMARY, pill = true))
         }
         val doc = StudioDocument(
             id = docId,

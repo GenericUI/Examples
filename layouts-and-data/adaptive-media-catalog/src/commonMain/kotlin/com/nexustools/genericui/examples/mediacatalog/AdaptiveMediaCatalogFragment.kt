@@ -1,6 +1,7 @@
 package com.nexustools.genericui.examples.mediacatalog
 
 import com.nexustools.genericui.component.action.Button
+import com.nexustools.genericui.component.feedback.ProgressBar
 import com.nexustools.genericui.component.fragment.FragmentBundle
 import com.nexustools.genericui.component.fragment.MainAppFragment
 import com.nexustools.genericui.component.fragment.helper.HybridColumnFragment
@@ -17,6 +18,7 @@ import com.nexustools.genericui.component.typography.Label
 import com.nexustools.genericui.enums.bootstrap.BorderRadiusStyle
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FlexWrap
 import com.nexustools.genericui.enums.bootstrap.FontWeight
 import com.nexustools.genericui.enums.bootstrap.ShadowElevation
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
@@ -56,7 +58,7 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
     var activeViewportConfig: WindowConfiguration = WindowConfiguration(widthPx = 1280, heightPx = 800)
         private set
 
-    val desktopPostureButton: Button = Button("Desktop Split (1280x800)", BootstrapType.PRIMARY, BootstrapSize.SM).apply {
+    val desktopPostureButton: Button = Button("Desktop", BootstrapType.PRIMARY, BootstrapSize.SM).apply {
         id = "btn-posture-desktop"
         bootstrap {
             type = BootstrapType.PRIMARY
@@ -66,7 +68,7 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
         onClick = { applyViewportPosture(1280, 800) }
     }
 
-    val phoneLandscapePostureButton: Button = Button("Phone Landscape (800x390)", BootstrapType.SECONDARY, BootstrapSize.SM).apply {
+    val phoneLandscapePostureButton: Button = Button("Landscape", BootstrapType.SECONDARY, BootstrapSize.SM).apply {
         id = "btn-posture-phone-landscape"
         bootstrap {
             type = BootstrapType.SECONDARY
@@ -75,7 +77,7 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
         onClick = { applyViewportPosture(800, 390) }
     }
 
-    val phonePortraitPostureButton: Button = Button("Phone Portrait (390x844)", BootstrapType.SECONDARY, BootstrapSize.SM).apply {
+    val phonePortraitPostureButton: Button = Button("Portrait", BootstrapType.SECONDARY, BootstrapSize.SM).apply {
         id = "btn-posture-phone-portrait"
         bootstrap {
             type = BootstrapType.SECONDARY
@@ -161,10 +163,23 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
         id = "label-detail-synopsis"
     }
 
-    private val queueItemsContainer = VStack(gap = SpacingScale.S2)
+    private val queueItemsContainer = VStack(gap = SpacingScale.S2).apply {
+        heightPx = 340
+    }
+
+    private val streamProgressBar = ProgressBar(
+        progress = 0.64f,
+        label = "LIVE STREAM  42:15",
+        type = BootstrapType.PRIMARY
+    ).apply {
+        id = "progress-now-playing"
+    }
 
     override fun onCreate(savedState: FragmentBundle?) {
         super.onCreate(savedState)
+
+        hybridColumnContainer.heightPx = 752
+        hybridColumnLayout.columnsRow.heightPx = 752
 
         val primaryStage = buildPrimaryViewportStage()
         addColumn(id = "primary", title = "Now Playing", weight = 1.8f, component = primaryStage)
@@ -273,17 +288,27 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
             addClass("catalog-primary-stage")
         }
 
-        val postureToolbar = HStack(gap = SpacingScale.S2).apply {
+        val postureCard = Card("Viewport Posture Switcher").apply {
             addClass("catalog-posture-bar")
             bootstrap {
                 padding = SpacingScale.S2
                 borderRadius = BorderRadiusStyle.MEDIUM
             }
-            addChild(desktopPostureButton)
-            addChild(phoneLandscapePostureButton)
-            addChild(phonePortraitPostureButton)
-            addChild(layoutModeBadge)
-            addChild(viewportSizeBadge)
+            val statusRow = HStack(gap = SpacingScale.S2).apply {
+                flexWrap = FlexWrap.WRAP
+                addChild(Label("Mode:"))
+                addChild(layoutModeBadge)
+                addChild(Label("Viewport:"))
+                addChild(viewportSizeBadge)
+            }
+            val buttonsRow = HStack(gap = SpacingScale.S2).apply {
+                flexWrap = FlexWrap.WRAP
+                addChild(desktopPostureButton)
+                addChild(phoneLandscapePostureButton)
+                addChild(phonePortraitPostureButton)
+            }
+            addChild(statusRow)
+            addChild(buttonsRow)
         }
 
         val nowPlayingCard = Card("Now Playing Viewport").apply {
@@ -293,33 +318,50 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
                 padding = SpacingScale.S3
             }
             val metaRow = HStack(gap = SpacingScale.S2).apply {
-                addChild(nowPlayingTitleLabel)
+                flexWrap = FlexWrap.WRAP
                 addChild(nowPlayingGenreBadge)
                 addChild(nowPlayingDurationLabel)
                 addChild(transportStateBadge)
                 addChild(queueCountBadge)
             }
+            addChild(nowPlayingTitleLabel)
             addChild(metaRow)
+            addChild(streamProgressBar)
             addChild(nowPlayingDescriptionLabel)
         }
 
-        val transportBar = HStack(gap = SpacingScale.S2).apply {
+        val controlsCard = Card("Media Transport & Queue Controls").apply {
             addClass("catalog-transport-bar")
             bootstrap {
                 padding = SpacingScale.S2
                 borderRadius = BorderRadiusStyle.SMALL
             }
-            addChild(prevTrackButton)
-            addChild(playPauseButton)
-            addChild(nextTrackButton)
-            addChild(enqueueCurrentButton)
-            addChild(clearQueueButton)
+            val transportRow = HStack(gap = SpacingScale.S2).apply {
+                flexWrap = FlexWrap.WRAP
+                addChild(prevTrackButton)
+                addChild(playPauseButton)
+                addChild(nextTrackButton)
+            }
+            val queueActionsRow = HStack(gap = SpacingScale.S2).apply {
+                flexWrap = FlexWrap.WRAP
+                addChild(enqueueCurrentButton)
+                addChild(clearQueueButton)
+            }
+            addChild(transportRow)
+            addChild(queueActionsRow)
+        }
+
+        val postureInfoCard = Card("Responsive Breakpoint Rules").apply {
+            addChild(Label("Desktop (1280x800): 4-Column Split"))
+            addChild(Label("Landscape (800x390): Fullscreen Stage"))
+            addChild(Label("Portrait (390x844): Pinned Top + Tabs"))
         }
 
         stage.addChild(Heading("Adaptive Media Catalog", level = 4))
-        stage.addChild(postureToolbar)
+        stage.addChild(postureCard)
         stage.addChild(nowPlayingCard)
-        stage.addChild(transportBar)
+        stage.addChild(controlsCard)
+        stage.addChild(postureInfoCard)
         return stage
     }
 
@@ -327,13 +369,14 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
         val pane = VStack(gap = SpacingScale.S2).apply {
             id = "tab-pane-channels"
         }
+        pane.addChild(Heading("Live Catalog Channels (4)", level = 4))
         for (channel in catalogChannels) {
-            val row = HStack(gap = SpacingScale.S2).apply {
+            val channelCard = Card(channel.title).apply {
                 id = "channel-row-${channel.id}"
                 addClass("catalog-channel-row")
             }
             val selectBtn = Button(
-                text = "Play ${channel.title}",
+                text = "Play",
                 type = BootstrapType.PRIMARY,
                 size = BootstrapSize.SM
             ).apply {
@@ -349,11 +392,16 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
                 id = "btn-enqueue-channel-${channel.id}"
                 onClick = { enqueueChannelById(channel.id) }
             }
-            row.addChild(selectBtn)
-            row.addChild(Badge(channel.genre, BootstrapType.SECONDARY, pill = true))
-            row.addChild(Label(channel.durationLabel))
-            row.addChild(queueBtn)
-            pane.addChild(row)
+            val actionRow = HStack(gap = SpacingScale.S2).apply {
+                flexWrap = FlexWrap.WRAP
+                addChild(selectBtn)
+                addChild(queueBtn)
+                addChild(Badge(channel.genre, BootstrapType.SECONDARY, pill = true))
+                addChild(Label(channel.durationLabel))
+            }
+            channelCard.addChild(Label(channel.description))
+            channelCard.addChild(actionRow)
+            pane.addChild(channelCard)
         }
         return pane
     }
@@ -362,7 +410,11 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
         val pane = VStack(gap = SpacingScale.S2).apply {
             id = "tab-pane-queue"
         }
-        pane.addChild(queueSummaryLabel)
+        val summaryCard = Card("Queue Overview").apply {
+            addChild(queueSummaryLabel)
+        }
+        pane.addChild(Heading("Playback Queue", level = 4))
+        pane.addChild(summaryCard)
         pane.addChild(queueItemsContainer)
         return pane
     }
@@ -371,8 +423,30 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
         val pane = VStack(gap = SpacingScale.S2).apply {
             id = "tab-pane-details"
         }
-        pane.addChild(detailChannelIdLabel)
-        pane.addChild(detailSynopsisLabel)
+        val streamInfoCard = Card("Active Stream Metadata").apply {
+            addChild(detailChannelIdLabel)
+            addChild(detailSynopsisLabel)
+        }
+        val codecProfileCard = Card("Technical Stream Profile").apply {
+            val badgesRow = HStack(gap = SpacingScale.S2).apply {
+                flexWrap = FlexWrap.WRAP
+                addChild(Badge("4K UHD", BootstrapType.PRIMARY, pill = true))
+                addChild(Badge("HDR10", BootstrapType.INFO, pill = true))
+                addChild(Badge("60 FPS", BootstrapType.SUCCESS, pill = true))
+            }
+            addChild(badgesRow)
+            addChild(Label("Video: AV1 Main 10-bit @ 18.4 Mbps"))
+            addChild(Label("Audio: Opus 48 kHz Stereo (256 kbps)"))
+            addChild(Label("Latency: Ultra-Low LL-HLS (1.2s)"))
+        }
+        val targetsCard = Card("Multiplatform Targets").apply {
+            addChild(Label("Desktop: Windows, macOS, GTK, Qt, Swing"))
+            addChild(Label("Mobile & Web: Android, iOS, Web Wasm/JS"))
+        }
+        pane.addChild(Heading("Channel Inspector", level = 4))
+        pane.addChild(streamInfoCard)
+        pane.addChild(codecProfileCard)
+        pane.addChild(targetsCard)
         return pane
     }
 
@@ -385,6 +459,7 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
         transportStateBadge.text = if (isPlaying) "PLAYING" else "PAUSED"
         transportStateBadge.type = if (isPlaying) BootstrapType.SUCCESS else BootstrapType.WARNING
         playPauseButton.text = if (isPlaying) "Pause" else "Play"
+        streamProgressBar.label = "${if (isPlaying) "LIVE" else "PAUSED"}  ${selectedChannel.durationLabel}"
 
         queueCountBadge.text = "Queue: ${_playbackQueue.size}"
         queueSummaryLabel.text = if (_playbackQueue.isEmpty()) {
@@ -394,8 +469,25 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
         }
 
         queueItemsContainer.clearChildren()
-        for (item in _playbackQueue) {
-            queueItemsContainer.addChild(Label("${item.title} (${item.durationLabel})"))
+        for ((index, item) in _playbackQueue.withIndex()) {
+            val isCurrent = item.id == selectedChannel.id
+            val itemCard = Card("${index + 1}. ${item.title}").apply {
+                val meta = HStack(gap = SpacingScale.S2).apply {
+                    flexWrap = FlexWrap.WRAP
+                    addChild(Badge(item.genre, BootstrapType.SECONDARY, pill = true))
+                    addChild(Label(item.durationLabel))
+                    addChild(
+                        Badge(
+                            if (isCurrent) "ACTIVE" else "UP NEXT",
+                            if (isCurrent) BootstrapType.SUCCESS else BootstrapType.INFO,
+                            pill = true
+                        )
+                    )
+                }
+                addChild(meta)
+                addChild(Label(item.description))
+            }
+            queueItemsContainer.addChild(itemCard)
         }
 
         detailChannelIdLabel.text = "ID: ${selectedChannel.id} | Genre: ${selectedChannel.genre}"

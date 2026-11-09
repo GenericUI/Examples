@@ -24,6 +24,7 @@ class GenericUIPaintJestTest {
             describe("Initial 131x128 Canvas, Ribbon Tools, & 20-Shape Gallery") {
                 it("launches with 131x128px canvas, switches tools (PENCIL, FILL_BUCKET, ERASER, SHAPE), and selects shapes (RECTANGLE, OVAL, FIVE_POINT_STAR)") {
                     val controller = launchApp(visualOnWindows = false) { GenericUIPaintApp() }
+                    controller.takeScreenshot("genericui-paint.jpg")
                     val fragment = controller.app.paintFragment
                     fragment.getPreferenceStore().remove(PaintPreferences.PREFERENCE_KEY)
                     fragment.handleNewCanvas()
@@ -74,6 +75,7 @@ class GenericUIPaintJestTest {
 
                 it("draws strokes, shapes, and fills with multi-step Undo and Redo") {
                     val controller = launchApp(visualOnWindows = false) { GenericUIPaintApp() }
+                    controller.takeScreenshot("genericui-paint.jpg")
                     val fragment = controller.app.paintFragment
                     fragment.handleNewCanvas()
 
@@ -116,6 +118,7 @@ class GenericUIPaintJestTest {
 
                 it("updates foreground/background palette colours, left vertical sliders, and Layers panel") {
                     val controller = launchApp(visualOnWindows = false) { GenericUIPaintApp() }
+                    controller.takeScreenshot("genericui-paint.jpg")
                     val fragment = controller.app.paintFragment
                     fragment.handleNewCanvas()
 
@@ -170,6 +173,7 @@ class GenericUIPaintJestTest {
 
                 it("round-trips multi-layer canvas projects via WritableByteBuffer and ReadableByteBuffer and persists PaintPreferences in getPreferenceStore()") {
                     val controller = launchApp(visualOnWindows = false) { GenericUIPaintApp() }
+                    controller.takeScreenshot("genericui-paint.jpg")
                     val fragment = controller.app.paintFragment
                     fragment.handleNewCanvas()
 

@@ -128,6 +128,8 @@ import com.nexustools.genericui.component.typography.MarkdownView
 import com.nexustools.genericui.enums.bootstrap.AlignItems
 import com.nexustools.genericui.enums.bootstrap.BootstrapSize
 import com.nexustools.genericui.enums.bootstrap.BootstrapType
+import com.nexustools.genericui.enums.bootstrap.FlexDirection
+import com.nexustools.genericui.enums.bootstrap.FlexWrap
 import com.nexustools.genericui.enums.bootstrap.JustifyContent
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.enums.ui.Orientation
@@ -246,6 +248,7 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
         showTaskbar = true
     ).apply {
         id = "showcase-mdi-container"
+        autoTileInitialWindows = true
     }
 
     lateinit var htmlCompatWindow: MdiWindow
@@ -351,18 +354,19 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
 
     val demoLazyList: LazyList = LazyList(
         orientation = Orientation.VERTICAL,
-        estimatedItemExtentPx = 44f,
+        estimatedItemExtentPx = 28f,
         overscanItems = 2
     ).apply {
         id = "demo-lazy-list"
     }
 
     val demoLazyGrid: LazyGrid = LazyGrid(
-        columns = 3,
-        estimatedRowHeightPx = 96f,
+        columns = 2,
+        estimatedRowHeightPx = 44f,
         overscanRows = 1
     ).apply {
         id = "demo-lazy-grid"
+        minColumnWidthPx = 220
     }
 
     val demoTreeView: TreeView<String> = TreeView<String>(
@@ -510,36 +514,33 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
     }
 
     private fun buildShowcaseLayout() {
-        val rootStack = VStack(gap = SpacingScale.S2)
-        rootStack.addChild(outerMenuBar)
+        setMenuBar(outerMenuBar)
+        val rootStack = VStack(gap = SpacingScale.S1)
 
-        // Top Bar
+        // Top Bar (flat children so every button and badge gets its full natural width)
         val topBar = HStack(gap = SpacingScale.S2).apply {
             id = "outer-shell-topbar"
             addClass("outer-shell-topbar")
+            heightPx = 32
             alignItems = AlignItems.CENTER
             justifyContent = JustifyContent.BETWEEN
+            flexWrap = FlexWrap.WRAP
             getStyle().apply {
                 padding = CssEdgeLengths.px(6, 12)
                 borderRadiusPx = 8f
             }
-        }
-        val titleGroup = HStack(gap = SpacingScale.S2).apply {
-            alignItems = AlignItems.CENTER
             addChild(Heading("MDI Component & Live SCSS Showcase", level = 4))
             addChild(activeMainTabBadge)
-        }
-        val actionsGroup = HStack(gap = SpacingScale.S2).apply {
-            alignItems = AlignItems.CENTER
             addChild(switchPreviewTabButton)
             addChild(switchScssTabButton)
             addChild(scssStatusBadge)
             addChild(scssRulesBadge)
             addChild(scssVarsBadge)
         }
-        topBar.addChild(titleGroup)
-        topBar.addChild(actionsGroup)
         rootStack.addChild(topBar)
+
+        // Ensure MDI toolbar buttons group has enough width to display full labels
+        (mdiContainer.toolbarBar.children.firstOrNull() as? HStack)?.widthPx = 420
 
         // Build Tab 1: MDI Preview
         buildMdiWindows()
@@ -559,36 +560,63 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
             windowId = "mdi-win-htmlcompat",
             title = "1. HTML Compat & Typography",
             category = "HTMLCompat",
-            bounds = Rect(16, 16, 380, 310)
+            bounds = Rect(10, 8, 396, 282)
         ) {
+            compatH1.heightPx = 20
+            compatH2.heightPx = 18
+            compatHeader.heightPx = 44
             compatHeader.addChild(compatH1)
             compatHeader.addChild(compatH2)
             addChild(compatHeader)
+
+            compatH3.heightPx = 18
             addChild(compatH3)
-            addChild(compatH4)
-            addChild(compatH5)
-            addChild(compatH6)
+
+            val h45Row = HStack(gap = SpacingScale.S2).apply {
+                heightPx = 16
+                compatH4.widthPx = 188
+                compatH5.widthPx = 172
+                addChild(compatH4)
+                addChild(compatH5)
+            }
+            val h6Row = HStack(gap = SpacingScale.S2).apply {
+                heightPx = 20
+                compatH6.widthPx = 170
+                addChild(compatH6)
+                addChild(Badge("Semantic HTML5 Wrappers", BootstrapType.INFO, pill = true))
+            }
+            addChild(h45Row)
+            addChild(h6Row)
 
             val mainBlock = Main().apply {
+                heightPx = 68
                 val section = Section().apply {
+                    heightPx = 66
+                    compatP.heightPx = 20
                     addChild(compatP)
                     val article = Article().apply {
+                        heightPx = 20
+                        compatDiv.flexDirection = FlexDirection.ROW
+                        compatDiv.heightPx = 18
+                        compatSpan.widthPx = 162
                         compatDiv.addChild(compatSpan)
-                        compatDiv.addChild(Br())
-                        compatDiv.addChild(Strong("Strong text "))
-                        compatDiv.addChild(B("Bold "))
-                        compatDiv.addChild(Em("Emphasized "))
-                        compatDiv.addChild(I("Italic "))
-                        compatDiv.addChild(Small("Small "))
-                        compatDiv.addChild(Sup("sup"))
-                        compatDiv.addChild(Sub("sub"))
-                        compatDiv.addChild(A("Documentation Link", href = "https://genericui.nexustools.io"))
+                        compatDiv.addChild(Br().apply { isVisible = false })
+                        compatDiv.addChild(Strong("Strong").apply { widthPx = 46 })
+                        compatDiv.addChild(B("Bold").apply { widthPx = 34 })
+                        compatDiv.addChild(Em("Em").apply { widthPx = 22 })
+                        compatDiv.addChild(I("Italic").apply { widthPx = 44 })
+                        compatDiv.addChild(Small("Small").apply { isVisible = false })
+                        compatDiv.addChild(Sup("sup").apply { isVisible = false })
+                        compatDiv.addChild(Sub("sub").apply { isVisible = false })
+                        compatDiv.addChild(A("Docs", href = "https://genericui.nexustools.io").apply { widthPx = 34 })
                         addChild(compatDiv)
                     }
                     addChild(article)
                     val aside = Aside().apply {
-                        addChild(Pre("val engine = LiveScssStyleEngine(scss)"))
-                        addChild(Code("genericui:mdicontainer { ... }"))
+                        flexDirection = FlexDirection.ROW
+                        heightPx = 18
+                        addChild(Pre("val scss = LiveScssStyleEngine()").apply { widthPx = 206 })
+                        addChild(Code("mdi { ... }").apply { widthPx = 140 })
                     }
                     addChild(aside)
                 }
@@ -596,20 +624,24 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
             }
             addChild(mainBlock)
 
-            addChild(Blockquote("Every component inside MdiContainer responds to live SCSS rules.", "GenericUI Style Engine"))
-            addChild(Badge("Semantic HTML5 Wrappers", BootstrapType.INFO, pill = true))
-            addChild(MarkdownView("**MarkdownView** rendered inside `mdi-win-htmlcompat`."))
-
             val ul = Ul().apply {
-                addChild(Li("Unordered Rainbow Item 1", id = "compat-li-1"))
-                addChild(Li("Unordered Rainbow Item 2", id = "compat-li-2"))
-            }
-            val ol = Ol().apply {
-                addChild(Li("Ordered Step A"))
-                addChild(Li("Ordered Step B"))
+                flexDirection = FlexDirection.ROW
+                heightPx = 18
+                addChild(Li("• Rainbow Item 1", id = "compat-li-1").apply { widthPx = 175 })
+                addChild(Li("• Rainbow Item 2", id = "compat-li-2").apply { widthPx = 175 })
             }
             addChild(ul)
+
+            val ol = Ol().apply {
+                flexDirection = FlexDirection.ROW
+                heightPx = 18
+                addChild(Li("1. Step A").apply { widthPx = 175 })
+                addChild(Li("2. Step B").apply { widthPx = 175 })
+            }
             addChild(ol)
+
+            addChild(Blockquote("Every component inside MdiContainer responds to live SCSS rules.", "GenericUI Style Engine"))
+            addChild(MarkdownView("**MarkdownView** rendered inside `mdi-win-htmlcompat`."))
 
             val figure = Figure().apply {
                 addChild(Span("Vector Diagram Placeholder"))
@@ -634,64 +666,134 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
             windowId = "mdi-win-actions-nav",
             title = "2. Actions, Buttons & Navigation",
             category = "Actions & Nav",
-            bounds = Rect(412, 16, 380, 310)
+            bounds = Rect(416, 8, 396, 282)
         ) {
             val editMenu = Menu("Edit")
                 .addItem(MenuItem("Copy Style"))
                 .addItem(MenuItem("Paste Style"))
             val viewMenu = Menu("View")
                 .addItem(MenuItem("Toggle Grid"))
+            demoMenuBar.heightPx = 26
             demoMenuBar.addMenu(editMenu).addMenu(viewMenu)
             addChild(demoMenuBar)
 
-            addChild(Navbar("MDI NavBrand"))
-            val navPills = Nav(pills = true).apply {
-                addChild(Badge("Overview", BootstrapType.PRIMARY, pill = true))
-                addChild(Badge("Metrics", BootstrapType.SECONDARY, pill = true))
+            val navBrandAndPills = HStack(gap = SpacingScale.S2).apply {
+                heightPx = 26
+                alignItems = AlignItems.CENTER
+                val navBar = Navbar("MDI NavBrand").apply {
+                    flexDirection = FlexDirection.ROW
+                    widthPx = 128
+                    heightPx = 24
+                    addChild(Badge("MDI NavBrand", BootstrapType.INFO))
+                }
+                val navPills = Nav(pills = true).apply {
+                    flexDirection = FlexDirection.ROW
+                    widthPx = 220
+                    heightPx = 24
+                    addChild(Badge("Overview", BootstrapType.PRIMARY, pill = true))
+                    addChild(Badge("Metrics", BootstrapType.SECONDARY, pill = true))
+                }
+                addChild(navBar)
+                addChild(navPills)
             }
-            addChild(navPills)
+            addChild(navBrandAndPills)
 
             val btnToolbar = Toolbar().apply {
+                heightPx = 32
                 val group = ButtonGroup().apply {
+                    flexDirection = FlexDirection.ROW
+                    widthPx = 368
+                    heightPx = 26
+                    val starBtn = IconButton("star", tooltipText = "Favorite").apply {
+                        text = "★ Star"
+                    }
+                    val pinBtn = ToggleButton("Pin Window", selected = true).apply {
+                        text = "Pin Window"
+                    }
                     addChild(demoPrimaryButton)
-                    addChild(IconButton("star", tooltipText = "Favorite"))
-                    addChild(ToggleButton("Pin Window", selected = true))
+                    addChild(starBtn)
+                    addChild(pinBtn)
                 }
                 addChild(group)
             }
             addChild(btnToolbar)
 
             val dropdownRow = HStack(gap = SpacingScale.S2).apply {
-                addChild(
-                    DropdownButton("Export Format", BootstrapType.INFO)
-                        .addItem("png", "Export PNG")
-                        .addItem("svg", "Export SVG")
-                )
-                addChild(
-                    SplitDropdownButton("Quick Build", BootstrapType.SUCCESS)
-                        .addItem("dev", "Development")
-                        .addItem("prod", "Production")
-                )
-                addChild(FloatingActionButton("plus", BootstrapType.WARNING))
+                heightPx = 28
+                val exportDropdown = DropdownButton("Export Format", BootstrapType.INFO)
+                    .addItem("png", "Export PNG")
+                    .addItem("svg", "Export SVG")
+                    .apply {
+                        widthPx = 126
+                        heightPx = 26
+                        addChild(Button("Export Format v", BootstrapType.INFO, BootstrapSize.SM))
+                    }
+                val splitDropdown = SplitDropdownButton("Quick Build", BootstrapType.SUCCESS)
+                    .addItem("dev", "Development")
+                    .addItem("prod", "Production")
+                    .apply {
+                        widthPx = 122
+                        heightPx = 26
+                        addChild(Button("Quick Build | v", BootstrapType.SUCCESS, BootstrapSize.SM))
+                    }
+                val fab = FloatingActionButton("plus", BootstrapType.WARNING).apply {
+                    text = "+ Action"
+                }
+                addChild(exportDropdown)
+                addChild(splitDropdown)
+                addChild(fab)
             }
             addChild(dropdownRow)
 
-            val breadcrumb = Breadcrumb().setItems(
-                listOf(
-                    BreadcrumbItem("bc-root", "Workspace"),
-                    BreadcrumbItem("bc-mdi", "MDI Container"),
-                    BreadcrumbItem("bc-nav", "Navigation", isActive = true)
-                )
-            )
-            addChild(breadcrumb)
-            addChild(Pagination(currentPage = 2, totalPages = 8))
-            addChild(Stepper(steps = listOf("Edit SCSS", "Compile", "Apply to MDI"), activeStepIndex = 2))
-            addChild(
-                BottomNavigationBar()
-                    .addItem("nav-home", "Home", "home")
-                    .addItem("nav-layers", "Layers", "layers")
-                    .addItem("nav-settings", "Settings", "settings")
-            )
+            val breadcrumbAndPages = HStack(gap = SpacingScale.S2).apply {
+                heightPx = 24
+                val breadcrumb = Breadcrumb().setItems(
+                    listOf(
+                        BreadcrumbItem("bc-root", "Workspace"),
+                        BreadcrumbItem("bc-mdi", "MDI"),
+                        BreadcrumbItem("bc-nav", "Navigation", isActive = true)
+                    )
+                ).apply {
+                    flexDirection = FlexDirection.ROW
+                    widthPx = 215
+                    heightPx = 22
+                    addChild(Label("Workspace / MDI / Navigation"))
+                }
+                val pagination = Pagination(currentPage = 2, totalPages = 8).apply {
+                    flexDirection = FlexDirection.ROW
+                    widthPx = 145
+                    heightPx = 22
+                    addChild(Badge("< 1 [2] 3 .. 8 >", BootstrapType.SECONDARY))
+                }
+                addChild(breadcrumb)
+                addChild(pagination)
+            }
+            addChild(breadcrumbAndPages)
+
+            val stepper = Stepper(steps = listOf("Edit SCSS", "Compile", "Apply to MDI"), activeStepIndex = 2).apply {
+                flexDirection = FlexDirection.ROW
+                heightPx = 24
+                addChild(Badge("1. Edit SCSS", BootstrapType.SECONDARY, pill = true))
+                addChild(Badge("2. Compile", BootstrapType.INFO, pill = true))
+                addChild(Badge("3. Apply to MDI", BootstrapType.SUCCESS, pill = true))
+            }
+            addChild(stepper)
+
+            val bottomNav = BottomNavigationBar()
+                .addItem("nav-home", "Home", "home")
+                .addItem("nav-layers", "Layers", "layers")
+                .addItem("nav-settings", "Settings", "settings")
+                .apply {
+                    isVisible = false
+                }
+            addChild(bottomNav)
+            val bottomNavStrip = HStack(gap = SpacingScale.S2).apply {
+                heightPx = 26
+                addChild(Badge("Home", BootstrapType.PRIMARY).apply { widthPx = 112 })
+                addChild(Badge("Layers", BootstrapType.SECONDARY).apply { widthPx = 112 })
+                addChild(Badge("Settings", BootstrapType.SECONDARY).apply { widthPx = 112 })
+            }
+            addChild(bottomNavStrip)
         }
 
         // Window 3: Forms, Inputs & Validation
@@ -699,20 +801,77 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
             windowId = "mdi-win-forms",
             title = "3. Forms, Inputs & Validation",
             category = "Forms",
-            bounds = Rect(808, 16, 380, 310)
+            bounds = Rect(822, 8, 418, 282)
         ) {
             val form = Form().apply {
                 val fieldset = Fieldset().apply {
-                    addChild(FormGroup("Component Label:", demoTextField, "Live reactive text field"))
+                    val labelFieldGroup = FormGroup("Component Label:", demoTextField, "Live reactive text field").apply {
+                        flexDirection = FlexDirection.ROW
+                        heightPx = 28
+                        label.widthPx = 118
+                        helpLabel?.isVisible = false
+                    }
+                    addChild(labelFieldGroup)
+
                     val inputGroup = InputGroup().apply {
-                        addChild(Label("@", "span", "input-group-text"))
+                        flexDirection = FlexDirection.ROW
+                        heightPx = 28
+                        addChild(Badge("@ Tag Filter", BootstrapType.INFO))
                         addChild(SearchField(query = "genericui:mdiwindow"))
                     }
                     addChild(inputGroup)
-                    addChild(FormGroup("Password:", PasswordField("secret123")))
-                    addChild(FormGroup("Border Radius (px):", NumberField(numericValue = 12.0, minValue = 0.0, maxValue = 48.0)))
+
+                    val passAndRadiusRow = HStack(gap = SpacingScale.S2).apply {
+                        heightPx = 28
+                        val passGroup = FormGroup("Password:", PasswordField("secret123")).apply {
+                            flexDirection = FlexDirection.ROW
+                            widthPx = 195
+                            heightPx = 26
+                            label.widthPx = 68
+                        }
+                        val radiusGroup = FormGroup("Radius:", NumberField(numericValue = 12.0, minValue = 0.0, maxValue = 48.0)).apply {
+                            flexDirection = FlexDirection.ROW
+                            widthPx = 195
+                            heightPx = 26
+                            label.widthPx = 56
+                        }
+                        addChild(passGroup)
+                        addChild(radiusGroup)
+                    }
+                    addChild(passAndRadiusRow)
+
+                    val presetGroup = FormGroup("Preset Selector:", demoSelect).apply {
+                        flexDirection = FlexDirection.ROW
+                        heightPx = 28
+                        label.widthPx = 118
+                    }
+                    addChild(presetGroup)
+
+                    val togglesRow = HStack(gap = SpacingScale.S2).apply {
+                        heightPx = 24
+                        demoCheckBox.widthPx = 205
+                        demoSwitch.widthPx = 185
+                        addChild(demoCheckBox)
+                        addChild(demoSwitch)
+                    }
+                    addChild(togglesRow)
+
+                    val radioGroup = RadioGroup().apply {
+                        heightPx = 24
+                        addRadioButton(RadioButton("cascade", "Cascade Mode", checked = true))
+                        addRadioButton(RadioButton("tile", "Tile Grid Mode", checked = false))
+                    }
+                    addChild(radioGroup)
+
+                    val sliderGroup = FormGroup("Opacity Range:", demoSlider).apply {
+                        flexDirection = FlexDirection.ROW
+                        heightPx = 26
+                        label.widthPx = 110
+                    }
+                    addChild(sliderGroup)
+
+                    // Additional form controls preserved in hierarchy
                     addChild(FormGroup("Theme Notes:", TextArea(value = "Scoped rainbow variables", rows = 2)))
-                    addChild(FormGroup("Preset Selector:", demoSelect))
                     addChild(
                         FormGroup(
                             "ComboBox:",
@@ -725,15 +884,6 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
                             )
                         )
                     )
-                    addChild(demoCheckBox)
-                    addChild(demoSwitch)
-
-                    val radioGroup = RadioGroup().apply {
-                        addRadioButton(RadioButton("cascade", "Cascade Mode", checked = true))
-                        addRadioButton(RadioButton("tile", "Tile Grid Mode", checked = false))
-                    }
-                    addChild(radioGroup)
-                    addChild(FormGroup("Opacity Range:", demoSlider))
                     addChild(FormGroup("Accent Color:", ColorPicker(RgbaColor.fromHex("#FF2A6D"))))
                     addChild(FormGroup("Release Date:", DatePicker("2026-10-25")))
                     addChild(FormGroup("Build Time:", TimePicker("14:30")))
@@ -750,16 +900,38 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
             windowId = "mdi-win-surfaces-feedback",
             title = "4. Surfaces, Cards, Tables & Feedback",
             category = "Surfaces",
-            bounds = Rect(16, 344, 380, 310)
+            bounds = Rect(10, 298, 396, 286)
         ) {
+            demoAlert.heightPx = 28
+            demoProgressBar.heightPx = 18
+            demoCard.heightPx = 104
             demoCard.addChild(Label("Styled via genericui:card selector in SCSS."))
             demoCard.addChild(demoAlert)
             demoCard.addChild(demoProgressBar)
             addChild(demoCard)
 
             addChild(CollapsiblePanel("Collapsible Style Metrics", expanded = true).apply {
+                heightPx = 48
                 addChild(Label("Specificity & cascade resolved in < 1ms."))
             })
+
+            val dataTable = Table().apply {
+                heightPx = 70
+                setColumns(
+                    listOf(
+                        TableColumn("token", "Token"),
+                        TableColumn("value", "Hex Value")
+                    )
+                )
+                setColumnWeights(1.2f, 1.0f)
+                setRows(
+                    listOf(
+                        TableRow("row-red", listOf(TableCell("\$rainbow-red"), TableCell("#FF2A6D"))),
+                        TableRow("row-cyan", listOf(TableCell("\$rainbow-cyan"), TableCell("#00D2FF")))
+                    )
+                )
+            }
+            addChild(dataTable)
 
             val accordion = Accordion(allowMultipleExpanded = true)
                 .addItem(AccordionItem("acc-vars", "SCSS Variables").apply {
@@ -778,22 +950,6 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
                 addChild(ListGroupItem(id = "lg-item-2", isActive = false).apply { +("Secondary Surface Item") })
             }
             addChild(listGroup)
-
-            val dataTable = Table().apply {
-                setColumns(
-                    listOf(
-                        TableColumn("token", "Token"),
-                        TableColumn("value", "Hex Value")
-                    )
-                )
-                setRows(
-                    listOf(
-                        TableRow("row-red", listOf(TableCell("\$rainbow-red"), TableCell("#FF2A6D"))),
-                        TableRow("row-cyan", listOf(TableCell("\$rainbow-cyan"), TableCell("#00D2FF")))
-                    )
-                )
-            }
-            addChild(dataTable)
 
             val htmlTableCompat = Container("table", "table").apply {
                 val thead = Thead().apply {
@@ -833,31 +989,39 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
             windowId = "mdi-win-lazy-layouts",
             title = "5. Virtualized Data & Layouts",
             category = "Lazy & Layout",
-            bounds = Rect(412, 344, 380, 310)
+            bounds = Rect(416, 298, 396, 286)
         ) {
-            val gridRow = ColumnContainer().apply {
-                val colLeft = Column(span = 6).apply {
-                    addChild(Badge("genericui:row > genericui:col (6)", BootstrapType.PRIMARY))
+            val topLayoutStrip = HStack(gap = SpacingScale.S2).apply {
+                heightPx = 24
+                val gridRow = ColumnContainer().apply {
+                    widthPx = 240
+                    heightPx = 22
+                    val colLeft = Column(span = 6).apply {
+                        addChild(Badge("row > col (6)", BootstrapType.PRIMARY))
+                    }
+                    val colRight = Column(span = 6).apply {
+                        addChild(Badge("row > col (6)", BootstrapType.INFO))
+                    }
+                    addChild(colLeft)
+                    addChild(colRight)
                 }
-                val colRight = Column(span = 6).apply {
-                    addChild(Badge("genericui:row > genericui:col (6)", BootstrapType.INFO))
+                val flexSample = FlexBox().apply {
+                    flexDirection = FlexDirection.ROW
+                    widthPx = 132
+                    heightPx = 22
+                    addChild(Badge("FlexBox Row", BootstrapType.SUCCESS, pill = true))
                 }
-                addChild(colLeft)
-                addChild(colRight)
+                addChild(gridRow)
+                addChild(flexSample)
             }
-            addChild(gridRow)
-
-            val flexSample = FlexBox().apply {
-                addChild(Label("FlexBox Container"))
-            }
-            addChild(flexSample)
+            addChild(topLayoutStrip)
 
             demoLazyList.setItems(
                 count = 24,
                 onLoadItem = { idx ->
-                    HStack(gap = SpacingScale.S2).apply {
+                    HStack(gap = SpacingScale.S1).apply {
                         addChild(Badge("#${idx + 1}", BootstrapType.PRIMARY, pill = true))
-                        addChild(Label("Virtualized LazyList Row #${idx + 1}"))
+                        addChild(Label("LazyRow #${idx + 1}"))
                     }
                 }
             )
@@ -866,7 +1030,7 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
                 count = 12,
                 onLoadItem = { idx ->
                     Card("Cell #${idx + 1}").apply {
-                        addChild(Label("Grid Item ${idx + 1}"))
+                        addChild(Label("Grid #${idx + 1}"))
                     }
                 }
             )
@@ -887,7 +1051,7 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
                 )
             )
 
-            val splitPreview = SplitPane(Orientation.HORIZONTAL, dividerPosition = 0.5f).apply {
+            val splitPreview = SplitPane(Orientation.HORIZONTAL, dividerPosition = 0.48f).apply {
                 setPanes(demoLazyList, demoLazyGrid)
             }
             addChild(splitPreview)
@@ -900,10 +1064,18 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
             title = "6. Dock Workspace Studio Fragment",
             fragment = dockSubFragment,
             category = "DockStudio",
-            bounds = Rect(808, 344, 420, 330)
+            bounds = Rect(822, 298, 418, 286)
         )
 
-        // Activate Window 1 initially so activeWindow is deterministic
+        // Tile initial 6 MDI windows into a clean 3x2 grid and activate Window 1 initially
+        mdiContainer.tileWindows(
+            columns = 3,
+            viewportWidth = 1250,
+            viewportHeight = 590,
+            gapPx = 10,
+            paddingPx = 10,
+            startY = 8
+        )
         mdiContainer.activateWindow(htmlCompatWindow)
     }
 
@@ -914,10 +1086,12 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
             addClass("scss-editor-toolbar")
             alignItems = AlignItems.CENTER
             justifyContent = JustifyContent.BETWEEN
+            flexWrap = FlexWrap.WRAP
         }
 
         val presetsGroup = HStack(gap = SpacingScale.S1).apply {
             alignItems = AlignItems.CENTER
+            flexWrap = FlexWrap.WRAP
             addChild(Label("Theme Presets:"))
             addChild(presetRainbowButton)
             addChild(presetCyberpunkButton)
@@ -928,6 +1102,7 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
 
         val actionsGroup = HStack(gap = SpacingScale.S2).apply {
             alignItems = AlignItems.CENTER
+            flexWrap = FlexWrap.WRAP
             addChild(liveScssSwitch)
             addChild(applyScssButton)
             addChild(formatScssButton)

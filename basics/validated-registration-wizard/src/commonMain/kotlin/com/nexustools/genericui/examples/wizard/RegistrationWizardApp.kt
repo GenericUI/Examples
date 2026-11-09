@@ -7,7 +7,7 @@ import com.nexustools.genericui.component.shell.MenuBar
 import com.nexustools.genericui.component.shell.MenuItem
 import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.enums.ui.ThemeMode
-import com.nexustools.genericui.examples.wizard.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.wizard.res.Resource
 import com.nexustools.genericui.window.TitleBar
 
 /**
@@ -26,13 +26,10 @@ class RegistrationWizardApp(
     override fun getPreferenceStore(): PreferenceStore =
         customPreferenceStore ?: super.getPreferenceStore()
 
-    val preferenceStore: PreferenceStore
-        get() = getPreferenceStore()
-
     init {
         setThemeMode(ThemeMode.AUTO)
         setThemeColor("#10B981")
-        addStyleSheet(StylesPrecompiledStyleSheet)
+        addStyleSheet(Resource.style.styles)
         val titleBar = TitleBar(
             embedMenuBar = true,
             showWindowTitle = true,
@@ -44,7 +41,6 @@ class RegistrationWizardApp(
         wizardFragment.setMenuBar(menuBar)
         mainWindow.setTitleBar(titleBar)
         mainWindow.setMenuBar(menuBar)
-        rootFragmentContainer.applyPrecompiledStyleSheet(StylesPrecompiledStyleSheet)
     }
 
     private fun buildApplicationMenuBar(): MenuBar {

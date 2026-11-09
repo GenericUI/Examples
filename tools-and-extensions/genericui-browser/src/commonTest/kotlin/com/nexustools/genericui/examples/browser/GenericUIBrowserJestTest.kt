@@ -2,7 +2,7 @@ package com.nexustools.genericui.examples.browser
 
 import com.nexustools.genericui.component.fragment.helper.TabbedChromeMode
 import com.nexustools.genericui.component.system.PreferenceStore
-import com.nexustools.genericui.examples.browser.styles.StylesPrecompiledStyleSheet
+import com.nexustools.genericui.examples.browser.res.Resource
 import com.nexustools.genericui.io.ReadableByteBuffer
 import com.nexustools.genericui.io.WritableByteBuffer
 import com.nexustools.genericui.tests.JestElectricRunner
@@ -25,10 +25,11 @@ class GenericUIBrowserJestTest {
                     val store = PreferenceStore.open("GenericUIBrowser_Posture_Test")
                     store.clear()
                     val controller = launchApp(visualOnWindows = false) { GenericUIBrowserApp(store) }.setup()
+                    controller.takeScreenshot("genericui-browser.jpg")
                     val frag = controller.app.fragment
 
                     expect(controller.app.getThemeMode()).toBe(com.nexustools.genericui.enums.ui.ThemeMode.AUTO)
-                    assertTrue(controller.app.hasStyleSheet(StylesPrecompiledStyleSheet))
+                    assertTrue(controller.app.hasStyleSheet(Resource.style.styles))
                     assertTrue(frag.hasClass("genericui-browser-root"))
                     expect(frag.tabCount).toBe(5)
                     expect(frag.activeTabId).toBe(GenericUIBrowserFragment.TAB_ID_AI_CREDITS)
