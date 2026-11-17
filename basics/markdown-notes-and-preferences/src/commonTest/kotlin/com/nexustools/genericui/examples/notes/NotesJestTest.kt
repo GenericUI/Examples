@@ -38,7 +38,7 @@ class NotesJestTest {
 
                     // Edit title and markdown body
                     controller.findById("input-note-title").performTypeText("Release Checklist")
-                    controller.findById("input-note-body").performTypeText("# Release v1.0\n- All 8 backends active")
+                    controller.findById("input-note-body").performTypeText("# Release v1.0\n- All 9 backends active")
 
                     val preview = controller.findById("markdown-preview").component as MarkdownView
                     expect(preview.markdown).toContain("# Release v1.0")

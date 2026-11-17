@@ -468,7 +468,7 @@ class NotesFragment(
                 content = buildString {
                     appendLine("# Welcome to GenericUI Notes")
                     appendLine()
-                    appendLine("Use **PreferenceStore** to persist structured notes across all 8 backends.")
+                    appendLine("Use **PreferenceStore** to persist structured notes across all 9 backends.")
                     appendLine()
                     appendLine("## Persistence Architecture")
                     appendLine("- **PreferenceObjectCodec** serializes `NoteItem` fields (`id`, `title`, `content`, `pinned`)")

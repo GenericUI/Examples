@@ -40,7 +40,7 @@ import kotlin.math.sqrt
 
 /**
  * Interactive GPU-accelerated image processing laboratory demonstrating
- * `:extensions:imageprocessing` ([GpuImageProcessor], [BrightnessContrastFilter],
+ * `:extensions:graphics:imageprocessing` ([GpuImageProcessor], [BrightnessContrastFilter],
  * [HueSaturationLightnessFilter], [GaussianBlurFilter], [VignetteFilter],
  * [ImageHistogramResult]) rendered onto [Canvas2D].
  */

@@ -1,6 +1,6 @@
 # Markdown Notes & Preferences (`examples/basics/markdown-notes-and-preferences`)
 
-A two-pane Markdown note manager demonstrating structured object persistence in `PreferenceStore`, live `PreferenceChangeListener` notifications, live search filtering, `MarkdownView` rendering, and `.md` file import/export across all 8 `GenericUI` backends.
+A two-pane Markdown note manager demonstrating structured object persistence in `PreferenceStore`, live `PreferenceChangeListener` notifications, live search filtering, `MarkdownView` rendering, and `.md` file import/export across all 9 `GenericUI` backends (desktop, Android/iOS/iPadOS mobile, and web).
 
 ---
 
@@ -96,7 +96,7 @@ class NotesFragment(
 
 ---
 
-## Building & Running Across All 8 Backends
+## Building & Running Across All 9 Backends
 
 From `examples/basics/markdown-notes-and-preferences`, invoke the root Gradle wrapper (`../../../gradlew`):
 
@@ -115,6 +115,7 @@ From `examples/basics/markdown-notes-and-preferences`, invoke the root Gradle wr
 # Build Mobile targets
 ../../../gradlew developmentAndroid
 ../../../gradlew developmentIos
+../../../gradlew developmentIpados
 ```
 
 ---

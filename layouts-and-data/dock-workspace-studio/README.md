@@ -1,13 +1,13 @@
 # Dock Workspace Studio (`examples/layouts-and-data/dock-workspace-studio`)
 
-Demonstrates a modular creative studio workspace in `GenericUI` built with `OverlayDockWorkspaceFragment` and `DockWorkspaceFragment`, featuring `LEFT` Toolbox, `RIGHT` Properties, and `BOTTOM` Console `DockPanel`s with custom `TitleBar`s, `CENTER` `TabContainer` with `CloseableTab` document tabs, dynamic switching between `StudioWindowMode.SINGLE_WINDOW_MODE` and `StudioWindowMode.MULTI_WINDOW_MODE` (with `PanelWindow` detachment), and a floating HUD overlay panel across all 8 backends.
+Demonstrates a modular creative studio workspace in `GenericUI` built with `OverlayDockWorkspaceFragment` and `DockWorkspaceFragment`, featuring `LEFT` Toolbox, `RIGHT` Properties, and `BOTTOM` Console `DockPanel`s with custom `TitleBar`s, `CENTER` `TabContainer` with `CloseableTab` document tabs, dynamic switching between `StudioWindowMode.SINGLE_WINDOW_MODE` and `StudioWindowMode.MULTI_WINDOW_MODE` (with `PanelWindow` detachment), and a floating HUD overlay panel across all 9 backends (desktop, Android/iOS/iPadOS mobile, and web).
 
 ---
 
 ## Key `GenericUI` APIs Demonstrated
 
 - **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `DockWorkspaceStudioFragment` (`@MainAppFragment` extending `OverlayDockWorkspaceFragment`) and `DockWorkspaceStudioApp` (`@AppApplication` extending `FragmentApplication`) with `ThemeMode.AUTO` (`setThemeMode(ThemeMode.AUTO)`) and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
-- **`ComponentBootstrap` (`bootstrap { ... }`) & `ComponentStyle` (`style { ... }`)**: Uses `:extensions:dsl` `bootstrap { ... }` and `style { ... }` builders (`BootstrapType`, `BootstrapSize`, `BorderRadiusStyle`, `ShadowElevation`, `SpacingScale`, `FontWeight`, `FlexWrap.WRAP`) with strict custom CSS class isolation.
+- **`ComponentBootstrap` (`bootstrap { ... }`) & `ComponentStyle` (`style { ... }`)**: Uses `:extensions:ui:dsl` `bootstrap { ... }` and `style { ... }` builders (`BootstrapType`, `BootstrapSize`, `BorderRadiusStyle`, `ShadowElevation`, `SpacingScale`, `FontWeight`, `FlexWrap.WRAP`) with strict custom CSS class isolation.
 - **Docking & Workspace Fragments**: `OverlayDockWorkspaceFragment`, `DockWorkspaceFragment`, `DockWorkspace`, `DockArea`, `DockPanel`, `PanelWindow`, `DockPosition`, and `StudioWindowMode` (`SINGLE_WINDOW_MODE` vs. `MULTI_WINDOW_MODE`).
 - **Panel & Window TitleBars**: `DockPanel.setTitleBar(TitleBar)`, `TitleBar.addTrailing(...)`, and `DockHeaderAction`.
 - **Document Tabs**: `TabContainer`, `CloseableTab`, `StudioDocument`, `openDocument`, `closeDocument`, and `activateDocument`.
@@ -99,7 +99,7 @@ class DockWorkspaceStudioFragment : OverlayDockWorkspaceFragment(
 
 ---
 
-## Building & Running Across All 8 Backends
+## Building & Running Across All 9 Backends
 
 From `examples/layouts-and-data/dock-workspace-studio`, invoke the root Gradle wrapper (`../../../gradlew`):
 
@@ -117,9 +117,10 @@ From `examples/layouts-and-data/dock-workspace-studio`, invoke the root Gradle w
 # Desktop — JVM / AWT / Swing
 ../../../gradlew developmentSwing
 
-# Mobile — Android & iOS
+# Mobile — Android, iOS & iPadOS
 ../../../gradlew developmentAndroid
 ../../../gradlew developmentIos
+../../../gradlew developmentIpados
 
 # Web — WasmJS primary + JS fallback + PWA manifest.webmanifest
 ../../../gradlew developmentWeb

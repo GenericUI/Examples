@@ -12,7 +12,7 @@ genericui {
         name = "GenericUIPad"
         version = "1.0.0"
         vendor = "NexusTools"
-        description = "Windows 11 Dark-Mode Tabbed Notepad & Rich Markdown Editor clone powered by GenericUI across all 8 backends."
+        description = "Windows 11 Dark-Mode Tabbed Notepad & Rich Markdown Editor clone powered by GenericUI across all 9 backends."
     }
     window {
         title = "GenericUIPad"
@@ -30,7 +30,7 @@ genericui {
             windowTitle = "GenericUIPad"
             appVersion = "1.0.0"
             vendor = "NexusTools"
-            description = "Windows 11 Dark-Mode Tabbed Notepad & Rich Markdown Editor clone powered by GenericUI across all 8 backends."
+            description = "Windows 11 Dark-Mode Tabbed Notepad & Rich Markdown Editor clone powered by GenericUI across all 9 backends."
             icon = "src/commonMain/resources/icon.svg"
             webIcon = "src/commonMain/resources/icon.svg"
             linuxIcon = "src/commonMain/resources/icon.svg"
@@ -40,7 +40,7 @@ genericui {
             allowInstallAsWebApp = true
             name = "GenericUIPad"
             shortName = "GenericUIPad"
-            description = "Windows 11 Dark-Mode Tabbed Notepad & Rich Markdown Editor clone powered by GenericUI across all 8 backends."
+            description = "Windows 11 Dark-Mode Tabbed Notepad & Rich Markdown Editor clone powered by GenericUI across all 9 backends."
             display = "standalone"
             backgroundColor = "#18181B"
             themeColor = "#1E1E1E"

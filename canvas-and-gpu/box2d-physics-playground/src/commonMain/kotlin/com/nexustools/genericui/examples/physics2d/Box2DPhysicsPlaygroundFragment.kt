@@ -46,7 +46,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 /**
- * Interactive 2D rigid-body physics sandbox built with `:extensions:box2d`
+ * Interactive 2D rigid-body physics sandbox built with `:extensions:physics:box2d`
  * ([World2D], [Body2D], [PolygonShape2D], [CircleShape2D], [RevoluteJoint2D],
  * [Box2DDebugDrawer]) and rendered onto [Canvas2D].
  */

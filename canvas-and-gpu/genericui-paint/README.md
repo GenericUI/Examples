@@ -1,6 +1,6 @@
 # GenericUIPaint — Windows 11 Dark-Mode Paint Clone (`examples/canvas-and-gpu/genericui-paint`)
 
-Complete standalone Kotlin Multiplatform clone of **Windows 11 Dark-Mode Paint** (`Untitled - Paint`) built with `:extensions:canvas2d` (`Canvas2D`), `:extensions:imageprocessing` (`ImageBuffer2DContext`), `:extensions:dsl`, binary project serialization (`WritableByteBuffer` / `ReadableByteBuffer`), and `getPreferenceStore()` persistence across all 8 `GenericUI` backends.
+Complete standalone Kotlin Multiplatform clone of **Windows 11 Dark-Mode Paint** (`Untitled - Paint`) built with `:extensions:graphics:canvas2d` (`Canvas2D`), `:extensions:graphics:imageprocessing` (`ImageBuffer2DContext`), `:extensions:ui:dsl`, binary project serialization (`WritableByteBuffer` / `ReadableByteBuffer`), and `getPreferenceStore()` persistence across all 9 `GenericUI` backends (desktop, Android/iOS/iPadOS mobile, and web).
 
 ---
 
@@ -57,30 +57,31 @@ examples/canvas-and-gpu/genericui-paint/
 
 ---
 
-## Building & Running Across All 8 Backends
+## Building & Running Across All 9 Backends
 
 From `examples/canvas-and-gpu/genericui-paint`, invoke the root Gradle wrapper (`../../../gradlew`):
 
 ```bash
 # Desktop JVM (AWT/Swing + optional LWJGL)
-../../../gradlew swingDevelopment
+../../../gradlew developmentSwing
 
 # Desktop Windows (Win32 / Direct2D / ANGLE / Vulkan)
-../../../gradlew windowsDevelopment
+../../../gradlew developmentWindows
 
 # Desktop macOS (AppKit / CoreGraphics / MoltenVK)
-../../../gradlew macDevelopment
+../../../gradlew developmentMac
 
 # Desktop Linux GTK & Qt
-../../../gradlew linuxDevelopmentGtk
-../../../gradlew linuxDevelopmentQt
+../../../gradlew developmentLinuxGtk
+../../../gradlew developmentLinuxQt
 
 # Web (WasmJS primary + JS IR fallback + PWA manifest.webmanifest)
-../../../gradlew webDevelopment
+../../../gradlew developmentWeb
 
-# Mobile (Android & iOS)
-../../../gradlew androidDevelopment
-../../../gradlew iosDevelopment
+# Mobile (Android, iOS & iPadOS)
+../../../gradlew developmentAndroid
+../../../gradlew developmentIos
+../../../gradlew developmentIpados
 ```
 
 ---

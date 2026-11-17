@@ -2,7 +2,7 @@
 
 `GenericUIBrowser` (`examples/tools-and-extensions/genericui-browser`) is a standalone Kotlin Multiplatform GenericUI browser application modeled directly after **Google Chrome Desktop** and **Google Chrome Mobile (Android)**.
 
-Built on [`TabbedFragment`](../../../common/src/commonMain/kotlin/com/nexustools/genericui/component/fragment/helper/TabbedFragment.kt) (`TabbedChromeMode.AUTO`) and `:extensions:webview` ([`WebView`](../../../extensions/webview/common/src/commonMain/kotlin/com/nexustools/genericui/ext/webview/WebView.kt)), `GenericUIBrowser` uses the **exact same `TabbedFragment` APIs** (`openTab`, `selectTab`, `closeTab`, `requestNewTab`, `openMobileTabOverview`, `closeMobileTabOverview`, `toggleMobileTabOverview`, `updateViewportSize`) across all 8 GenericUI backends.
+Built on [`TabbedFragment`](../../../common/src/commonMain/kotlin/com/nexustools/genericui/component/fragment/helper/TabbedFragment.kt) (`TabbedChromeMode.AUTO`) and `:extensions:ui:webview` ([`WebView`](../../../extensions/ui/webview/src/commonMain/kotlin/com/nexustools/genericui/ext/webview/WebView.kt)), `GenericUIBrowser` uses the **exact same `TabbedFragment` APIs** (`openTab`, `selectTab`, `closeTab`, `requestNewTab`, `openMobileTabOverview`, `closeMobileTabOverview`, `toggleMobileTabOverview`, `updateViewportSize`) across all 9 GenericUI backends (including iPadOS).
 
 ---
 

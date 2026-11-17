@@ -12,7 +12,7 @@ genericui {
         name = "BSON JSON Plist Editor"
         version = "1.0.0"
         vendor = "NexusTools"
-        description = "Visual multi-tab JSON, Binary JSON (BSON), and Binary Plist (bplist00) editor powered by GenericUI across all 8 backends."
+        description = "Visual multi-tab JSON, Binary JSON (BSON), and Binary Plist (bplist00) editor powered by GenericUI across all 9 backends."
     }
     window {
         title = "BSON / JSON / Binary Plist Visual Editor"
@@ -30,7 +30,7 @@ genericui {
             windowTitle = "BSON / JSON / Binary Plist Visual Editor"
             appVersion = "1.0.0"
             vendor = "NexusTools"
-            description = "Visual multi-tab JSON, Binary JSON (BSON), and Binary Plist (bplist00) editor powered by GenericUI across all 8 backends."
+            description = "Visual multi-tab JSON, Binary JSON (BSON), and Binary Plist (bplist00) editor powered by GenericUI across all 9 backends."
             icon = "src/commonMain/resources/icon.svg"
             webIcon = "src/commonMain/resources/icon.svg"
             linuxIcon = "src/commonMain/resources/icon.svg"
@@ -40,7 +40,7 @@ genericui {
             allowInstallAsWebApp = true
             name = "BSON / JSON / Binary Plist Visual Editor"
             shortName = "DataEditor"
-            description = "Visual multi-tab JSON, Binary JSON (BSON), and Binary Plist (bplist00) editor powered by GenericUI across all 8 backends."
+            description = "Visual multi-tab JSON, Binary JSON (BSON), and Binary Plist (bplist00) editor powered by GenericUI across all 9 backends."
             display = "standalone"
             backgroundColor = "#0F172A"
             themeColor = "#1E293B"

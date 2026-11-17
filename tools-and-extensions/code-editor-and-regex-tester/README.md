@@ -1,6 +1,6 @@
 # Syntax-Highlighted CodeEditor & Regex Playground (`examples/tools-and-extensions/code-editor-and-regex-tester`)
 
-A multiplatform developer tool built with `GenericUI`, `:extensions:codeeditor`, and `:extensions:dsl` across all 8 backends.
+A multiplatform developer tool built with `GenericUI`, `:extensions:ui:codeeditor`, and `:extensions:ui:dsl` across all 9 backends (desktop, Android/iOS/iPadOS mobile, and web).
 
 ---
 
@@ -56,7 +56,7 @@ genericui {
         name = "CodeEditor & Regex Playground"
         version = "1.0.0"
         vendor = "NexusTools"
-        description = "Syntax-highlighted multi-language IDE code editor and live regular expression playground powered by GenericUI across all 8 backends."
+        description = "Syntax-highlighted multi-language IDE code editor and live regular expression playground powered by GenericUI across all 9 backends."
     }
     window {
         title = "GenericUI — Syntax-Highlighted CodeEditor & Regex Playground"
@@ -98,7 +98,7 @@ class CodeEditorRegexFragment(
 
 ---
 
-## Building & Running Across All 8 Backends
+## Building & Running Across All 9 Backends
 
 From `examples/tools-and-extensions/code-editor-and-regex-tester`, invoke the root Gradle wrapper (`../../../gradlew`):
 
@@ -111,6 +111,7 @@ From `examples/tools-and-extensions/code-editor-and-regex-tester`, invoke the ro
 | **JVM / Swing (`:desktop:swing`)** | `../../../gradlew developmentSwing` | `../../../gradlew productionSwing` |
 | **Android (`:mobile:android`)** | `../../../gradlew developmentAndroid` | `../../../gradlew productionAndroid` |
 | **iOS (`:mobile:ios`)** | `../../../gradlew developmentIos` | `../../../gradlew productionIos` |
+| **iPadOS (`:mobile:ipados`)** | `../../../gradlew developmentIpados` | `../../../gradlew productionIpados` |
 | **Web (`:web` WasmJS + JS + PWA)** | `../../../gradlew developmentWeb` | `../../../gradlew productionWeb` |
 
 ---

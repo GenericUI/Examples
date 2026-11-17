@@ -17,6 +17,7 @@ genericui {
     window {
         title = "GenericUI — Adaptive Media Catalog"
         icon = "src/commonMain/resources/icon.svg"
+        aspectRatio(16, 9)
     }
     theme {
         mode = "auto"
@@ -59,11 +60,6 @@ genericui {
     testing {
         enabled = true
         visualOnWindows = true
-    }
-    sourceSets {
-        commonMain {
-            implementation("com.nexustools.genericui.tests:common:0.1.0-SNAPSHOT")
-        }
     }
     styles {
         compileSass = true

@@ -50,7 +50,7 @@ class BrowserTabPageFragment(
     private var githubStarred: Boolean = false
     private var githubStarCount: Int = 383
 
-    /** Embedded `:extensions:webview` component synchronized with [currentUrl]. */
+    /** Embedded `:extensions:ui:webview` component synchronized with [currentUrl]. */
     val webView: WebView = WebView(initialUrl = initialUrl).apply {
         addClass("browser-tab-webview")
         isVisible = false

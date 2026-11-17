@@ -50,8 +50,8 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 
 /**
- * Windows 11 Dark-Mode Paint (`Untitled - Paint`) clone built with `:extensions:canvas2d` ([Canvas2D]),
- * `:extensions:imageprocessing` ([ImageBuffer2DContext]), `:extensions:dsl`, [Writable] / [Readable]
+ * Windows 11 Dark-Mode Paint (`Untitled - Paint`) clone built with `:extensions:graphics:canvas2d` ([Canvas2D]),
+ * `:extensions:graphics:imageprocessing` ([ImageBuffer2DContext]), `:extensions:ui:dsl`, [Writable] / [Readable]
  * binary project serialization, and `getPreferenceStore()` persistence.
  */
 @MainAppFragment

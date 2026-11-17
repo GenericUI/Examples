@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+  <!-- Articulated Skyline Courier 2D SVG Reference Rig -->
+  <g id="courier-rig" transform="translate(80, 96)">
+    <path id="scarf" d="M-8,-46 C-28,-48 -46,-36 -56,-26 L-44,-20 C-32,-28 -18,-36 -6,-36 Z" fill="#F43F5E" stroke="#881337" stroke-width="2"/>
+    <rect id="torso" x="-11" y="-48" width="22" height="38" rx="6" fill="#0EA5E9" stroke="#0C4A6E" stroke-width="2"/>
+    <circle id="head" cx="0" cy="-64" r="14" fill="#E2E8F0" stroke="#0F172A" stroke-width="2"/>
+    <path id="visor" d="M-2,-70 L14,-70 L11,-61 L-2,-61 Z" fill="#F59E0B" stroke="#78350F" stroke-width="1.5"/>
+    <rect id="thighL" x="-10" y="-10" width="9" height="24" rx="4" fill="#1E293B"/>
+    <rect id="thighR" x="2" y="-10" width="9" height="24" rx="4" fill="#334155"/>
+    <path id="grappler-arm" d="M8,-40 L34,-50 L38,-43 L10,-32 Z" fill="#38BDF8" stroke="#0369A1" stroke-width="1.5"/>
+  </g>
+</svg>

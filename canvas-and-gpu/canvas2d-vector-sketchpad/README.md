@@ -1,6 +1,6 @@
 # Canvas2D Vector & Bezier Sketchpad (`examples/canvas-and-gpu/canvas2d-vector-sketchpad`)
 
-Interactive 2D vector drawing and cubic-Bezier curve sketchpad demonstrating `:extensions:canvas2d` (`Canvas2D`, `CurveEditor`), `:extensions:dsl`, hardware VBlank rendering (`onRender`), undo/redo command history (`SketchVectorCommand`), and `JestElectricRunner` cross-platform UI testing across all 8 `GenericUI` backends.
+Interactive 2D vector drawing and cubic-Bezier curve sketchpad demonstrating `:extensions:graphics:canvas2d` (`Canvas2D`, `CurveEditor`), `:extensions:ui:dsl`, hardware VBlank rendering (`onRender`), undo/redo command history (`SketchVectorCommand`), and `JestElectricRunner` cross-platform UI testing across all 9 `GenericUI` backends (desktop, Android/iOS/iPadOS mobile, and web).
 
 ---
 
@@ -8,7 +8,7 @@ Interactive 2D vector drawing and cubic-Bezier curve sketchpad demonstrating `:e
 
 - **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `SketchpadFragment` (`@MainAppFragment`) and `SketchpadApp` (`@AppApplication` extending `FragmentApplication` with `setThemeMode(ThemeMode.DARK)` and `addStyleSheet(StylesPrecompiledStyleSheet)`).
 - **Custom SVG Tool Cursors (`CssCustomCursor`) & `getStyle()` / `getBootstrap()`**: Dynamic tool-specific cursors built with `CssCustomCursor.fromSvg(...)` (with custom hotspot coordinates and `CssCursor.CROSSHAIR` fallback) applied via `sketchCanvas.getStyle().setCursor(...)`, and active tool button state updates via `btn.getBootstrap().apply { type = ...; outline = ... }`.
-- **`:extensions:canvas2d` (`Canvas2D` & `CurveEditor`)**: Immediate-mode 2D vector drawing (`beginPath`, `moveTo`, `lineTo`, `bezierCurveTo`, `arc`, `fillRect`, `strokeRect`) and interactive cubic-Bezier curve editing (`sampleCurveY`).
+- **`:extensions:graphics:canvas2d` (`Canvas2D` & `CurveEditor`)**: Immediate-mode 2D vector drawing (`beginPath`, `moveTo`, `lineTo`, `bezierCurveTo`, `arc`, `fillRect`, `strokeRect`) and interactive cubic-Bezier curve editing (`sampleCurveY`).
 - **Hardware VBlank Rendering**: Frame-accurate rendering loop tracking `deltaMs` and VBlank frame counters (`badge-vblank-frames`).
 - **Form & Action Controls**: Tool switcher `Button`s (`Freehand`, `Rectangle`, `Ellipse`, `Line`, `Bezier Curve` via `SketchShapeType`), stroke width `RangeSlider` (`slider-stroke-width`), `ColorPicker` (`picker-stroke-color`), Undo/Redo history stack, and PNG export (`Dialogs.saveFile`).
 - **`JestElectricRunner` Test Suite**: Automated vector drawing, custom cursor rasterization (`resolveToImageBuffer()`), `getBootstrap()`, undo/redo, and UI tests in `SketchpadJestTest.kt`.
@@ -95,7 +95,7 @@ class SketchpadFragment : Fragment() {
 
 ---
 
-## Building & Running Across All 8 Backends
+## Building & Running Across All 9 Backends
 
 From `examples/canvas-and-gpu/canvas2d-vector-sketchpad`, invoke the root Gradle wrapper (`../../../gradlew`):
 
@@ -116,9 +116,10 @@ From `examples/canvas-and-gpu/canvas2d-vector-sketchpad`, invoke the root Gradle
 # Web (WasmJS primary + JS IR fallback + PWA manifest.webmanifest)
 ../../../gradlew developmentWeb
 
-# Mobile (Android & iOS)
+# Mobile (Android, iOS & iPadOS)
 ../../../gradlew developmentAndroid
 ../../../gradlew developmentIos
+../../../gradlew developmentIpados
 ```
 
 ---

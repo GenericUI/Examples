@@ -12,7 +12,7 @@ genericui {
         name = "MDI Component & Live SCSS Showcase"
         version = "1.0.0"
         vendor = "NexusTools"
-        description = "Interactive Multi-Document Interface (MDI) component gallery and live SCSS stylesheet editor powered by GenericUI across all 8 backends."
+        description = "Interactive Multi-Document Interface (MDI) component gallery and live SCSS stylesheet editor powered by GenericUI across all 9 backends."
     }
     window {
         title = "GenericUI — MDI Component & Live SCSS Stylesheet Showcase"
@@ -32,7 +32,7 @@ genericui {
             windowTitle = "GenericUI — MDI Component & Live SCSS Stylesheet Showcase"
             appVersion = "1.0.0"
             vendor = "NexusTools"
-            description = "Interactive Multi-Document Interface (MDI) component gallery and live SCSS stylesheet editor powered by GenericUI across all 8 backends."
+            description = "Interactive Multi-Document Interface (MDI) component gallery and live SCSS stylesheet editor powered by GenericUI across all 9 backends."
             icon = "src/commonMain/resources/icon.svg"
             webIcon = "src/commonMain/resources/icon.svg"
             linuxIcon = "src/commonMain/resources/icon.svg"
@@ -42,7 +42,7 @@ genericui {
             allowInstallAsWebApp = true
             name = "GenericUI MDI Component & Live SCSS Showcase"
             shortName = "MdiScssLab"
-            description = "Interactive Multi-Document Interface (MDI) component gallery and live SCSS stylesheet editor powered by GenericUI across all 8 backends."
+            description = "Interactive Multi-Document Interface (MDI) component gallery and live SCSS stylesheet editor powered by GenericUI across all 9 backends."
             display = "standalone"
             backgroundColor = "#0B0F19"
             themeColor = "#FF2A6D"
@@ -60,11 +60,6 @@ genericui {
     testing {
         enabled = true
         visualOnWindows = true
-    }
-    sourceSets {
-        common {
-            implementation("com.nexustools.genericui.tests:common:0.1.0-SNAPSHOT")
-        }
     }
     styles {
         compileSass = true

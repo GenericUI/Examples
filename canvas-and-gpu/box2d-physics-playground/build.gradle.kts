@@ -17,6 +17,7 @@ genericui {
     window {
         title = "Box2D Rigid-Body Physics Playground"
         icon = "src/commonMain/resources/icon.svg"
+        aspectRatio(16, 10)
     }
     theme {
         color = "#10B981"
@@ -57,9 +58,8 @@ genericui {
     }
     sourceSets {
         common {
-            implementation("com.nexustools.genericui.extensions.canvas2d:dsl:0.1.0-SNAPSHOT")
-            implementation("com.nexustools.genericui.extensions.box2d:dsl:0.1.0-SNAPSHOT")
-            implementation("com.nexustools.genericui.tests:common:0.1.0-SNAPSHOT")
+            implementation("com.nexustools.genericui.extensions.graphics.canvas2d:dsl:0.1.0-SNAPSHOT")
+            implementation("com.nexustools.genericui.extensions.physics.box2d:dsl:0.1.0-SNAPSHOT")
         }
     }
     testing {

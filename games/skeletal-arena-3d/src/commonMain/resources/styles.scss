@@ -1,0 +1,39 @@
+$bg-arena: #090714;
+$bg-card: #151226;
+$accent-pink: #ec4899;
+$text-light: #f8fafc;
+
+html, body, #genericui-app, .genericui-window {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: $bg-arena;
+  color: $text-light;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+.arena-shell {
+  width: 100%;
+  height: 100%;
+  background-color: $bg-arena;
+  color: $text-light;
+  padding: 10px;
+
+  .arena-card {
+    background-color: $bg-card;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+
+  .arena-canvas-3d {
+    border-radius: 8px;
+    background-color: #0e0b1f;
+  }
+
+  .arena-gamepad-focus {
+    outline: 2px solid $accent-pink;
+    box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.5);
+  }
+}

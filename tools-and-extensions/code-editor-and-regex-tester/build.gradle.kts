@@ -12,7 +12,7 @@ genericui {
         name = "CodeEditor & Regex Playground"
         version = "1.0.0"
         vendor = "NexusTools"
-        description = "Syntax-highlighted multi-language IDE code editor and live regular expression playground powered by GenericUI across all 8 backends."
+        description = "Syntax-highlighted multi-language IDE code editor and live regular expression playground powered by GenericUI across all 9 backends."
     }
     window {
         title = "GenericUI — Syntax-Highlighted CodeEditor & Regex Playground"
@@ -30,7 +30,7 @@ genericui {
             windowTitle = "GenericUI — Syntax-Highlighted CodeEditor & Regex Playground"
             appVersion = "1.0.0"
             vendor = "NexusTools"
-            description = "Syntax-highlighted multi-language IDE code editor and live regular expression playground powered by GenericUI across all 8 backends."
+            description = "Syntax-highlighted multi-language IDE code editor and live regular expression playground powered by GenericUI across all 9 backends."
             icon = "src/commonMain/resources/icon.svg"
             webIcon = "src/commonMain/resources/icon.svg"
             linuxIcon = "src/commonMain/resources/icon.svg"
@@ -40,7 +40,7 @@ genericui {
             allowInstallAsWebApp = true
             name = "GenericUI CodeEditor & Regex Playground"
             shortName = "RegexLab"
-            description = "Syntax-highlighted multi-language IDE code editor and live regular expression playground powered by GenericUI across all 8 backends."
+            description = "Syntax-highlighted multi-language IDE code editor and live regular expression playground powered by GenericUI across all 9 backends."
             display = "standalone"
             backgroundColor = "#0F172A"
             themeColor = "#6366F1"
@@ -57,11 +57,6 @@ genericui {
     testing {
         enabled = true
         visualOnWindows = true
-    }
-    sourceSets {
-        common {
-            implementation("com.nexustools.genericui.tests:common:0.1.0-SNAPSHOT")
-        }
     }
     styles {
         compileSass = true

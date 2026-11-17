@@ -49,7 +49,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 /**
- * Interactive 2D vector and cubic-Bezier sketchpad [Fragment] built with `:extensions:canvas2d`
+ * Interactive 2D vector and cubic-Bezier sketchpad [Fragment] built with `:extensions:graphics:canvas2d`
  * ([Canvas2D] and [CurveEditor]) and hardware VBlank rendering (`registerVBlankRender`).
  */
 @MainAppFragment

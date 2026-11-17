@@ -17,6 +17,7 @@ genericui {
     window {
         title = "Offscreen GPU Image Filter & Histogram Lab"
         icon = "src/commonMain/resources/icon.svg"
+        aspectRatio(16, 10)
     }
     theme {
         color = "#8B5CF6"
@@ -58,8 +59,7 @@ genericui {
     }
     sourceSets {
         common {
-            implementation("com.nexustools.genericui.extensions.canvas2d:dsl:0.1.0-SNAPSHOT")
-            implementation("com.nexustools.genericui.tests:common:0.1.0-SNAPSHOT")
+            implementation("com.nexustools.genericui.extensions.graphics.canvas2d:dsl:0.1.0-SNAPSHOT")
         }
     }
     testing {

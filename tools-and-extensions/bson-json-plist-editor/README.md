@@ -1,6 +1,6 @@
 # BSON / JSON / Binary Plist Visual Editor (`examples/tools-and-extensions/bson-json-plist-editor`)
 
-A purely **visual, multi-tab structured document editor** for **JSON (`.json`)**, **Binary JSON / BSON (`.bson`, `.bjson`)**, and **Apple Binary Property List (`.plist` `bplist00`)** files, powered by **`LazyGridTree`** across **all 8 GenericUI target backends** (`windows`, `macos`, `gtk`, `qt`, `swing`, `android`, `ios`, and `web`).
+A purely **visual, multi-tab structured document editor** for **JSON (`.json`)**, **Binary JSON / BSON (`.bson`, `.bjson`)**, and **Apple Binary Property List (`.plist` `bplist00`)** files, powered by **`LazyGridTree`** across **all 9 GenericUI target backends** (`windows`, `macos`, `gtk`, `qt`, `swing`, `android`, `ios`, `ipados`, and `web`).
 
 ---
 
@@ -71,7 +71,7 @@ genericui {
         name = "BSON JSON Plist Editor"
         version = "1.0.0"
         vendor = "NexusTools"
-        description = "Visual multi-tab JSON, Binary JSON (BSON), and Binary Plist (bplist00) editor powered by GenericUI across all 8 backends."
+        description = "Visual multi-tab JSON, Binary JSON (BSON), and Binary Plist (bplist00) editor powered by GenericUI across all 9 backends."
     }
     window {
         title = "BSON / JSON / Binary Plist Visual Editor"
@@ -112,7 +112,7 @@ class DataEditorFragment(
 
 ---
 
-## Building & Running Across All 8 Backends
+## Building & Running Across All 9 Backends
 
 From `examples/tools-and-extensions/bson-json-plist-editor`, invoke the root Gradle wrapper (`../../../gradlew`):
 
@@ -129,4 +129,5 @@ From `examples/tools-and-extensions/bson-json-plist-editor`, invoke the root Gra
 | **Linux Qt (`:desktop:qt`)** | `../../../gradlew developmentLinuxQt` / `../../../gradlew productionLinuxQt` |
 | **Android (`:mobile:android`)** | `../../../gradlew developmentAndroid` / `../../../gradlew productionAndroid` |
 | **iOS (`:mobile:ios`)** | `../../../gradlew developmentIos` / `../../../gradlew productionIos` |
+| **iPadOS (`:mobile:ipados`)** | `../../../gradlew developmentIpados` / `../../../gradlew productionIpados` |
 | **Web PWA (`:web` Wasm + JS)** | `../../../gradlew developmentWeb` / `../../../gradlew productionWeb` |

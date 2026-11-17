@@ -1,6 +1,6 @@
 # MDI Component & Live SCSS Stylesheet Showcase (`examples/tools-and-extensions/mdi-component-and-scss-showcase`)
 
-A multiplatform showcase and live theme studio built with `GenericUI`, `:extensions:codeeditor`, `:extensions:dsl`, and `:extensions:canvas2d` across all 8 backends.
+A multiplatform showcase and live theme studio built with `GenericUI`, `:extensions:ui:codeeditor`, `:extensions:ui:dsl`, and `:extensions:graphics:canvas2d` across all 9 backends (desktop, Android/iOS/iPadOS mobile, and web).
 
 ---
 
@@ -68,7 +68,7 @@ genericui {
         name = "MDI Component & Live SCSS Showcase"
         version = "1.0.0"
         vendor = "NexusTools"
-        description = "Interactive Multi-Document Interface (MDI) component gallery and live SCSS stylesheet editor powered by GenericUI across all 8 backends."
+        description = "Interactive Multi-Document Interface (MDI) component gallery and live SCSS stylesheet editor powered by GenericUI across all 9 backends."
     }
     window {
         title = "GenericUI — MDI Component & Live SCSS Stylesheet Showcase"
@@ -114,7 +114,7 @@ class EmbeddedDockWorkspaceSubFragment : DockWorkspaceFragment(
 
 ---
 
-## Building & Running Across All 8 Backends
+## Building & Running Across All 9 Backends
 
 From `examples/tools-and-extensions/mdi-component-and-scss-showcase`, invoke the root Gradle wrapper (`../../../gradlew`):
 
@@ -127,6 +127,7 @@ From `examples/tools-and-extensions/mdi-component-and-scss-showcase`, invoke the
 | **JVM / Swing (`:desktop:swing`)** | `../../../gradlew developmentSwing` | `../../../gradlew productionSwing` |
 | **Android (`:mobile:android`)** | `../../../gradlew developmentAndroid` | `../../../gradlew productionAndroid` |
 | **iOS (`:mobile:ios`)** | `../../../gradlew developmentIos` | `../../../gradlew productionIos` |
+| **iPadOS (`:mobile:ipados`)** | `../../../gradlew developmentIpados` | `../../../gradlew productionIpados` |
 | **Web (`:web` WasmJS + JS + PWA)** | `../../../gradlew developmentWeb` | `../../../gradlew productionWeb` |
 
 ---

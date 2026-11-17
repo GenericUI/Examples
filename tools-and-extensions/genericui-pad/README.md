@@ -1,6 +1,6 @@
 # GenericUIPad — Windows 11 Tabbed Notepad & Rich Markdown Clone
 
-`GenericUIPad` is a standalone Kotlin Multiplatform application built with **GenericUI** that replicates the dark-mode **Windows 11 Tabbed Notepad** experience across all 8 GenericUI backends (`:desktop:windows`, `:desktop:macos`, `:desktop:gtk`, `:desktop:qt`, `:desktop:swing`, `:mobile:android`, `:mobile:ios`, and `:web`).
+`GenericUIPad` is a standalone Kotlin Multiplatform application built with **GenericUI** that replicates the dark-mode **Windows 11 Tabbed Notepad** experience across all 9 GenericUI backends (`windows`, `macos`, `gtk`, `qt`, `swing`, `android`, `ios`, `ipados`, and `web`).
 
 ## Highlights
 

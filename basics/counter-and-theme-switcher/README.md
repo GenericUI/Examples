@@ -1,6 +1,6 @@
 # Counter & Theme Switcher (`examples/basics/counter-and-theme-switcher`)
 
-A beginner-friendly **GenericUI** multiplatform example demonstrating reactive UI controls, `ComponentBootstrap` (`getBootstrap()`) contextual styling, `ComponentStyle` (`getStyle()`) inline CSS properties, runtime theme mode (`AUTO`, `LIGHT`, `DARK`) and accent `themeColor` switching, and cross-platform object persistence via `PreferenceStore` across all 8 backends.
+A beginner-friendly **GenericUI** multiplatform example demonstrating reactive UI controls, `ComponentBootstrap` (`getBootstrap()`) contextual styling, `ComponentStyle` (`getStyle()`) inline CSS properties, runtime theme mode (`AUTO`, `LIGHT`, `DARK`) and accent `themeColor` switching, and cross-platform object persistence via `PreferenceStore` across all 9 `GenericUI` backends (desktop, mobile including iPadOS, and web).
 
 ---
 
@@ -10,7 +10,7 @@ A beginner-friendly **GenericUI** multiplatform example demonstrating reactive U
 - **Core Widgets & Layouts**: `VStack`, `HStack` (with `FlexWrap.WRAP` multi-line wrapping), `Card`, `Button`, `Badge`, `Select`, `SelectOption`, `Switch`, `Heading`, and `Text`.
 - **`ComponentBootstrap` (`getBootstrap()`) & `ComponentStyle` (`getStyle()`)**: Uses strongly-typed `getBootstrap()` (`BootstrapType`, `BootstrapSize`, `SpacingScale`, `BorderRadiusStyle`, `ShadowElevation`, `FontWeight`, `FlexWrap.WRAP`), W3C `getStyle()` (`fontSizePx`, `color` on typography elements), strict custom CSS class isolation (`addClass` / `hasClass` / `getClasses`), and build-time `styles.scss` precompilation (`StylesPrecompiledStyleSheet` via `addStyleSheet(...)`).
 - **Runtime Theme (`ThemeConfig`) & Accent Color Switching**: Updates `setThemeMode(...)` / `getThemeMode()` / `getResolvedTheme()` (`ThemeMode.AUTO`, `ThemeMode.LIGHT`, `ThemeMode.DARK`), `setThemeConfig(...)`, and `setThemeColor(...)` (`#2563EB`, `#10B981`, `#8B5CF6`).
-- **`getPreferenceStore()` & `PreferenceStore` Object Persistence**: Automatically serializes and restores `CounterSettings` (`PreferenceSerializable` + `PreferenceObjectCodec`) via `IFragment.getPreferenceStore()` / `IApplication.getPreferenceStore()` across all 8 backends.
+- **`getPreferenceStore()` & `PreferenceStore` Object Persistence**: Automatically serializes and restores `CounterSettings` (`PreferenceSerializable` + `PreferenceObjectCodec`) via `IFragment.getPreferenceStore()` / `IApplication.getPreferenceStore()` across all 9 backends (`backends { all() }` enables `windows`, `macos`, `gtk`, `qt`, `swing`, `android`, `ios`, `ipados`, and `web`, with automatic Apple squircle/tile wrapping for `icon.svg`).
 - **`JestElectricRunner` Test Suite**: Full BDD (`describe`, `it`, `expect`, `expectNode`) and Robolectric-style (`launchApp`, `launchFragment`, `findById`, `performClick`, `performSelectValue`, `performSetChecked`) UI test coverage in `CounterJestTest.kt`.
 
 ---
@@ -95,7 +95,7 @@ class CounterFragment(
 
 ---
 
-## Building & Running Across All 8 Backends
+## Building & Running Across All 9 Backends
 
 From `examples/basics/counter-and-theme-switcher`, invoke the root Gradle wrapper (`../../../gradlew`):
 
@@ -114,6 +114,7 @@ From `examples/basics/counter-and-theme-switcher`, invoke the root Gradle wrappe
 # Build Mobile targets
 ../../../gradlew developmentAndroid
 ../../../gradlew developmentIos
+../../../gradlew developmentIpados
 ```
 
 ---

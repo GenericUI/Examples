@@ -1,13 +1,13 @@
 # Adaptive Media Catalog (`examples/layouts-and-data/adaptive-media-catalog`)
 
-Demonstrates responsive 3-posture layout adaptation in `GenericUI` using `AdaptiveSplitTabFragment`, seamlessly re-parenting the primary media viewport and secondary tab container across **Desktop/Tablet Multi-Column Split** (`TABLET_DESKTOP_COLUMNS`), **Phone Landscape Immersive Fullscreen** (`PHONE_LANDSCAPE_FULLSCREEN`), and **Phone Portrait Single-Flow Tabs** (`PORTRAIT_SINGLE_FLOW_TABS`) without interrupting playback state across all 8 backends.
+Demonstrates responsive 3-posture layout adaptation in `GenericUI` using `AdaptiveSplitTabFragment`, seamlessly re-parenting the primary media viewport and secondary tab container across **Desktop/Tablet Multi-Column Split** (`TABLET_DESKTOP_COLUMNS`), **Phone Landscape Immersive Fullscreen** (`PHONE_LANDSCAPE_FULLSCREEN`), and **Phone Portrait Single-Flow Tabs** (`PORTRAIT_SINGLE_FLOW_TABS`) without interrupting playback state across all 9 backends (desktop, Android/iOS/iPadOS mobile, and web).
 
 ---
 
 ## Key `GenericUI` APIs Demonstrated
 
 - **Annotation-Driven Entry Point (`@MainAppFragment` & `@AppApplication`)**: `AdaptiveMediaCatalogFragment` (`@MainAppFragment` extending `AdaptiveSplitTabFragment`) and `AdaptiveMediaCatalogApp` (`@AppApplication` extending `FragmentApplication`) with `ThemeMode.AUTO` (`setThemeMode(ThemeMode.AUTO)`) and `StylesPrecompiledStyleSheet` (`addStyleSheet(...)`).
-- **`ComponentBootstrap` (`bootstrap { ... }`) & `ComponentStyle` (`style { ... }`)**: Uses `:extensions:dsl` `bootstrap { ... }` and `style { ... }` builders (`BootstrapType`, `BootstrapSize`, `BorderRadiusStyle`, `ShadowElevation`, `SpacingScale`, `FontWeight`, `accentColor`) with strict custom CSS class isolation.
+- **`ComponentBootstrap` (`bootstrap { ... }`) & `ComponentStyle` (`style { ... }`)**: Uses `:extensions:ui:dsl` `bootstrap { ... }` and `style { ... }` builders (`BootstrapType`, `BootstrapSize`, `BorderRadiusStyle`, `ShadowElevation`, `SpacingScale`, `FontWeight`, `accentColor`) with strict custom CSS class isolation.
 - **Adaptive Helper Fragment**: `AdaptiveSplitTabFragment`, `AdaptiveSplitTabFragment.LayoutMode`, `WindowConfiguration`, `setPrimaryView`, and `addTab`.
 - **Navigation & Surfaces**: `TabContainer` (`Channels`, `Queue`, `Details`), `Card`, `Badge`, `Button`, `Heading`, `Label`, `HStack`, and `VStack`.
 - **Posture Simulation & Testing**: Live switching between Desktop (`1280x800`), Phone Landscape (`800x390`), and Phone Portrait (`390x844`) postures verified with `JestElectricRunner` (`AdaptiveMediaCatalogJestTest.kt`).
@@ -100,7 +100,7 @@ class AdaptiveMediaCatalogFragment : AdaptiveSplitTabFragment(
 
 ---
 
-## Building & Running Across All 8 Backends
+## Building & Running Across All 9 Backends
 
 From `examples/layouts-and-data/adaptive-media-catalog`, invoke the root Gradle wrapper (`../../../gradlew`):
 
@@ -118,9 +118,10 @@ From `examples/layouts-and-data/adaptive-media-catalog`, invoke the root Gradle 
 # Desktop — JVM / AWT / Swing
 ../../../gradlew developmentSwing
 
-# Mobile — Android & iOS
+# Mobile — Android, iOS & iPadOS
 ../../../gradlew developmentAndroid
 ../../../gradlew developmentIos
+../../../gradlew developmentIpados
 
 # Web — WasmJS primary + JS fallback + PWA manifest.webmanifest
 ../../../gradlew developmentWeb

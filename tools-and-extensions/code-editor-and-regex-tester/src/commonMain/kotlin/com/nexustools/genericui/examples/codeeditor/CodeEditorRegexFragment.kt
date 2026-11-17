@@ -40,7 +40,7 @@ import com.nexustools.genericui.ext.codeeditor.TextRange
 import com.nexustools.genericui.style.css.CssEdgeLengths
 
 /**
- * Primary [Fragment] combining `:extensions:codeeditor` ([IdeCodeEditor] and [CodeLanguage])
+ * Primary [Fragment] combining `:extensions:ui:codeeditor` ([IdeCodeEditor] and [CodeLanguage])
  * with an interactive Regular Expression playground, capture-group inspector table,
  * multi-buffer [TabContainer], and [PreferenceStore]-backed snippet library.
  */

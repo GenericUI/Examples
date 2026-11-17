@@ -60,11 +60,6 @@ genericui {
         enabled = true
         visualOnWindows = true
     }
-    sourceSets {
-        commonMain {
-            implementation("com.nexustools.genericui.tests:common:0.1.0-SNAPSHOT")
-        }
-    }
     styles {
         compileSass = true
         generateWebCss = true

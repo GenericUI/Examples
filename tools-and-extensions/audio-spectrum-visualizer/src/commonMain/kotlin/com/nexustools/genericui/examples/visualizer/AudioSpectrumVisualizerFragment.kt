@@ -50,9 +50,9 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 /**
- * Primary [Fragment] demonstrating `:extensions:media` ([AudioPlayer], [AudioAnalyzer],
+ * Primary [Fragment] demonstrating `:extensions:media:media` ([AudioPlayer], [AudioAnalyzer],
  * [WebVttSrtParser], [AudioEnergyBands], [MediaCapabilitiesReport]) paired with a real-time
- * `:extensions:canvas2d` ([Canvas2D]) visualizer stage.
+ * `:extensions:graphics:canvas2d` ([Canvas2D]) visualizer stage.
  */
 @MainAppFragment
 class AudioSpectrumVisualizerFragment : Fragment() {

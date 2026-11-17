@@ -1,6 +1,6 @@
 # Audio Spectrum Visualizer & Media Codec Inspector (`examples/tools-and-extensions/audio-spectrum-visualizer`)
 
-A multiplatform media and visualization showcase built with `GenericUI`, `:extensions:media`, `:extensions:canvas2d`, `:extensions:gpu`, and `:extensions:dsl` across all 8 backends.
+A multiplatform media and visualization showcase built with `GenericUI`, `:extensions:media:media`, `:extensions:graphics:canvas2d`, `:extensions:graphics:gpu`, and `:extensions:ui:dsl` across all 9 backends (desktop, Android/iOS/iPadOS mobile, and web).
 
 ---
 
@@ -59,7 +59,7 @@ genericui {
         name = "Audio Spectrum Visualizer"
         version = "1.0.0"
         vendor = "NexusTools"
-        description = "Cross-platform media player, real-time FFT spectrum & waveform visualizer, WebVTT/SRT subtitle inspector, and codec capability viewer across all 8 backends."
+        description = "Cross-platform media player, real-time FFT spectrum & waveform visualizer, WebVTT/SRT subtitle inspector, and codec capability viewer across all 9 backends."
     }
     window {
         title = "GenericUI — Media Player, Codec Inspector & FFT Spectrum Visualizer"
@@ -103,7 +103,7 @@ class AudioSpectrumVisualizerFragment : Fragment() {
 
 ---
 
-## Building & Running Across All 8 Backends
+## Building & Running Across All 9 Backends
 
 From `examples/tools-and-extensions/audio-spectrum-visualizer`, invoke the root Gradle wrapper (`../../../gradlew`):
 
@@ -116,6 +116,7 @@ From `examples/tools-and-extensions/audio-spectrum-visualizer`, invoke the root 
 | **JVM / Swing (`:desktop:swing`)** | `../../../gradlew developmentSwing` | `../../../gradlew productionSwing` |
 | **Android (`:mobile:android`)** | `../../../gradlew developmentAndroid` | `../../../gradlew productionAndroid` |
 | **iOS (`:mobile:ios`)** | `../../../gradlew developmentIos` | `../../../gradlew productionIos` |
+| **iPadOS (`:mobile:ipados`)** | `../../../gradlew developmentIpados` | `../../../gradlew productionIpados` |
 | **Web (`:web` WasmJS + JS + PWA)** | `../../../gradlew developmentWeb` | `../../../gradlew productionWeb` |
 
 ---

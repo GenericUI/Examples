@@ -12,7 +12,7 @@ genericui {
         name = "GenericUIBrowser"
         version = "1.0.0"
         vendor = "NexusTools"
-        description = "Google Chrome Desktop and Mobile multi-tab browser clone powered by GenericUI TabbedFragment and WebView across all 8 backends."
+        description = "Google Chrome Desktop and Mobile multi-tab browser clone powered by GenericUI TabbedFragment and WebView across all 9 backends."
     }
     window {
         title = "GenericUIBrowser"
@@ -30,7 +30,7 @@ genericui {
             windowTitle = "GenericUIBrowser"
             appVersion = "1.0.0"
             vendor = "NexusTools"
-            description = "Google Chrome Desktop and Mobile multi-tab browser clone powered by GenericUI TabbedFragment and WebView across all 8 backends."
+            description = "Google Chrome Desktop and Mobile multi-tab browser clone powered by GenericUI TabbedFragment and WebView across all 9 backends."
             icon = "src/commonMain/resources/icon.svg"
             webIcon = "src/commonMain/resources/icon.svg"
             linuxIcon = "src/commonMain/resources/icon.svg"
@@ -40,7 +40,7 @@ genericui {
             allowInstallAsWebApp = true
             name = "GenericUIBrowser"
             shortName = "Browser"
-            description = "Google Chrome Desktop and Mobile multi-tab browser clone powered by GenericUI TabbedFragment and WebView across all 8 backends."
+            description = "Google Chrome Desktop and Mobile multi-tab browser clone powered by GenericUI TabbedFragment and WebView across all 9 backends."
             display = "standalone"
             backgroundColor = "#111827"
             themeColor = "#1F2937"

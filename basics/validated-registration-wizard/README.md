@@ -1,6 +1,6 @@
 # Validated Registration Wizard (`examples/basics/validated-registration-wizard`)
 
-A multi-step developer onboarding wizard built with **GenericUI** demonstrating form controls, live per-step validation, progress tracking, and structured `RegistrationProfile` persistence via `PreferenceStore` across all 8 backends.
+A multi-step developer onboarding wizard built with **GenericUI** demonstrating form controls, live per-step validation, progress tracking, and structured `RegistrationProfile` persistence via `PreferenceStore` across all 9 backends (desktop, Android/iOS/iPadOS mobile, and web).
 
 ---
 
@@ -13,7 +13,7 @@ A multi-step developer onboarding wizard built with **GenericUI** demonstrating 
   - **Step 2 (Developer Profile)**: `Select` (`select-role`) and `RangeSlider` (`slider-experience`) with live experience badge updates (`badge-experience-years`).
   - **Step 3 (Review & Terms)**: Summary overview (`summary-username`, `summary-email`, `summary-role`, `summary-experience`), `CheckBox` (`check-terms`), and `Button` (`btn-submit`).
 - **Feedback & Navigation Controls**: `ProgressBar` (`wizard-progress`), contextual `Alert` (`validation-alert`), status `Badge` (`validation-message`, `badge-current-step`), and `Back` / `Next` navigation buttons (`btn-back`, `btn-next`).
-- **`PreferenceStore` Object Persistence**: Persists the completed `RegistrationProfile` across all 8 GenericUI target backends.
+- **`PreferenceStore` Object Persistence**: Persists the completed `RegistrationProfile` across all 9 GenericUI target backends (including macOS/iOS/iPadOS with automatic Chrome-style squircle app-icon wrapping).
 - **`JestElectricRunner` Test Suite**: Tests blocked navigation on invalid inputs, typing via `performTypeText`, step progression, `performSelectValue`, `performSetSliderValue`, `performSetChecked(true)`, and `PreferenceStore` verification in `RegistrationWizardJestTest.kt`.
 
 ---
@@ -97,7 +97,7 @@ class RegistrationWizardFragment(
 
 ---
 
-## Building & Running Across All 8 Backends
+## Building & Running Across All 9 Backends
 
 From `examples/basics/validated-registration-wizard`, invoke the root Gradle wrapper (`../../../gradlew`):
 
@@ -116,6 +116,7 @@ From `examples/basics/validated-registration-wizard`, invoke the root Gradle wra
 # Build Mobile targets
 ../../../gradlew developmentAndroid
 ../../../gradlew developmentIos
+../../../gradlew developmentIpados
 ```
 
 ---

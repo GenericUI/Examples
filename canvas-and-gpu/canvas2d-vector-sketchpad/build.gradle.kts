@@ -56,8 +56,7 @@ genericui {
     }
     sourceSets {
         common {
-            implementation("com.nexustools.genericui.extensions.canvas2d:dsl:0.1.0-SNAPSHOT")
-            implementation("com.nexustools.genericui.tests:common:0.1.0-SNAPSHOT")
+            implementation("com.nexustools.genericui.extensions.graphics.canvas2d:dsl:0.1.0-SNAPSHOT")
         }
     }
     testing {
