@@ -1,6 +1,6 @@
 # Abyssal Crypt — UI Dungeon Crawler (`examples/games/ui-dungeon-crawler`)
 
-A complete turn-based roguelike dungeon crawler built directly with **GenericUI** components, `:extensions:game:engine`, and `:extensions:game:gamepad` across **all 9 GenericUI target backends** (`windows`, `macos`, `gtk`, `qt`, `swing`, `android`, `ios`, `ipados`, and `web`).
+A complete turn-based roguelike dungeon crawler built directly with **GenericUI** components, `:extensions:game:engine`, and `:extensions:game:gamepad` across **all 9 GenericUI target backends** (`windows`, `macos`, `gtk`, `kde`, `swing`, `android`, `ios`, `ipados`, and `web`).
 
 ---
 
@@ -63,7 +63,7 @@ From `examples/games/ui-dungeon-crawler`, invoke the root Gradle wrapper (`../..
 ../../../gradlew developmentWindows
 ../../../gradlew developmentMac
 ../../../gradlew developmentLinuxGtk
-../../../gradlew developmentLinuxQt
+../../../gradlew developmentLinuxKde
 ../../../gradlew developmentSwing
 ../../../gradlew developmentAndroid
 ../../../gradlew developmentIos

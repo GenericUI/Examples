@@ -161,7 +161,7 @@ class DungeonCrawlerFragment(
             addChild(familyBadge)
         }
 
-        hpProgressBar = ProgressBar(1.0f, label = "Hero Vitality", type = BootstrapType.SUCCESS).apply {
+        hpProgressBar = ProgressBar(1.0f, label = "Hero Vitality").apply {
             id = "progress-hero-hp"
         }
         promptsBadge = Badge("Prompts", BootstrapType.DARK, pill = false).apply {

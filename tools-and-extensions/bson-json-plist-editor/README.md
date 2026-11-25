@@ -1,6 +1,6 @@
 # BSON / JSON / Binary Plist Visual Editor (`examples/tools-and-extensions/bson-json-plist-editor`)
 
-A purely **visual, multi-tab structured document editor** for **JSON (`.json`)**, **Binary JSON / BSON (`.bson`, `.bjson`)**, and **Apple Binary Property List (`.plist` `bplist00`)** files, powered by **`LazyGridTree`** across **all 9 GenericUI target backends** (`windows`, `macos`, `gtk`, `qt`, `swing`, `android`, `ios`, `ipados`, and `web`).
+A purely **visual, multi-tab structured document editor** for **JSON (`.json`)**, **Binary JSON / BSON (`.bson`, `.bjson`)**, and **Apple Binary Property List (`.plist` `bplist00`)** files, powered by **`LazyGridTree`** across **all 9 GenericUI target backends** (`windows`, `macos`, `gtk`, `kde`, `swing`, `android`, `ios`, `ipados`, and `web`).
 
 ---
 
@@ -126,7 +126,7 @@ From `examples/tools-and-extensions/bson-json-plist-editor`, invoke the root Gra
 | **Windows Native (`:desktop:windows`)** | `../../../gradlew developmentWindows` / `../../../gradlew productionWindows` |
 | **macOS Native (`:desktop:macos`)** | `../../../gradlew developmentMac` / `../../../gradlew productionMac` |
 | **Linux GTK (`:desktop:gtk`)** | `../../../gradlew developmentLinuxGtk` / `../../../gradlew productionLinuxGtk` |
-| **Linux Qt (`:desktop:qt`)** | `../../../gradlew developmentLinuxQt` / `../../../gradlew productionLinuxQt` |
+| **Linux KDE (`:desktop:kde`)** | `../../../gradlew developmentLinuxKde` / `../../../gradlew productionLinuxKde` |
 | **Android (`:mobile:android`)** | `../../../gradlew developmentAndroid` / `../../../gradlew productionAndroid` |
 | **iOS (`:mobile:ios`)** | `../../../gradlew developmentIos` / `../../../gradlew productionIos` |
 | **iPadOS (`:mobile:ipados`)** | `../../../gradlew developmentIpados` / `../../../gradlew productionIpados` |

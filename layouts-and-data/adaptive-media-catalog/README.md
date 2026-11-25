@@ -111,9 +111,9 @@ From `examples/layouts-and-data/adaptive-media-catalog`, invoke the root Gradle 
 # Desktop — macOS (AppKit / CoreGraphics / MoltenVK)
 ../../../gradlew developmentMac
 
-# Desktop — Linux GTK & Qt
+# Desktop — Linux GTK & KDE
 ../../../gradlew developmentLinuxGtk
-../../../gradlew developmentLinuxQt
+../../../gradlew developmentLinuxKde
 
 # Desktop — JVM / AWT / Swing
 ../../../gradlew developmentSwing

@@ -200,9 +200,9 @@ class DataEditorFragment(
     val convertToBsonButton: Button = Button("Set BSON (.bson)", type = BootstrapType.INFO, size = BootstrapSize.SM, outline = true)
     val convertToPlistButton: Button = Button("Set Plist (.plist)", type = BootstrapType.SUCCESS, size = BootstrapSize.SM, outline = true)
     val sizeComparisonSummaryLabel: Label = Label("JSON: 0 B | BinaryJson: 0 B | BinaryPlist: 0 B")
-    val jsonSizeBar: ProgressBar = ProgressBar(progress = 0.5f, type = BootstrapType.PRIMARY)
-    val bsonSizeBar: ProgressBar = ProgressBar(progress = 0.5f, type = BootstrapType.INFO)
-    val plistSizeBar: ProgressBar = ProgressBar(progress = 0.5f, type = BootstrapType.SUCCESS)
+    val jsonSizeBar: ProgressBar = ProgressBar(progress = 0.5f)
+    val bsonSizeBar: ProgressBar = ProgressBar(progress = 0.5f)
+    val plistSizeBar: ProgressBar = ProgressBar(progress = 0.5f)
 
     // Bottom Status Bar
     val statusBar: StatusBar = StatusBar()

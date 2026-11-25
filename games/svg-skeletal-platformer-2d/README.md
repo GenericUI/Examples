@@ -58,7 +58,7 @@ examples/games/svg-skeletal-platformer-2d/
 ../../../gradlew developmentWindows
 ../../../gradlew developmentMac
 ../../../gradlew developmentLinuxGtk
-../../../gradlew developmentLinuxQt
+../../../gradlew developmentLinuxKde
 ../../../gradlew developmentSwing
 ../../../gradlew developmentAndroid
 ../../../gradlew developmentIos

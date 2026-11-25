@@ -169,8 +169,7 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
 
     private val streamProgressBar = ProgressBar(
         progress = 0.64f,
-        label = "LIVE STREAM  42:15",
-        type = BootstrapType.PRIMARY
+        label = "LIVE STREAM  42:15"
     ).apply {
         id = "progress-now-playing"
     }
@@ -440,7 +439,7 @@ class AdaptiveMediaCatalogFragment : HybridColumnFragment(
             addChild(Label("Latency: Ultra-Low LL-HLS (1.2s)"))
         }
         val targetsCard = Card("Multiplatform Targets").apply {
-            addChild(Label("Desktop: Windows, macOS, GTK, Qt, Swing"))
+            addChild(Label("Desktop: Windows, macOS, GTK, KDE, Swing"))
             addChild(Label("Mobile & Web: Android, iOS, Web Wasm/JS"))
         }
         pane.addChild(Heading("Channel Inspector", level = 4))

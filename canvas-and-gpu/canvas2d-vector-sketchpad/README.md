@@ -109,9 +109,9 @@ From `examples/canvas-and-gpu/canvas2d-vector-sketchpad`, invoke the root Gradle
 # Desktop macOS (AppKit / CoreGraphics / MoltenVK)
 ../../../gradlew developmentMac
 
-# Desktop Linux GTK & Qt
+# Desktop Linux GTK & KDE
 ../../../gradlew developmentLinuxGtk
-../../../gradlew developmentLinuxQt
+../../../gradlew developmentLinuxKde
 
 # Web (WasmJS primary + JS IR fallback + PWA manifest.webmanifest)
 ../../../gradlew developmentWeb

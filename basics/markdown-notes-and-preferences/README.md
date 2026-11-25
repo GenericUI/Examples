@@ -109,7 +109,7 @@ From `examples/basics/markdown-notes-and-preferences`, invoke the root Gradle wr
 ../../../gradlew developmentWindows
 ../../../gradlew developmentMac
 ../../../gradlew developmentLinuxGtk
-../../../gradlew developmentLinuxQt
+../../../gradlew developmentLinuxKde
 ../../../gradlew developmentWeb
 
 # Build Mobile targets

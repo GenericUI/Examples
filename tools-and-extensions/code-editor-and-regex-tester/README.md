@@ -107,7 +107,7 @@ From `examples/tools-and-extensions/code-editor-and-regex-tester`, invoke the ro
 | **Windows (`:desktop:windows`)** | `../../../gradlew developmentWindows` | `../../../gradlew productionWindows` |
 | **macOS (`:desktop:macos`)** | `../../../gradlew developmentMac` | `../../../gradlew productionMac` |
 | **Linux GTK (`:desktop:gtk`)** | `../../../gradlew developmentLinuxGtk` | `../../../gradlew productionLinuxGtk` |
-| **Linux Qt (`:desktop:qt`)** | `../../../gradlew developmentLinuxQt` | `../../../gradlew productionLinuxQt` |
+| **Linux KDE (`:desktop:kde`)** | `../../../gradlew developmentLinuxKde` | `../../../gradlew productionLinuxKde` |
 | **JVM / Swing (`:desktop:swing`)** | `../../../gradlew developmentSwing` | `../../../gradlew productionSwing` |
 | **Android (`:mobile:android`)** | `../../../gradlew developmentAndroid` | `../../../gradlew productionAndroid` |
 | **iOS (`:mobile:ios`)** | `../../../gradlew developmentIos` | `../../../gradlew productionIos` |

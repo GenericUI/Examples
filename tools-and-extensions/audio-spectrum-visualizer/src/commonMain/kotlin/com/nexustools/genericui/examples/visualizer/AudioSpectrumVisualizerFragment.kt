@@ -217,13 +217,13 @@ class AudioSpectrumVisualizerFragment : Fragment() {
         widthPx = 148
     }
 
-    val bassMeterBar: ProgressBar = ProgressBar(progress = 0f, type = BootstrapType.PRIMARY).apply {
+    val bassMeterBar: ProgressBar = ProgressBar(progress = 0f).apply {
         id = "meter-bass"
     }
-    val midMeterBar: ProgressBar = ProgressBar(progress = 0f, type = BootstrapType.INFO).apply {
+    val midMeterBar: ProgressBar = ProgressBar(progress = 0f).apply {
         id = "meter-mid"
     }
-    val trebleMeterBar: ProgressBar = ProgressBar(progress = 0f, type = BootstrapType.WARNING).apply {
+    val trebleMeterBar: ProgressBar = ProgressBar(progress = 0f).apply {
         id = "meter-treble"
     }
 

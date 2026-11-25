@@ -188,8 +188,7 @@ class VirtualizedDataExplorerFragment(
 
     val viewportProgressBar: ProgressBar = ProgressBar(
         progress = 0.02f,
-        label = "Viewport Window: 0.2% of 10,000 rows",
-        type = BootstrapType.INFO
+        label = "Viewport Window: 0.2% of 10,000 rows"
     ).apply {
         id = "progress-viewport-window"
         widthPx = 280
@@ -254,20 +253,17 @@ class VirtualizedDataExplorerFragment(
     val inspectorLatencyLabel: Label = Label("Latency Budget: 4 ms / 250 ms SLA")
     val inspectorLatencyBar: ProgressBar = ProgressBar(
         progress = 0.08f,
-        label = "4 ms (98% SLA Headroom)",
-        type = BootstrapType.SUCCESS
+        label = "4 ms (98% SLA Headroom)"
     )
     val inspectorLoadLabel: Label = Label("Compute & I/O Utilization: 35%")
     val inspectorLoadBar: ProgressBar = ProgressBar(
         progress = 0.35f,
-        label = "CPU 35% | 14.2k IOPS",
-        type = BootstrapType.PRIMARY
+        label = "CPU 35% | 14.2k IOPS"
     )
     val inspectorPoolLabel: Label = Label("ViewHolder Pool: 24 Bound | 0 Recycled")
     val inspectorPoolBar: ProgressBar = ProgressBar(
         progress = 0.80f,
-        label = "24 / 30 Active Holders",
-        type = BootstrapType.WARNING
+        label = "24 / 30 Active Holders"
     )
     val departmentSummaryTable: Table = Table().apply {
         id = "explorer-department-table"
@@ -645,12 +641,7 @@ class VirtualizedDataExplorerFragment(
         val loadPct = 22 + ((record.id * 13) % 72)
         val loadBar = ProgressBar(
             progress = loadPct / 100f,
-            label = "$loadPct%",
-            type = when {
-                loadPct >= 80 -> BootstrapType.WARNING
-                loadPct <= 45 -> BootstrapType.SUCCESS
-                else -> BootstrapType.PRIMARY
-            }
+            label = "$loadPct%"
         ).apply {
             widthPx = 92
         }

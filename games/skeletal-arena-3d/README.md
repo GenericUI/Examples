@@ -55,7 +55,7 @@ examples/games/skeletal-arena-3d/
 ../../../gradlew developmentWindows
 ../../../gradlew developmentMac
 ../../../gradlew developmentLinuxGtk
-../../../gradlew developmentLinuxQt
+../../../gradlew developmentLinuxKde
 ../../../gradlew developmentSwing
 ../../../gradlew developmentAndroid
 ../../../gradlew developmentIos

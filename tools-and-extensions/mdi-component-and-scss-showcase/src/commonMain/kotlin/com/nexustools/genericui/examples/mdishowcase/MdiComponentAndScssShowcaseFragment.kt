@@ -346,8 +346,7 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
 
     val demoProgressBar: ProgressBar = ProgressBar(
         progress = 0.72f,
-        indeterminate = false,
-        type = BootstrapType.SUCCESS
+        indeterminate = false
     ).apply {
         id = "demo-progress"
     }
@@ -720,7 +719,7 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
 
             val dropdownRow = HStack(gap = SpacingScale.S2).apply {
                 heightPx = 28
-                val exportDropdown = DropdownButton("Export Format", BootstrapType.INFO)
+                val exportDropdown = DropdownButton("Export Format")
                     .addItem("png", "Export PNG")
                     .addItem("svg", "Export SVG")
                     .apply {
@@ -728,7 +727,7 @@ class MdiComponentAndScssShowcaseFragment : Fragment() {
                         heightPx = 26
                         addChild(Button("Export Format v", BootstrapType.INFO, BootstrapSize.SM))
                     }
-                val splitDropdown = SplitDropdownButton("Quick Build", BootstrapType.SUCCESS)
+                val splitDropdown = SplitDropdownButton("Quick Build")
                     .addItem("dev", "Development")
                     .addItem("prod", "Production")
                     .apply {

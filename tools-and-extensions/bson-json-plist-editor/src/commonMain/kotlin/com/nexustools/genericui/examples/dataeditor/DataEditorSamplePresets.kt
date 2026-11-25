@@ -41,7 +41,7 @@ object DataEditorSamplePresets {
             "windows": true,
             "macos": true,
             "gtk": true,
-            "qt": true,
+            "kde": true,
             "swing": true,
             "android": true,
             "ios": true,

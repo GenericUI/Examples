@@ -110,7 +110,7 @@ From `examples/basics/validated-registration-wizard`, invoke the root Gradle wra
 ../../../gradlew developmentWindows
 ../../../gradlew developmentMac
 ../../../gradlew developmentLinuxGtk
-../../../gradlew developmentLinuxQt
+../../../gradlew developmentLinuxKde
 ../../../gradlew developmentWeb
 
 # Build Mobile targets

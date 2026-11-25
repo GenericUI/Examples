@@ -1,6 +1,6 @@
 # GenericUI Examples
 
-This directory contains **19 standalone Kotlin Multiplatform example applications** built with **GenericUI** (`id("com.nexustools.genericui")`). Each example is organized by category, links against the root `GenericUI` consolidated 45-project architecture via Gradle composite builds (`includeBuild("../../..")`), targets all **9 platform backends** (`windows`, `macos`, `gtk`, `qt`, `swing`, `android`, `ios`, `ipados`, `web`), and includes automated **`JestElectricRunner`** UI tests.
+This directory contains **19 standalone Kotlin Multiplatform example applications** built with **GenericUI** (`id("com.nexustools.genericui")`). Each example is organized by category, links against the root `GenericUI` consolidated 45-project architecture via Gradle composite builds (`includeBuild("../../..")`), targets all **9 platform backends** (`windows`, `macos`, `gtk`, `kde`, `swing`, `android`, `ios`, `ipados`, `web`), and includes automated **`JestElectricRunner`** UI tests.
 
 For full framework documentation, see the [Root README](../README.md) and the [Documentation Index](../docs/README.md).
 
@@ -59,7 +59,7 @@ genericui {
         accentColor = "#3B82F6"
     }
     backends {
-        all() // windows, macos, gtk, qt, swing, android, ios, ipados, web
+        all() // windows, macos, gtk, kde, swing, android, ios, ipados, web
     }
     extensions {
         engine2d() // Enables :extensions:game:engine2d (+ engine, gamepad, canvas2d, imageprocessing, box2d)
@@ -154,7 +154,7 @@ cd examples/tools-and-extensions/mdi-component-and-scss-showcase
 ../../../gradlew windowsVisualTest  # Live Windows visual UI suite (or testWindowsX64)
 ../../../gradlew testMacosArm64     # Native macOS AppKit
 ../../../gradlew testLinuxGtk       # Native Linux GTK4
-../../../gradlew testLinuxQt        # Native Linux Qt6
+../../../gradlew testLinuxKde       # Native Linux KDE
 ../../../gradlew testAndroid        # Android host / unit suite
 ../../../gradlew testIos            # iOS simulator/device suite
 ../../../gradlew testIpados         # iPadOS simulator/device suite
@@ -165,20 +165,20 @@ cd examples/tools-and-extensions/mdi-component-and-scss-showcase
 ../../../gradlew developmentWindows
 ../../../gradlew developmentMac
 ../../../gradlew developmentLinuxGtk
-../../../gradlew developmentLinuxQt
+../../../gradlew developmentLinuxKde
 ../../../gradlew developmentAndroid
 ../../../gradlew developmentIos
 ../../../gradlew developmentIpados
 ../../../gradlew developmentWeb
 ```
 
-### Headed Linux (GTK4 / Qt6) Display under OrbStack on macOS
+### Headed Linux (GTK4 / KDE) Display under OrbStack on macOS
 
-For Linux containers running under **OrbStack on macOS**, forward live GTK4 and Qt6 windows directly to **XQuartz** on your macOS desktop (ensuring *"Allow connections from network clients"* is enabled in XQuartz Preferences):
+For Linux containers running under **OrbStack on macOS**, forward live GTK4 and KDE windows directly to **XQuartz** on your macOS desktop (ensuring *"Allow connections from network clients"* is enabled in XQuartz Preferences):
 
 ```bash
 export DISPLAY=host.orb.internal:0
-../../../gradlew developmentLinuxGtk   # or testLinuxGtk / developmentLinuxQt / testLinuxQt
+../../../gradlew developmentLinuxGtk   # or testLinuxGtk / developmentLinuxKde / testLinuxKde
 ```
 
 See [Cross-Platform UI Testing (`docs/testing.md`)](../docs/testing.md) for full runner setup details.

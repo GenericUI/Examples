@@ -111,8 +111,7 @@ class BrowserTabPageFragment(
     val creditsCaptionLabel: Label = Label("AI credits available (of 10,000 monthly plan)")
     val creditsQuotaBar: ProgressBar = ProgressBar(
         progress = (initialCreditsBalance.toFloat() / 10_000f).coerceIn(0f, 1f),
-        label = "${BrowserCreditActivityRow.formatNumberWithCommas(initialCreditsBalance)} / 10,000 credits",
-        type = BootstrapType.PRIMARY
+        label = "${BrowserCreditActivityRow.formatNumberWithCommas(initialCreditsBalance)} / 10,000 credits"
     ).apply {
         widthPx = 300
     }
@@ -281,17 +280,17 @@ class BrowserTabPageFragment(
         breakdownCard.addChild(Heading(level = 4, text = "Credit Usage by Google AI Product"))
         val agRow = HStack(gap = SpacingScale.S2).apply { alignItems = AlignItems.CENTER }
         agRow.addChild(Badge("Google Antigravity", type = BootstrapType.PRIMARY).apply { widthPx = 156 })
-        agRow.addChild(ProgressBar(progress = 0.72f, label = "5,230 credits (72%)", type = BootstrapType.PRIMARY).apply { widthPx = 380 })
+        agRow.addChild(ProgressBar(progress = 0.72f, label = "5,230 credits (72%)").apply { widthPx = 380 })
         breakdownCard.addChild(agRow)
 
         val geminiRow = HStack(gap = SpacingScale.S2).apply { alignItems = AlignItems.CENTER }
         geminiRow.addChild(Badge("Gemini 2.5 Pro", type = BootstrapType.INFO).apply { widthPx = 156 })
-        geminiRow.addChild(ProgressBar(progress = 0.18f, label = "1,310 credits (18%)", type = BootstrapType.INFO).apply { widthPx = 380 })
+        geminiRow.addChild(ProgressBar(progress = 0.18f, label = "1,310 credits (18%)").apply { widthPx = 380 })
         breakdownCard.addChild(geminiRow)
 
         val veoRow = HStack(gap = SpacingScale.S2).apply { alignItems = AlignItems.CENTER }
         veoRow.addChild(Badge("Veo 2 & Imagen 3", type = BootstrapType.SUCCESS).apply { widthPx = 156 })
-        veoRow.addChild(ProgressBar(progress = 0.10f, label = "720 credits (10%)", type = BootstrapType.SUCCESS).apply { widthPx = 380 })
+        veoRow.addChild(ProgressBar(progress = 0.10f, label = "720 credits (10%)").apply { widthPx = 380 })
         breakdownCard.addChild(veoRow)
         breakdownCol.addChild(breakdownCard)
 

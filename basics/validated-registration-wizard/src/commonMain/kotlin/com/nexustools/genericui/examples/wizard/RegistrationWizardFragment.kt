@@ -58,8 +58,7 @@ class RegistrationWizardFragment(
 
     val wizardProgress: ProgressBar = ProgressBar(
         progress = 1f / 3f,
-        indeterminate = false,
-        type = BootstrapType.PRIMARY
+        indeterminate = false
     ).apply {
         id = "wizard-progress"
         label = "Step 1 of 3 (33%)"

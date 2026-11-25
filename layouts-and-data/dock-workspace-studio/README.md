@@ -110,9 +110,9 @@ From `examples/layouts-and-data/dock-workspace-studio`, invoke the root Gradle w
 # Desktop — macOS (AppKit / CoreGraphics / MoltenVK)
 ../../../gradlew developmentMac
 
-# Desktop — Linux GTK & Qt
+# Desktop — Linux GTK & KDE
 ../../../gradlew developmentLinuxGtk
-../../../gradlew developmentLinuxQt
+../../../gradlew developmentLinuxKde
 
 # Desktop — JVM / AWT / Swing
 ../../../gradlew developmentSwing

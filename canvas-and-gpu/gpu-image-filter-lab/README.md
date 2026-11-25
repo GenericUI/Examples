@@ -114,9 +114,9 @@ From `examples/canvas-and-gpu/gpu-image-filter-lab`, invoke the root Gradle wrap
 # Desktop macOS (AppKit / CoreGraphics / MoltenVK)
 ../../../gradlew developmentMac
 
-# Desktop Linux GTK & Qt
+# Desktop Linux GTK & KDE
 ../../../gradlew developmentLinuxGtk
-../../../gradlew developmentLinuxQt
+../../../gradlew developmentLinuxKde
 
 # Web (WasmJS primary + JS IR fallback + PWA manifest.webmanifest)
 ../../../gradlew developmentWeb

@@ -74,8 +74,7 @@ class CounterFragment(
     }
 
     val counterMagnitudeBar: ProgressBar = ProgressBar(
-        progress = (abs(settings.count) % 100) / 100f,
-        type = BootstrapType.PRIMARY
+        progress = (abs(settings.count) % 100) / 100f
     ).apply {
         id = "progress-counter-magnitude"
         widthPx = 220
