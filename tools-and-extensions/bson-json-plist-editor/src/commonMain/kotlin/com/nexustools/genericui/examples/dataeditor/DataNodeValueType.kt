@@ -16,6 +16,7 @@ enum class DataNodeValueType(
     MAP("Map", "MAP", isContainer = true, isNumber = false),
     ARRAY("Array", "ARR", isContainer = true, isNumber = false),
     STRING("String", "STR", isContainer = false, isNumber = false),
+    BYTES("Bytes (Binary)", "BIN", isContainer = false, isNumber = false),
     BYTE("Byte (Int8)", "I8", isContainer = false, isNumber = true),
     SHORT("Short (Int16)", "I16", isContainer = false, isNumber = true),
     INT("Int (Int32)", "I32", isContainer = false, isNumber = true),
@@ -28,6 +29,7 @@ enum class DataNodeValueType(
     fun defaultPrimitiveText(): String = when (this) {
         OBJECT, MAP, ARRAY -> ""
         STRING -> ""
+        BYTES -> ""
         BYTE, SHORT, INT, LONG -> "0"
         FLOAT, DOUBLE -> "0.0"
         BOOLEAN -> "false"
@@ -45,6 +47,17 @@ enum class DataNodeValueType(
             MAP -> PreferenceElement.ofMap(childrenEntries)
             ARRAY -> PreferenceElement.ofArray(childrenList)
             STRING -> PreferenceElement.ofString(primitiveText)
+            BYTES -> {
+                val cleaned = trimmed.removePrefix("0x").removePrefix("0X").replace(Regex("\\s+"), "")
+                val bytes = if (cleaned.isEmpty() || cleaned.length % 2 != 0) {
+                    primitiveText.encodeToByteArray()
+                } else {
+                    ByteArray(cleaned.length / 2) { i ->
+                        cleaned.substring(i * 2, i * 2 + 2).toIntOrNull(16)?.toByte() ?: 0.toByte()
+                    }
+                }
+                PreferenceElement.ofBytes(bytes)
+            }
             BYTE -> PreferenceElement.ofByte(
                 trimmed.toByteOrNull()
                     ?: trimmed.toIntOrNull()?.coerceIn(Byte.MIN_VALUE.toInt(), Byte.MAX_VALUE.toInt())?.toByte()
@@ -88,6 +101,7 @@ enum class DataNodeValueType(
             PreferenceElementKind.MAP -> MAP
             PreferenceElementKind.ARRAY -> ARRAY
             PreferenceElementKind.STRING -> STRING
+            PreferenceElementKind.BYTES -> BYTES
             PreferenceElementKind.BOOLEAN -> BOOLEAN
             PreferenceElementKind.NULL -> NULL
             PreferenceElementKind.NUMBER -> when (element.numberTypeTag) {
@@ -106,6 +120,10 @@ enum class DataNodeValueType(
             PreferenceElementKind.BOOLEAN -> (element.booleanValue ?: false).toString()
             PreferenceElementKind.NUMBER -> (element.numberValue ?: 0).toString()
             PreferenceElementKind.STRING -> element.stringValue ?: ""
+            PreferenceElementKind.BYTES -> (element.bytesOrNull() ?: ByteArray(0)).joinToString(" ") { b ->
+                val v = b.toInt() and 0xFF
+                "${"0123456789ABCDEF"[v ushr 4]}${"0123456789ABCDEF"[v and 0x0F]}"
+            }
             PreferenceElementKind.ARRAY, PreferenceElementKind.MAP, PreferenceElementKind.OBJECT -> ""
         }
 

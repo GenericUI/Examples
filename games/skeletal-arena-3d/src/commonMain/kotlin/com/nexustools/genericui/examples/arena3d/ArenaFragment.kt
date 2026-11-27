@@ -16,9 +16,9 @@ import com.nexustools.genericui.enums.bootstrap.BootstrapType
 import com.nexustools.genericui.enums.bootstrap.ShadowElevation
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.ext.gamepad.GamepadButton
-import com.nexustools.genericui.ext.gamepad.dsl.gamepadNavigation
 import com.nexustools.genericui.ext.gamepad.ui.DefaultSpatialGamepadUiNavigationStrategy
 import com.nexustools.genericui.ext.gamepad.ui.GamepadUiNavigator
+import com.nexustools.genericui.ext.gamepad.ui.enableGamepadUiNavigation
 import kotlin.math.roundToInt
 
 /**
@@ -248,11 +248,11 @@ class ArenaFragment(
 
         addChild(rootStack)
 
-        uiNavigator = gamepadNavigation {
-            gamepadManager = controller.gamepadManager
-            strategy = pauseNavStrategy
+        uiNavigator = enableGamepadUiNavigation(
+            gamepadManager = controller.gamepadManager,
+            strategy = pauseNavStrategy,
             autoStart = false
-        }
+        )
         refreshHud()
     }
 

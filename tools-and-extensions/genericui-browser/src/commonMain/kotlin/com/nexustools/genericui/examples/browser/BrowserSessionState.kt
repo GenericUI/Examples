@@ -15,17 +15,13 @@ import com.nexustools.genericui.util.BinaryJson
 data class BrowserSessionState(
     val homeUrl: String = DEFAULT_HOME_URL,
     val searchEnginePrefix: String = DEFAULT_SEARCH_PREFIX,
-    val showBookmarksBar: Boolean = true,
-    val askGeminiSidebarOpen: Boolean = false,
-    val aiCreditsBalance: Int = DEFAULT_AI_CREDITS_BALANCE
+    val showBookmarksBar: Boolean = true
 ) : PreferenceSerializable {
 
     override fun toPreferenceMap(): Map<String, Any?> = linkedMapOf(
         "homeUrl" to homeUrl,
         "searchEnginePrefix" to searchEnginePrefix,
-        "showBookmarksBar" to showBookmarksBar,
-        "askGeminiSidebarOpen" to askGeminiSidebarOpen,
-        "aiCreditsBalance" to aiCreditsBalance
+        "showBookmarksBar" to showBookmarksBar
     )
 
     /**
@@ -43,9 +39,8 @@ data class BrowserSessionState(
     companion object {
         const val SESSION_STATE_KEY: String = "browser.sessionState"
         const val BOOKMARKS_KEY: String = "browser.bookmarks"
-        const val DEFAULT_HOME_URL: String = "https://one.google.com/ai/activity"
-        const val DEFAULT_SEARCH_PREFIX: String = "https://www.google.com/search?q="
-        const val DEFAULT_AI_CREDITS_BALANCE: Int = 6488
+        const val DEFAULT_HOME_URL: String = "about:newtab"
+        const val DEFAULT_SEARCH_PREFIX: String = "https://duckduckgo.com/?q="
 
         init {
             registerFactory()
@@ -60,9 +55,7 @@ data class BrowserSessionState(
         fun fromElementMap(fields: Map<String, PreferenceElement>): BrowserSessionState = BrowserSessionState(
             homeUrl = fields["homeUrl"]?.asString(DEFAULT_HOME_URL) ?: DEFAULT_HOME_URL,
             searchEnginePrefix = fields["searchEnginePrefix"]?.asString(DEFAULT_SEARCH_PREFIX) ?: DEFAULT_SEARCH_PREFIX,
-            showBookmarksBar = fields["showBookmarksBar"]?.asBoolean(true) ?: true,
-            askGeminiSidebarOpen = fields["askGeminiSidebarOpen"]?.asBoolean(false) ?: false,
-            aiCreditsBalance = fields["aiCreditsBalance"]?.asInt(DEFAULT_AI_CREDITS_BALANCE) ?: DEFAULT_AI_CREDITS_BALANCE
+            showBookmarksBar = fields["showBookmarksBar"]?.asBoolean(true) ?: true
         )
 
         /**

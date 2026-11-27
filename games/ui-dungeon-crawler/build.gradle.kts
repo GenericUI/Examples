@@ -66,7 +66,6 @@ genericui {
     sourceSets {
         commonMain {
             implementation("com.nexustools.genericui.extensions.game.engine:dsl:0.1.0-SNAPSHOT")
-            implementation("com.nexustools.genericui.extensions.game.gamepad:dsl:0.1.0-SNAPSHOT")
         }
     }
     styles {

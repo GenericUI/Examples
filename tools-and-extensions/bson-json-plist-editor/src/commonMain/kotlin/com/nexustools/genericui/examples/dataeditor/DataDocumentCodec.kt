@@ -325,6 +325,14 @@ object DataDocumentCodec {
                 }
             }
             PreferenceElementKind.STRING -> appendEscapedJsonString(sb, element.stringValue ?: "")
+            PreferenceElementKind.BYTES -> {
+                val raw = element.bytesOrNull() ?: ByteArray(0)
+                val hex = raw.joinToString("") { b ->
+                    val v = b.toInt() and 0xFF
+                    "${"0123456789abcdef"[v ushr 4]}${"0123456789abcdef"[v and 0x0F]}"
+                }
+                appendEscapedJsonString(sb, "0x$hex")
+            }
             PreferenceElementKind.ARRAY -> {
                 val items = element.arrayElements
                 if (items.isEmpty()) {

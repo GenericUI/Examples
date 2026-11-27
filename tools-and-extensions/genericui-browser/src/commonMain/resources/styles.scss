@@ -1,177 +1,475 @@
-$chrome-bg-dark: #1f2023;
-$chrome-strip-bg: #17181b;
-$chrome-toolbar-bg: #292a2d;
-$chrome-omnibox-bg: #202124;
-$chrome-surface-light: #f8f9fa;
-$chrome-card-white: #ffffff;
-$chrome-text-light: #e8eaed;
-$chrome-text-muted: #9aa0a6;
-$chrome-accent-blue: #1a73e8;
-$chrome-gemini-pill: #28354a;
-$github-dark-bg: #0d1117;
-$github-dark-surface: #161b22;
-$github-dark-border: #30363d;
-$github-topic-bg: #121d2f;
-$github-topic-text: #58a6ff;
-
-html, body, #genericui-app, .genericui-window {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background-color: $chrome-bg-dark;
-    color: $chrome-text-light;
-    font-family: "Google Sans", "Segoe UI", Roboto, system-ui, sans-serif;
-}
+// GenericUIBrowser Chromium-style light and dark theme stylesheet.
+// Light Chromium palette is the clean default; [data-bs-theme="dark"] (compiled to .bs-theme-dark
+// natively and matched by data-bs-theme="dark" on Web) + .browser-theme-dark provide dark mode.
 
 .genericui-browser-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  background-color: #f8f9fa;
+  color: #202124;
+
+  .genericui-tabbed-header-slot {
+    padding: 0;
+    margin: 0;
+    gap: 0;
+  }
+
+  .gui-tab-strip--chromium {
+    background-color: #dee1e6;
+    min-height: 36px;
+    padding: 4px 8px 0 8px;
+    margin: 0;
+  }
+
+  .gui-tab-strip--chromium.gui-tab-strip--titlebar {
+    background-color: transparent;
+  }
+
+  .gui-tab-navbar--chromium {
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0;
+    margin: 0;
+  }
+
+  .browser-nav-toolbar {
+    width: 100%;
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+  }
+
+  .browser-desktop-toolbar,
+  .browser-mobile-toolbar {
+    width: 100%;
+    flex-grow: 1;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    margin: 0;
+  }
+
+  .browser-toolbar-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .browser-omnibox-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+    min-width: 220px;
+    gap: 6px;
+  }
+
+  .browser-omnibox-pill {
+    flex-grow: 1;
+    min-width: 220px;
+    height: 34px;
+    border-radius: 999px;
+    padding: 0 16px;
+    background-color: #f1f3f4;
+    color: #202124;
+    border: 1px solid rgba(60, 64, 67, 0.14);
+    font-size: 13.5px;
+
+    &:hover {
+      background-color: #e8eaed;
+      border-color: rgba(60, 64, 67, 0.24);
+    }
+
+    &:focus {
+      background-color: #ffffff;
+      border: 2px solid #1a73e8;
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.25);
+    }
+  }
+
+  .browser-icon-btn {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    padding: 0;
+    border-radius: 999px;
+    border: none;
+    background-color: transparent;
+    color: #202124;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(60, 64, 67, 0.09);
+    }
+
+    &:active {
+      background-color: rgba(60, 64, 67, 0.15);
+    }
+
+    &:disabled {
+      opacity: 0.38;
+      cursor: default;
+    }
+  }
+
+  .browser-pill-action-btn {
+    height: 30px;
+    border-radius: 999px;
+    padding: 0 12px;
+    font-size: 12.5px;
+    background-color: #f1f3f4;
+    color: #202124;
+    border: 1px solid rgba(60, 64, 67, 0.14);
+    cursor: pointer;
+
+    &:hover {
+      background-color: #e8eaed;
+      border-color: rgba(60, 64, 67, 0.24);
+    }
+  }
+
+  .browser-settings-save-btn {
+    height: 32px;
+    border-radius: 999px;
+    padding: 0 14px;
+    background-color: #1a73e8;
+    color: #ffffff;
+    border: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #1765cc;
+    }
+  }
+
+  .browser-security-badge {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    padding: 0;
+    border-radius: 999px;
+    border: none;
+    background-color: rgba(60, 64, 67, 0.06);
+    color: #5f6368;
+    font-size: 12.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(60, 64, 67, 0.09);
+    }
+
+    &:active {
+      background-color: rgba(60, 64, 67, 0.15);
+    }
+  }
+
+  .browser-bookmarks-bar {
+    width: 100%;
+    padding: 5px 14px;
+    gap: 8px;
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    align-items: center;
+  }
+
+  .browser-bookmarks-empty {
+    color: #5f6368;
+    font-size: 12px;
+  }
+
+  .bookmark-bar-item {
+    border-radius: 999px;
+    height: 26px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+
+  .browser-settings-panel {
+    margin: 8px 14px 6px 14px;
+    padding: 16px 20px;
+    border-radius: 14px;
+    background-color: #ffffff;
+    border: 1px solid #dadce0;
+    color: #202124;
+    box-shadow: 0 4px 16px rgba(60, 64, 67, 0.08);
+  }
+
+  .browser-settings-form {
+    width: 100%;
+    gap: 12px;
+    padding: 8px 0 4px 0;
+  }
+
+  .browser-settings-row {
+    width: 100%;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .browser-settings-label {
+    min-width: 116px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #202124;
+    margin-bottom: 0;
+  }
+
+  .browser-settings-input,
+  .browser-settings-select {
+    flex-grow: 1;
+    min-width: 220px;
+    border-radius: 10px;
+  }
+
+  .browser-settings-actions {
+    width: 100%;
+    gap: 8px;
+    padding-top: 6px;
+  }
+
+  .browser-newtab-page {
     width: 100%;
     height: 100%;
-    background-color: $chrome-bg-dark;
-    color: $chrome-text-light;
+    padding: 28px 24px;
+    background-color: #f8f9fa;
+  }
 
-    .genericui-tabbed-header-slot {
-        background-color: $chrome-strip-bg;
-        border-bottom: 1px solid #3c4043;
+  .browser-newtab-card {
+    width: 100%;
+    max-width: 720px;
+    padding: 36px 32px;
+    border-radius: 20px;
+    background-color: #ffffff;
+    border: 1px solid #dadce0;
+    color: #202124;
+    box-shadow: 0 8px 28px rgba(60, 64, 67, 0.08);
+  }
+
+  .browser-newtab-heading {
+    color: #202124;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .browser-newtab-subtitle {
+    color: #5f6368;
+    font-size: 13.5px;
+    margin: 0;
+  }
+
+  .browser-newtab-search-row {
+    width: 100%;
+    max-width: 640px;
+    gap: 8px;
+  }
+
+  .browser-newtab-search {
+    min-width: 220px;
+    max-width: 640px;
+    height: 44px;
+    padding: 0 18px;
+    font-size: 15px;
+  }
+
+  .browser-newtab-bookmarks-grid {
+    width: 100%;
+    max-width: 640px;
+    gap: 10px;
+  }
+
+  .newtab-speed-dial-btn {
+    border-radius: 999px;
+    padding: 0 14px;
+  }
+
+  .browser-tab-loading-bar {
+    height: 3px;
+    width: 100%;
+  }
+
+  .browser-tab-webview {
+    width: 100%;
+    flex-grow: 1;
+  }
+
+  .genericui-tabbed-mobile-bar {
+    padding: 6px 10px;
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .genericui-tabbed-mobile-overview {
+    padding: 12px;
+    gap: 10px;
+    background-color: #f8f9fa;
+  }
+
+  .genericui-tabbed-overview-card {
+    padding: 12px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    border: 1px solid #dadce0;
+  }
+
+  .browser-mobile-bottom-nav {
+    padding: 6px 12px;
+    background-color: #ffffff;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+}
+
+[data-bs-theme="dark"] .genericui-browser-root,
+.genericui-browser-root.browser-theme-dark {
+  background-color: #202124;
+  color: #e8eaed;
+
+  .gui-tab-strip--chromium {
+    background-color: #1c1e22;
+  }
+
+  .gui-tab-strip--chromium.gui-tab-strip--titlebar {
+    background-color: transparent;
+  }
+
+  .gui-tab-navbar--chromium {
+    background-color: #35363a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  .browser-omnibox-pill {
+    background-color: #202124;
+    color: #e8eaed;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+
+    &:hover {
+      background-color: #292a2d;
+      border-color: rgba(255, 255, 255, 0.2);
     }
 
-    .genericui-tabbed-desktop-strip {
-        background-color: $chrome-strip-bg;
-        padding: 6px 10px 0 10px;
+    &:focus {
+      background-color: #202124;
+      border: 2px solid #8ab4f8;
+      box-shadow: 0 0 0 3px rgba(138, 180, 248, 0.28);
+    }
+  }
+
+  .browser-icon-btn {
+    background-color: transparent;
+    color: #e8eaed;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
-    .genericui-tabbed-chip {
-        background-color: #202124;
-        border-radius: 10px 10px 0 0;
-        padding: 4px 10px;
+    &:active {
+      background-color: rgba(255, 255, 255, 0.16);
+    }
+  }
 
-        &.active {
-            background-color: $chrome-toolbar-bg;
-        }
+  .browser-security-badge {
+    background-color: rgba(255, 255, 255, 0.07);
+    color: #9aa0a6;
 
-        &.pinned {
-            padding: 4px 8px;
-        }
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
-    .genericui-tabbed-new-tab-btn {
-        border-radius: 16px;
-        padding: 2px 10px;
+    &:active {
+      background-color: rgba(255, 255, 255, 0.16);
     }
+  }
 
-    .browser-desktop-toolbar {
-        background-color: $chrome-toolbar-bg;
-        padding: 6px 12px;
+  .browser-pill-action-btn {
+    background-color: #303134;
+    color: #e8eaed;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+
+    &:hover {
+      background-color: #3c4043;
+      border-color: rgba(255, 255, 255, 0.24);
     }
+  }
 
-    .browser-mobile-toolbar {
-        background-color: $chrome-toolbar-bg;
-        padding: 8px 10px;
+  .browser-settings-save-btn {
+    background-color: #8ab4f8;
+    color: #202124;
+
+    &:hover {
+      background-color: #aecbfa;
     }
+  }
 
-    .browser-omnibox-pill {
-        background-color: $chrome-omnibox-bg;
-        color: $chrome-text-light;
-        border-radius: 20px;
-        padding: 4px 14px;
-    }
+  .browser-bookmarks-bar {
+    background-color: #35363a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  }
 
-    .browser-ask-gemini-btn {
-        background-color: $chrome-gemini-pill;
-        color: #a8c7fa;
-        border-radius: 18px;
-        padding: 4px 12px;
-        font-weight: 600;
-    }
+  .browser-bookmarks-empty {
+    color: #9aa0a6;
+  }
 
-    .browser-bookmarks-bar {
-        background-color: $chrome-toolbar-bg;
-        padding: 4px 12px 6px 12px;
-        border-bottom: 1px solid #3c4043;
-    }
+  .browser-settings-panel {
+    background-color: #292a2d;
+    border: 1px solid #3c4043;
+    color: #e8eaed;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
 
-    .genericui-tabbed-mobile-pill {
-        border-radius: 8px;
-        font-weight: 700;
-        padding: 2px 8px;
-    }
+  .browser-settings-label {
+    color: #e8eaed;
+  }
 
-    .genericui-tabbed-mobile-overview {
-        background-color: #121316;
-        padding: 12px;
-    }
+  .browser-newtab-page {
+    background-color: #202124;
+  }
 
-    .genericui-tabbed-overview-card {
-        background-color: #28292c;
-        border-radius: 16px;
-        padding: 10px;
+  .browser-newtab-card {
+    background-color: #292a2d;
+    border: 1px solid #3c4043;
+    color: #e8eaed;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
+  }
 
-        &.active {
-            border: 2px solid #8ab4f8;
-        }
-    }
+  .browser-newtab-heading {
+    color: #e8eaed;
+  }
 
-    .browser-gemini-sidebar {
-        background-color: #1e293b;
-        border-left: 1px solid #334155;
-        padding: 12px;
-        border-radius: 8px;
-    }
+  .browser-newtab-subtitle {
+    color: #9aa0a6;
+  }
 
-    .google-one-page {
-        background-color: $chrome-surface-light;
-        color: #202124;
-        padding: 20px 32px;
+  .genericui-tabbed-mobile-bar {
+    background-color: #35363a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  }
 
-        .google-one-credits-card {
-            background-color: #f1f3f4;
-            border-radius: 16px;
-            padding: 20px 24px;
-        }
+  .genericui-tabbed-mobile-overview {
+    background-color: #202124;
+  }
 
-        .google-one-credits-balance {
-            font-size: 32px;
-            font-weight: 700;
-            color: #202124;
-        }
+  .genericui-tabbed-overview-card {
+    background-color: #292a2d;
+    border: 1px solid #3c4043;
+    color: #e8eaed;
+  }
 
-        .google-one-add-btn {
-            background-color: $chrome-accent-blue;
-            color: #ffffff;
-            border-radius: 20px;
-            padding: 6px 18px;
-        }
-
-        .google-one-activity-card {
-            background-color: $chrome-card-white;
-            border-radius: 16px;
-            padding: 16px 20px;
-        }
-    }
-
-    .github-repo-page {
-        background-color: $github-dark-bg;
-        color: #f0f6fc;
-        padding: 16px 20px;
-
-        .github-repo-header {
-            background-color: $github-dark-surface;
-            border-bottom: 1px solid $github-dark-border;
-            padding: 12px 16px;
-            border-radius: 10px;
-        }
-
-        .github-topic-pill {
-            background-color: $github-topic-bg;
-            color: $github-topic-text;
-            border-radius: 14px;
-            padding: 2px 10px;
-        }
-    }
-
-    .browser-mobile-bottom-nav {
-        background-color: #000000;
-        color: #e8eaed;
-        padding: 6px 24px;
-    }
+  .browser-mobile-bottom-nav {
+    background-color: #292a2d;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
 }

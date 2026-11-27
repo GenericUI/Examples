@@ -1,84 +1,88 @@
 package com.nexustools.genericui.examples.browser
 
-import com.nexustools.genericui.component.action.Button
-import com.nexustools.genericui.component.content.Table
-import com.nexustools.genericui.component.content.TableCell
-import com.nexustools.genericui.component.content.TableColumn
-import com.nexustools.genericui.component.content.TableRow
 import com.nexustools.genericui.component.feedback.ProgressBar
-import com.nexustools.genericui.component.form.TextField
 import com.nexustools.genericui.component.fragment.AppFragment
 import com.nexustools.genericui.component.fragment.Fragment
-import com.nexustools.genericui.component.layout.Column
-import com.nexustools.genericui.component.layout.ColumnContainer
-import com.nexustools.genericui.component.layout.Container
-import com.nexustools.genericui.component.layout.FlexBox
-import com.nexustools.genericui.component.layout.HStack
-import com.nexustools.genericui.component.layout.VStack
-import com.nexustools.genericui.component.surface.Card
-import com.nexustools.genericui.component.typography.Badge
-import com.nexustools.genericui.component.typography.Heading
-import com.nexustools.genericui.component.typography.Label
-import com.nexustools.genericui.enums.bootstrap.AlignItems
-import com.nexustools.genericui.enums.bootstrap.BootstrapSize
-import com.nexustools.genericui.enums.bootstrap.BootstrapType
-import com.nexustools.genericui.enums.bootstrap.FlexDirection
-import com.nexustools.genericui.enums.bootstrap.FlexWrap
-import com.nexustools.genericui.enums.bootstrap.JustifyContent
-import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.ext.webview.WebView
+import com.nexustools.genericui.ext.webview.WebViewConfig
 
 /**
- * Single browser tab content [Fragment] containing an embedded [WebView] alongside rich interactive
- * native preview surfaces for built-in showcase routes:
- * - `https://one.google.com/ai/activity` ("Google One — AI credits activity")
- * - `https://github.com/T-Crypt/berth` ("T-Crypt / berth")
- * - `chrome://newtab` (Speed-Dial & Search New Tab page)
+ * Single browser tab content [Fragment] hosting a real `:extensions:ui:webview` [WebView]
+ * alongside the clean [BrowserNewTabView] when unnavigated (`about:newtab`).
  */
 @AppFragment(route = "browser/tab", label = "Browser Tab Page")
 class BrowserTabPageFragment(
-    initialUrl: String = BrowserSessionState.DEFAULT_HOME_URL,
-    initialCreditsBalance: Int = BrowserSessionState.DEFAULT_AI_CREDITS_BALANCE,
-    initialBookmarks: List<BrowserBookmark> = BrowserBookmark.defaultBookmarks()
+    initialUrl: String = URL_NEW_TAB,
+    initialBookmarks: List<BrowserBookmark> = emptyList(),
+    initialSearchPrefix: String = BrowserSessionState.DEFAULT_SEARCH_PREFIX
 ) : Fragment() {
 
+    private var searchEnginePrefix: String = initialSearchPrefix
     private val navigationHistory = mutableListOf<BrowserHistoryEntry>()
     private var navigationIndex: Int = -1
-    private val _creditActivityRows = BrowserCreditActivityRow.defaultRows().toMutableList()
-    private var bookmarksList: List<BrowserBookmark> = initialBookmarks.toList()
-    private var topUpCounter: Int = 0
-    private var githubStarred: Boolean = false
-    private var githubStarCount: Int = 383
+    private var historySequence: Long = 0L
+    private var activeLoadToken: Int = 0
+    private var stoppedSupersededUrl: String? = null
+    private var hasDocumentTitle: Boolean = false
 
     /** Embedded `:extensions:ui:webview` component synchronized with [currentUrl]. */
-    val webView: WebView = WebView(initialUrl = initialUrl).apply {
+    val webView: WebView = WebView(
+        initialUrl = null,
+        config = WebViewConfig(
+            enableJavaScript = true,
+            domStorageEnabled = true,
+            allowFileAccess = true
+        )
+    ).apply {
+        id = "browser-tab-webview"
         addClass("browser-tab-webview")
+        isVisible = !isNewTabUrl(initialUrl)
+    }
+
+    /** Thin indeterminate progress indicator shown while [webView] is loading a page. */
+    val loadingProgressBar: ProgressBar = ProgressBar(
+        progress = 0f,
+        indeterminate = true
+    ).apply {
+        id = "browser-tab-loading-progress"
+        addClass("browser-tab-loading-bar")
         isVisible = false
     }
 
+    /** Unnavigated New Tab search surface (`about:newtab`). */
+    val newTabSurface: BrowserNewTabView = BrowserNewTabView(
+        showNewTabButton = false,
+        initialBookmarks = initialBookmarks,
+        idPrefix = "browser-tab-newtab"
+    )
+
     /** Currently active URL in this tab. */
-    var currentUrl: String = initialUrl
+    var currentUrl: String = normalizeOmniboxInput(initialUrl, initialSearchPrefix)
         private set
 
     /** Resolved human-readable title for [currentUrl]. */
-    var currentTitle: String = resolveTitleForUrl(initialUrl)
+    var currentTitle: String = resolveTitleForUrl(currentUrl)
         private set
 
-    /** Resolved icon/emoji badge for [currentUrl]. */
-    var currentIcon: String = resolveIconForUrl(initialUrl)
+    /** Resolved icon badge label for [currentUrl], or `null` when using favicon / vector fallback. */
+    var currentIcon: String? = resolveIconForUrl(currentUrl)
+        private set
+
+    /** Current favicon URL reported by [webView], or `null` when unnavigated or unavailable. */
+    var currentFaviconUrl: String? = sanitizeFaviconUrl(webView.currentFaviconUrl)
+        private set
+
+    /** `true` while [webView] has an in-flight navigation load. */
+    var isPageLoading: Boolean = false
         private set
 
     /** Number of times [reload] has been invoked on this tab. */
     var reloadCount: Int = 0
         private set
 
-    /** Current Google One AI credits balance displayed on `https://one.google.com/ai/activity`. */
-    var aiCreditsBalance: Int = initialCreditsBalance
-        private set
-
-    /** Read-only snapshot of the Google One AI credit activity rows. */
-    val creditActivityRows: List<BrowserCreditActivityRow>
-        get() = _creditActivityRows.toList()
+    /** `true` when this tab is displaying the unnavigated New Tab view (`about:newtab`). */
+    val isShowingNewTabPage: Boolean
+        get() = isNewTabUrl(currentUrl)
 
     /** Read-only snapshot of this tab's navigation history stack. */
     val historyStack: List<BrowserHistoryEntry>
@@ -96,430 +100,160 @@ class BrowserTabPageFragment(
     val canGoForward: Boolean
         get() = navigationIndex >= 0 && navigationIndex < navigationHistory.lastIndex
 
-    // --- 1. Google One "AI credits activity" Surface Controls ---
-    val googleOneSurface: VStack = VStack(gap = SpacingScale.S2).apply {
-        addClass("google-one-page")
-    }
-    val googleOneBrandLabel: Label = Label("Google One")
-    val googleOneHeading: Heading = Heading(level = 2, text = "AI credits activity")
-    val googleOneSubtitleLabel: Label = Label("View your AI credit balance and recent usage across Google products").apply {
-        widthPx = 460
-    }
-    val creditsBalanceLabel: Label = Label(BrowserCreditActivityRow.formatNumberWithCommas(initialCreditsBalance)).apply {
-        addClass("google-one-credits-balance")
-    }
-    val creditsCaptionLabel: Label = Label("AI credits available (of 10,000 monthly plan)")
-    val creditsQuotaBar: ProgressBar = ProgressBar(
-        progress = (initialCreditsBalance.toFloat() / 10_000f).coerceIn(0f, 1f),
-        label = "${BrowserCreditActivityRow.formatNumberWithCommas(initialCreditsBalance)} / 10,000 credits"
-    ).apply {
-        widthPx = 300
-    }
-    val addCreditsButton: Button = Button(
-        text = "+ Add",
-        type = BootstrapType.PRIMARY,
-        size = BootstrapSize.SM
-    ).apply {
-        addClass("google-one-add-btn")
-        widthPx = 88
-    }
-    val recentActivityHeading: Heading = Heading(level = 4, text = "Your recent activity")
-    val activityTable: Table = Table().apply {
-        isStriped = true
-    }
+    /** Invoked whenever this tab navigates to a new URL, updates its title, or finishes loading. */
+    var onPageNavigated: ((url: String, title: String, icon: String?) -> Unit)? = null
 
-    // --- 2. GitHub "T-Crypt/berth" Dark Repository Surface Controls ---
-    val githubBerthSurface: VStack = VStack(gap = SpacingScale.S3).apply {
-        addClass("github-repo-page")
-    }
-    val githubCodeTabButton: Button = Button("<> Code", type = BootstrapType.DARK, size = BootstrapSize.SM)
-    val githubIssuesTabButton: Button = Button("(!) Issues 9", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val githubPullRequestsTabButton: Button = Button("PR Pull requests", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val githubActionsTabButton: Button = Button("> Actions", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val githubOwnerRepoHeading: Heading = Heading(level = 3, text = "T-Crypt / berth")
-    val repoVisibilityBadge: Badge = Badge("Public", type = BootstrapType.SECONDARY, pill = true)
-    val notificationsButton: Button = Button("Notifications", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val forkButton: Button = Button("Fork 22", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val starButton: Button = Button("* Star 383", type = BootstrapType.SECONDARY, size = BootstrapSize.SM, outline = true)
-    val repoDescriptionLabel: Label = Label(
-        "Decides who gets your GPU. Chat, image and voice engines lease the card in turn instead of grabbing it, so two of them never load at once and crash each other. One Go binary, nothing else to install."
-    )
-    val repoWebsiteLabel: Label = Label("Link: t-crypt.github.io/berth/")
-    val repoLicenseLabel: Label = Label("License: Apache-2.0 license")
-    val repoStatsLabel: Label = Label("* 383 stars   |   22 forks")
-    val githubTopicsContainer: FlexBox = FlexBox().apply {
-        flexDirection = FlexDirection.ROW
-        flexWrap = FlexWrap.WRAP
-        addClass("gap-1")
-    }
-    val githubTopicBadges: List<Badge> = GITHUB_BERTH_TOPICS.map { topic ->
-        Badge(topic, type = BootstrapType.INFO, pill = true).apply {
-            addClass("github-topic-pill")
-        }
-    }
+    /** Invoked whenever [currentFaviconUrl] changes. */
+    var onFaviconChanged: ((faviconUrl: String?) -> Unit)? = null
 
-    // --- 3. Chrome New Tab ("chrome://newtab") Surface Controls ---
-    val newTabSurface: VStack = VStack(gap = SpacingScale.S3).apply {
-        addClass("chrome-newtab-page")
-    }
-    val newTabBrandHeading: Heading = Heading(level = 2, text = "Google")
-    val newTabSearchField: TextField = TextField(
-        value = "",
-        placeholder = "Search Google or type a URL"
-    ).apply {
-        addClass("browser-omnibox-pill")
-    }
-    val newTabSearchButton: Button = Button("Search", type = BootstrapType.PRIMARY, size = BootstrapSize.SM)
-    val speedDialContainer: FlexBox = FlexBox().apply {
-        flexDirection = FlexDirection.ROW
-        flexWrap = FlexWrap.WRAP
-        addClass("gap-2")
-    }
-
-    // --- 4. Generic / Auxiliary Route Surface Controls ---
-    val genericWebSurface: VStack = VStack(gap = SpacingScale.S2).apply {
-        addClass("generic-web-page")
-    }
-    val genericPageTitleHeading: Heading = Heading(level = 3, text = "")
-    val genericPageUrlLabel: Label = Label("")
-    val genericPageSummaryLabel: Label = Label("")
-
-    /** Invoked whenever this tab navigates to a new URL or updates its title. */
-    var onPageNavigated: ((url: String, title: String, icon: String) -> Unit)? = null
-
-    /** Invoked whenever [aiCreditsBalance] is incremented via [addCreditsButton] or [addAiCredits]. */
-    var onCreditsBalanceChanged: ((newBalance: Int, addedRow: BrowserCreditActivityRow) -> Unit)? = null
+    /** Invoked whenever [isPageLoading] changes. */
+    var onLoadingStateUpdated: ((isLoading: Boolean) -> Unit)? = null
 
     /** Invoked whenever this tab fragment receives an [onResize] callback. */
     var onViewportResized: ((widthPx: Int, heightPx: Int) -> Unit)? = null
 
     init {
         addClass("browser-tab-page-fragment")
-        buildGoogleOneSurface()
-        buildGithubBerthSurface()
-        buildNewTabSurface()
-        buildGenericWebSurface()
 
-        addChild(googleOneSurface)
-        addChild(githubBerthSurface)
-        addChild(newTabSurface)
-        addChild(genericWebSurface)
-        addChild(webView)
-
-        navigateTo(initialUrl, recordHistory = true)
-    }
-
-    private fun buildGoogleOneSurface() {
-        val headerRow = HStack(gap = SpacingScale.S2).apply {
-            alignItems = AlignItems.CENTER
-            justifyContent = JustifyContent.BETWEEN
-            flexWrap = FlexWrap.WRAP
-        }
-        headerRow.addChild(googleOneBrandLabel)
-        headerRow.addChild(Badge("AI Premium 2 TB", type = BootstrapType.INFO, pill = true))
-        headerRow.addChild(Badge("Google Account", type = BootstrapType.PRIMARY, pill = true))
-        headerRow.addChild(Badge("Auto-Top-Up: Enabled", type = BootstrapType.SUCCESS, pill = true))
-        googleOneSurface.addChild(headerRow)
-
-        val creditsCard = Card().apply {
-            addClass("google-one-credits-card")
-        }
-        val titleRow = HStack(gap = SpacingScale.S3).apply {
-            alignItems = AlignItems.CENTER
-            flexWrap = FlexWrap.WRAP
-        }
-        titleRow.addChild(googleOneHeading)
-        titleRow.addChild(googleOneSubtitleLabel)
-        creditsCard.addChild(titleRow)
-
-        val creditsRow = HStack(gap = SpacingScale.S2).apply {
-            alignItems = AlignItems.CENTER
-            flexWrap = FlexWrap.WRAP
-        }
-        creditsRow.addChild(Badge("BALANCE", type = BootstrapType.PRIMARY, pill = true))
-        creditsRow.addChild(creditsBalanceLabel)
-        creditsRow.addChild(creditsCaptionLabel)
-        creditsRow.addChild(creditsQuotaBar)
-        creditsRow.addChild(addCreditsButton)
-        creditsRow.addChild(Badge("Renews Nov 27, 2026", type = BootstrapType.SECONDARY, pill = true))
-        creditsCard.addChild(creditsRow)
-        googleOneSurface.addChild(creditsCard)
-
-        addCreditsButton.setOnClick {
-            addAiCredits(1000)
-        }
-
-        val activityCard = Card().apply {
-            addClass("google-one-activity-card")
-        }
-        val activityHeaderRow = HStack(gap = SpacingScale.S2).apply {
-            alignItems = AlignItems.CENTER
-            flexWrap = FlexWrap.WRAP
-        }
-        activityHeaderRow.addChild(recentActivityHeading)
-        activityHeaderRow.addChild(Badge("Hourly Metering", type = BootstrapType.SECONDARY, pill = true))
-        activityHeaderRow.addChild(Badge("Export CSV", type = BootstrapType.INFO, pill = true))
-        activityCard.addChild(activityHeaderRow)
-
-        activityTable.setColumns(
-            listOf(
-                TableColumn(id = "date", headerText = "DATE"),
-                TableColumn(id = "category", headerText = "CATEGORY"),
-                TableColumn(id = "amount", headerText = "AMOUNT")
-            )
-        )
-        activityTable.setColumnWeights(1.2f, 1.8f, 1.0f)
-        refreshCreditsActivityTable()
-        activityCard.addChild(activityTable)
-        googleOneSurface.addChild(activityCard)
-
-        // Bottom 2-column Quota Breakdown & Plan Details row so the viewport is balanced and informative
-        val benefitsGrid = ColumnContainer()
-        val breakdownCol = Column(span = 6, md = 6, lg = 6)
-        val breakdownCard = Card()
-        breakdownCard.addChild(Heading(level = 4, text = "Credit Usage by Google AI Product"))
-        val agRow = HStack(gap = SpacingScale.S2).apply { alignItems = AlignItems.CENTER }
-        agRow.addChild(Badge("Google Antigravity", type = BootstrapType.PRIMARY).apply { widthPx = 156 })
-        agRow.addChild(ProgressBar(progress = 0.72f, label = "5,230 credits (72%)").apply { widthPx = 380 })
-        breakdownCard.addChild(agRow)
-
-        val geminiRow = HStack(gap = SpacingScale.S2).apply { alignItems = AlignItems.CENTER }
-        geminiRow.addChild(Badge("Gemini 2.5 Pro", type = BootstrapType.INFO).apply { widthPx = 156 })
-        geminiRow.addChild(ProgressBar(progress = 0.18f, label = "1,310 credits (18%)").apply { widthPx = 380 })
-        breakdownCard.addChild(geminiRow)
-
-        val veoRow = HStack(gap = SpacingScale.S2).apply { alignItems = AlignItems.CENTER }
-        veoRow.addChild(Badge("Veo 2 & Imagen 3", type = BootstrapType.SUCCESS).apply { widthPx = 156 })
-        veoRow.addChild(ProgressBar(progress = 0.10f, label = "720 credits (10%)").apply { widthPx = 380 })
-        breakdownCard.addChild(veoRow)
-        breakdownCol.addChild(breakdownCard)
-
-        val planCol = Column(span = 6, md = 6, lg = 6)
-        val planCard = Card()
-        planCard.addChild(Heading(level = 4, text = "Google One AI Plan & Credit Settings"))
-        planCard.addChild(Label("Subscription: Google One AI Premium (2 TB Cloud + 10,000 Monthly AI Credits)"))
-        planCard.addChild(Label("Instant Top-Up: Click '+ Add' above to purchase +1,000 bonus AI credits anytime"))
-        val planBadgesRow = HStack(gap = SpacingScale.S2).apply {
-            alignItems = AlignItems.CENTER
-            flexWrap = FlexWrap.WRAP
-        }
-        planBadgesRow.addChild(Badge("Status: Active", type = BootstrapType.SUCCESS, pill = true))
-        planBadgesRow.addChild(Badge("Rollover: Up to 5,000", type = BootstrapType.INFO, pill = true))
-        planBadgesRow.addChild(Badge("Family Sharing: On", type = BootstrapType.SECONDARY, pill = true))
-        planCard.addChild(planBadgesRow)
-        planCol.addChild(planCard)
-
-        benefitsGrid.addColumn(breakdownCol)
-        benefitsGrid.addColumn(planCol)
-        googleOneSurface.addChild(benefitsGrid)
-    }
-
-    private fun buildGithubBerthSurface() {
-        val repoTabsRow = HStack(gap = SpacingScale.S2).apply {
-            alignItems = AlignItems.CENTER
-            flexWrap = FlexWrap.WRAP
-        }
-        repoTabsRow.addChild(githubCodeTabButton)
-        repoTabsRow.addChild(githubIssuesTabButton)
-        repoTabsRow.addChild(githubPullRequestsTabButton)
-        repoTabsRow.addChild(githubActionsTabButton)
-        githubBerthSurface.addChild(repoTabsRow)
-
-        val repoHeaderCard = Container("div", "github-repo-header")
-        val headerStack = VStack(gap = SpacingScale.S2)
-
-        val titleAndBadgeRow = HStack(gap = SpacingScale.S2).apply {
-            alignItems = AlignItems.CENTER
-            flexWrap = FlexWrap.WRAP
-        }
-        titleAndBadgeRow.addChild(githubOwnerRepoHeading)
-        titleAndBadgeRow.addChild(repoVisibilityBadge)
-        headerStack.addChild(titleAndBadgeRow)
-
-        val actionButtonsRow = HStack(gap = SpacingScale.S2).apply {
-            alignItems = AlignItems.CENTER
-            flexWrap = FlexWrap.WRAP
-        }
-        actionButtonsRow.addChild(notificationsButton)
-        actionButtonsRow.addChild(forkButton)
-        actionButtonsRow.addChild(starButton)
-        headerStack.addChild(actionButtonsRow)
-
-        starButton.setOnClick {
-            githubStarred = !githubStarred
-            githubStarCount = if (githubStarred) 384 else 383
-            starButton.text = if (githubStarred) "★ Starred $githubStarCount" else "* Star $githubStarCount"
-            repoStatsLabel.text = "* $githubStarCount stars   |   22 forks"
-        }
-
-        headerStack.addChild(repoDescriptionLabel)
-        headerStack.addChild(repoWebsiteLabel)
-        headerStack.addChild(repoLicenseLabel)
-        headerStack.addChild(repoStatsLabel)
-
-        for (badge in githubTopicBadges) {
-            githubTopicsContainer.addChild(badge)
-        }
-        headerStack.addChild(githubTopicsContainer)
-        repoHeaderCard.addChild(headerStack)
-        githubBerthSurface.addChild(repoHeaderCard)
-
-        val readmeCard = Card("README.md — berth")
-        val readmeStack = VStack(gap = SpacingScale.S1)
-        readmeStack.addChild(Label("berth — GPU Lease Coordinator for Local AI Workloads"))
-        readmeStack.addChild(
-            Label("Run Ollama, llama.cpp, vLLM, and ComfyUI on a single GPU without VRAM collisions.")
-        )
-        readmeCard.addChild(readmeStack)
-        githubBerthSurface.addChild(readmeCard)
-    }
-
-    private fun buildNewTabSurface() {
-        newTabSurface.addChild(newTabBrandHeading)
-
-        val searchRow = HStack(gap = SpacingScale.S2).apply {
-            alignItems = AlignItems.CENTER
-        }
-        searchRow.addChild(newTabSearchField)
-        searchRow.addChild(newTabSearchButton)
-        newTabSurface.addChild(searchRow)
-
-        val submitNewTabQuery: (String) -> Unit = { raw ->
-            val trimmed = raw.trim()
-            if (trimmed.isNotEmpty()) {
-                navigateTo(normalizeOmniboxInput(trimmed))
+        webView.onFaviconChanged = { rawFavicon ->
+            val cleaned = if (isShowingNewTabPage) {
+                null
+            } else {
+                sanitizeFaviconUrl(rawFavicon)
             }
-        }
-        newTabSearchField.onSubmit = submitNewTabQuery
-        newTabSearchButton.setOnClick {
-            submitNewTabQuery(newTabSearchField.value)
+            updateFaviconUrl(cleaned)
         }
 
-        rebuildSpeedDialGrid()
-        newTabSurface.addChild(speedDialContainer)
-    }
-
-    private fun buildGenericWebSurface() {
-        val card = Card("Web Page Content")
-        val stack = VStack(gap = SpacingScale.S2)
-        stack.addChild(genericPageTitleHeading)
-        stack.addChild(genericPageUrlLabel)
-        stack.addChild(genericPageSummaryLabel)
-        card.addChild(stack)
-        genericWebSurface.addChild(card)
-    }
-
-    /**
-     * Updates the bookmarks shown on the `chrome://newtab` speed-dial grid.
-     */
-    fun setSpeedDialBookmarks(bookmarks: List<BrowserBookmark>) {
-        bookmarksList = bookmarks.toList()
-        rebuildSpeedDialGrid()
-    }
-
-    private fun rebuildSpeedDialGrid() {
-        speedDialContainer.clearChildren()
-        for (bookmark in bookmarksList) {
-            val shortcutBtn = Button(
-                text = "${bookmark.iconLabel} ${bookmark.title}",
-                type = BootstrapType.SECONDARY,
-                size = BootstrapSize.SM,
-                outline = true
-            ).apply {
-                addClass("newtab-speed-dial-btn")
-                setOnClick {
-                    navigateTo(bookmark.url)
+        webView.onTitleChanged = { rawTitle ->
+            if (!isShowingNewTabPage) {
+                val trimmed = rawTitle.trim()
+                if (trimmed.isNotEmpty()) {
+                    hasDocumentTitle = true
+                    currentTitle = trimmed
+                    pageTitle = trimmed
+                    val currentEntry = navigationHistory.getOrNull(navigationIndex)
+                    if (currentEntry != null) {
+                        navigationHistory[navigationIndex] = currentEntry.copy(title = trimmed)
+                    }
+                    onPageNavigated?.invoke(currentUrl, currentTitle, currentIcon)
                 }
             }
-            speedDialContainer.addChild(shortcutBtn)
+        }
+
+        webView.onPageFinished = { finishedUrl ->
+            val resolved = finishedUrl.trim()
+            val preempted = stoppedSupersededUrl
+            if (preempted != null && resolved == preempted && currentUrl != resolved) {
+                stoppedSupersededUrl = null
+            } else if (!(webView.isLoading && resolved.isNotEmpty() && !isNewTabUrl(currentUrl) && resolved != currentUrl)) {
+                stoppedSupersededUrl = null
+                if (resolved.isNotEmpty() && !isNewTabUrl(currentUrl)) {
+                    val docTitle = if (hasDocumentTitle) {
+                        currentTitle
+                    } else {
+                        webView.currentTitle?.trim()?.takeIf { it.isNotBlank() }?.also {
+                            hasDocumentTitle = true
+                        }
+                    }
+                    applyLocationMetadata(resolved, titleOverride = docTitle)
+                    val currentEntry = navigationHistory.getOrNull(navigationIndex)
+                    if (currentEntry != null && (currentEntry.url != resolved || currentEntry.title != currentTitle)) {
+                        navigationHistory[navigationIndex] = currentEntry.copy(
+                            url = resolved,
+                            title = currentTitle
+                        )
+                    }
+                    val latestFavicon = sanitizeFaviconUrl(webView.currentFaviconUrl)
+                    if (latestFavicon != null) {
+                        updateFaviconUrl(latestFavicon)
+                    }
+                }
+                activeLoadToken += 1
+                setLoadingState(false)
+                syncActiveSurface()
+                onPageNavigated?.invoke(currentUrl, currentTitle, currentIcon)
+            }
+        }
+
+        newTabSurface.onSubmitQuery = { raw ->
+            navigateTo(raw, recordHistory = true, searchPrefix = searchEnginePrefix)
+        }
+        newTabSurface.onBookmarkSelected = { bookmark ->
+            navigateTo(bookmark.url, recordHistory = true, searchPrefix = searchEnginePrefix)
+        }
+
+        addChild(loadingProgressBar)
+        addChild(newTabSurface)
+        addChild(webView)
+
+        navigateTo(initialUrl, recordHistory = true, searchPrefix = initialSearchPrefix)
+    }
+
+    /**
+     * Updates the saved bookmarks shown on this tab's New Tab surface.
+     */
+    fun setSpeedDialBookmarks(bookmarks: List<BrowserBookmark>) {
+        newTabSurface.setBookmarks(bookmarks)
+    }
+
+    /**
+     * Updates the search engine URL prefix used when plain search terms are submitted.
+     */
+    fun updateSearchEnginePrefix(searchPrefix: String) {
+        if (searchPrefix.isNotBlank()) {
+            searchEnginePrefix = searchPrefix
         }
     }
 
     /**
-     * Increments [aiCreditsBalance] by [delta] (default `1,000`), updates [creditsBalanceLabel],
-     * and prepends a new top-up row to [activityTable].
-     */
-    fun addAiCredits(delta: Int = 1000): BrowserCreditActivityRow {
-        topUpCounter += 1
-        aiCreditsBalance += delta
-        val formatted = BrowserCreditActivityRow.formatNumberWithCommas(aiCreditsBalance)
-        creditsBalanceLabel.text = formatted
-        creditsQuotaBar.progress = (aiCreditsBalance.toFloat() / 10_000f).coerceIn(0f, 1f)
-        creditsQuotaBar.label = "$formatted / 10,000 credits"
-        val hour = (6 + topUpCounter).coerceIn(1, 12)
-        val newRow = BrowserCreditActivityRow(
-            date = "Oct 27, 2026, $hour:00:00 AM",
-            category = "Google One AI credits top-up",
-            amount = delta
-        )
-        _creditActivityRows.add(0, newRow)
-        refreshCreditsActivityTable()
-        onCreditsBalanceChanged?.invoke(aiCreditsBalance, newRow)
-        return newRow
-    }
-
-    /**
-     * Synchronizes [aiCreditsBalance] from external session state without adding an activity row.
-     */
-    fun syncAiCreditsBalance(newBalance: Int) {
-        aiCreditsBalance = newBalance
-        val formatted = BrowserCreditActivityRow.formatNumberWithCommas(aiCreditsBalance)
-        creditsBalanceLabel.text = formatted
-        creditsQuotaBar.progress = (aiCreditsBalance.toFloat() / 10_000f).coerceIn(0f, 1f)
-        creditsQuotaBar.label = "$formatted / 10,000 credits"
-    }
-
-    private fun refreshCreditsActivityTable() {
-        activityTable.setRows(
-            _creditActivityRows.mapIndexed { idx, row ->
-                TableRow(
-                    id = "credit-row-$idx",
-                    cells = listOf(
-                        TableCell(row.date),
-                        TableCell(row.category),
-                        TableCell(row.formattedAmount())
-                    )
-                )
-            }
-        )
-    }
-
-    /**
-     * Navigates this tab to [targetUrl], updating [webView], active preview surface visibility,
-     * and the per-tab history stack when [recordHistory] is `true`.
+     * Navigates this tab to [targetUrl], normalizing URLs (`https://...`, `file://...`, `about:...`,
+     * or search URL for plain search queries), updating [webView], active surface visibility,
+     * loading state, and the per-tab history stack when [recordHistory] is `true`.
      */
     fun navigateTo(
         targetUrl: String,
         recordHistory: Boolean = true,
-        searchPrefix: String = BrowserSessionState.DEFAULT_SEARCH_PREFIX
+        searchPrefix: String = searchEnginePrefix
     ) {
+        searchEnginePrefix = searchPrefix
+        val previousUrl = currentUrl
+        val wasLoading = isPageLoading
         val normalized = normalizeOmniboxInput(targetUrl, searchPrefix)
-        currentUrl = normalized
-        currentTitle = resolveTitleForUrl(normalized)
-        currentIcon = resolveIconForUrl(normalized)
-        pageTitle = currentTitle
-
-        webView.loadUrl(normalized)
+        val urlChanged = previousUrl != normalized
+        hasDocumentTitle = false
+        applyLocationMetadata(normalized)
 
         if (recordHistory) {
-            val currentAtCursor = navigationHistory.getOrNull(navigationIndex)
-            if (currentAtCursor?.url != normalized) {
-                while (navigationHistory.lastIndex > navigationIndex) {
-                    navigationHistory.removeAt(navigationHistory.lastIndex)
-                }
-                navigationHistory.add(
-                    BrowserHistoryEntry(
-                        url = normalized,
-                        title = currentTitle,
-                        timestampIso = "2026-10-27T06:00:00Z"
-                    )
-                )
-                navigationIndex = navigationHistory.lastIndex
-            }
+            recordNavigationEntry(normalized, currentTitle)
         }
 
-        syncActiveRouteSurface()
-        onPageNavigated?.invoke(currentUrl, currentTitle, currentIcon)
+        if (isNewTabUrl(normalized)) {
+            if (wasLoading) {
+                stoppedSupersededUrl = previousUrl
+                webView.stopLoading()
+            }
+            activeLoadToken += 1
+            setLoadingState(false)
+            syncActiveSurface()
+            updateFaviconUrl(null, forceNotify = true)
+            onPageNavigated?.invoke(currentUrl, currentTitle, currentIcon)
+            return
+        }
+
+        if (urlChanged) {
+            updateFaviconUrl(null)
+        }
+        if (wasLoading) {
+            stoppedSupersededUrl = previousUrl
+            webView.stopLoading()
+        }
+        syncActiveSurface()
+        val token = ++activeLoadToken
+        setLoadingState(true)
+        webView.loadUrl(normalized)
+        if (activeLoadToken == token && isPageLoading) {
+            onPageNavigated?.invoke(currentUrl, currentTitle, currentIcon)
+        }
     }
 
     /**
@@ -528,9 +262,7 @@ class BrowserTabPageFragment(
     fun goBack(): Boolean {
         if (!canGoBack) return false
         navigationIndex -= 1
-        val entry = navigationHistory[navigationIndex]
-        webView.goBack()
-        navigateTo(entry.url, recordHistory = false)
+        navigateToHistoryEntry(navigationHistory[navigationIndex], isBack = true)
         return true
     }
 
@@ -540,9 +272,7 @@ class BrowserTabPageFragment(
     fun goForward(): Boolean {
         if (!canGoForward) return false
         navigationIndex += 1
-        val entry = navigationHistory[navigationIndex]
-        webView.goForward()
-        navigateTo(entry.url, recordHistory = false)
+        navigateToHistoryEntry(navigationHistory[navigationIndex], isBack = false)
         return true
     }
 
@@ -551,8 +281,30 @@ class BrowserTabPageFragment(
      */
     fun reload() {
         reloadCount += 1
+        if (isNewTabUrl(currentUrl)) {
+            setLoadingState(false)
+            syncActiveSurface()
+            return
+        }
+        val token = ++activeLoadToken
+        setLoadingState(true)
         webView.reload()
-        syncActiveRouteSurface()
+        if (activeLoadToken == token && isPageLoading) {
+            onPageNavigated?.invoke(currentUrl, currentTitle, currentIcon)
+        }
+    }
+
+    /**
+     * Stops any active page load in this tab.
+     */
+    fun stopLoading() {
+        activeLoadToken += 1
+        webView.stopLoading()
+        if (isPageLoading) {
+            setLoadingState(false)
+            syncActiveSurface()
+            onPageNavigated?.invoke(currentUrl, currentTitle, currentIcon)
+        }
     }
 
     override fun onResize(viewportWidth: Int, viewportHeight: Int) {
@@ -560,55 +312,122 @@ class BrowserTabPageFragment(
         onViewportResized?.invoke(viewportWidth, viewportHeight)
     }
 
-    private fun syncActiveRouteSurface() {
-        val lower = currentUrl.lowercase()
-        val isGoogleOneCredits = lower.contains("one.google.com/ai/activity")
-        val isGithubBerth = lower.contains("github.com/t-crypt/berth")
-        val isNewTab = lower.startsWith("chrome://newtab") || lower == "about:blank"
+    override fun onDestroy() {
+        webView.dispose()
+        super.onDestroy()
+    }
 
-        googleOneSurface.isVisible = isGoogleOneCredits
-        githubBerthSurface.isVisible = isGithubBerth
-        newTabSurface.isVisible = isNewTab
-        genericWebSurface.isVisible = !isGoogleOneCredits && !isGithubBerth && !isNewTab
+    private fun navigateToHistoryEntry(entry: BrowserHistoryEntry, isBack: Boolean) {
+        val previousUrl = currentUrl
+        hasDocumentTitle = false
+        applyLocationMetadata(entry.url)
+        if (isNewTabUrl(entry.url)) {
+            activeLoadToken += 1
+            setLoadingState(false)
+            syncActiveSurface()
+            updateFaviconUrl(null, forceNotify = true)
+            onPageNavigated?.invoke(currentUrl, currentTitle, currentIcon)
+            return
+        }
 
-        if (genericWebSurface.isVisible) {
-            genericPageTitleHeading.text = currentTitle
-            genericPageUrlLabel.text = currentUrl
-            genericPageSummaryLabel.text = when {
-                lower.contains("keep.google.com") ->
-                    "Google Keep — Pinned notes, checklists, and reminders synced across Chrome."
-                lower.contains("gemini.google.com") ->
-                    "Overcoming Overwhelming Anxiety — Gemini AI workspace document and structured breathing guide."
-                lower.contains("google.com/search") ->
-                    "Google Search results for query in '$currentUrl'."
-                else ->
-                    "Rendered web document for $currentUrl via GenericUI WebView."
+        syncActiveSurface()
+        if (webView.url == entry.url) {
+            webView.currentTitle?.trim()?.takeIf { it.isNotBlank() }?.let {
+                hasDocumentTitle = true
+                currentTitle = it
+                pageTitle = it
             }
+            activeLoadToken += 1
+            setLoadingState(false)
+            updateFaviconUrl(sanitizeFaviconUrl(webView.currentFaviconUrl))
+            onPageNavigated?.invoke(currentUrl, currentTitle, currentIcon)
+            return
+        }
+
+        if (previousUrl != entry.url) {
+            updateFaviconUrl(null)
+        }
+        val token = ++activeLoadToken
+        setLoadingState(true)
+        val navigatedViaWebView = if (isBack) {
+            if (webView.canGoBack()) {
+                webView.goBack()
+                true
+            } else {
+                false
+            }
+        } else {
+            if (webView.canGoForward()) {
+                webView.goForward()
+                true
+            } else {
+                false
+            }
+        }
+        if (!navigatedViaWebView) {
+            webView.loadUrl(entry.url)
+        }
+        if (activeLoadToken == token && isPageLoading) {
+            onPageNavigated?.invoke(currentUrl, currentTitle, currentIcon)
+        }
+    }
+
+    private fun applyLocationMetadata(url: String, titleOverride: String? = null) {
+        currentUrl = url
+        currentTitle = titleOverride ?: resolveTitleForUrl(url)
+        currentIcon = resolveIconForUrl(url)
+        pageTitle = currentTitle
+    }
+
+    private fun updateFaviconUrl(nextFavicon: String?, forceNotify: Boolean = false) {
+        val changed = currentFaviconUrl != nextFavicon
+        currentFaviconUrl = nextFavicon
+        if (changed || forceNotify) {
+            onFaviconChanged?.invoke(nextFavicon)
+        }
+    }
+
+    private fun recordNavigationEntry(url: String, title: String) {
+        val currentAtCursor = navigationHistory.getOrNull(navigationIndex)
+        if (currentAtCursor?.url == url) return
+        while (navigationHistory.lastIndex > navigationIndex) {
+            navigationHistory.removeAt(navigationHistory.lastIndex)
+        }
+        historySequence += 1L
+        navigationHistory.add(
+            BrowserHistoryEntry(
+                url = url,
+                title = title,
+                sequenceNumber = historySequence
+            )
+        )
+        navigationIndex = navigationHistory.lastIndex
+    }
+
+    private fun setLoadingState(loading: Boolean) {
+        isPageLoading = loading
+        loadingProgressBar.isVisible = loading && !isNewTabUrl(currentUrl)
+        loadingProgressBar.isBusy = loading
+        onLoadingStateUpdated?.invoke(loading)
+    }
+
+    private fun syncActiveSurface() {
+        val showNewTab = isNewTabUrl(currentUrl)
+        newTabSurface.isVisible = showNewTab
+        webView.isVisible = !showNewTab
+        if (showNewTab) {
+            loadingProgressBar.isVisible = false
         }
     }
 
     companion object {
-        const val URL_AI_CREDITS: String = "https://one.google.com/ai/activity"
-        const val URL_GITHUB_BERTH: String = "https://github.com/T-Crypt/berth"
-        const val URL_KEEP: String = "https://keep.google.com"
-        const val URL_GEMINI_DOC: String = "https://gemini.google.com/app"
-        const val URL_NEW_TAB: String = "chrome://newtab"
+        const val URL_NEW_TAB: String = "about:newtab"
+        const val URL_BLANK: String = "about:blank"
 
-        val GITHUB_BERTH_TOPICS: List<String> = listOf(
-            "comfyui",
-            "golang",
-            "gpu",
-            "inference",
-            "llama-cpp",
-            "llama-swap",
-            "llm",
-            "local-ai",
-            "nvidia",
-            "ollama",
-            "self-hosted",
-            "vllm",
-            "vram"
-        )
+        fun isNewTabUrl(url: String): Boolean {
+            val trimmed = url.trim().lowercase()
+            return trimmed.isEmpty() || trimmed == URL_NEW_TAB
+        }
 
         fun normalizeOmniboxInput(
             rawInput: String,
@@ -616,53 +435,135 @@ class BrowserTabPageFragment(
         ): String {
             val trimmed = rawInput.trim()
             if (trimmed.isEmpty()) return URL_NEW_TAB
-            if (trimmed.startsWith("http://") ||
-                trimmed.startsWith("https://") ||
-                trimmed.startsWith("chrome://") ||
-                trimmed.startsWith("about:")
-            ) {
-                return trimmed
+
+            val lower = trimmed.lowercase()
+            if (lower.startsWith("https://")) return "https://${trimmed.substring(8)}"
+            if (lower.startsWith("http://")) return "http://${trimmed.substring(7)}"
+            if (lower.startsWith("file://")) return "file://${trimmed.substring(7)}"
+            if (lower.startsWith("about:")) return "about:${trimmed.substring(6)}"
+            if (lower.startsWith("data:")) return trimmed
+
+            if (!trimmed.contains(' ')) {
+                if (lower == "localhost" || lower.startsWith("localhost:") || lower.startsWith("localhost/")) {
+                    return "http://$trimmed"
+                }
+                if (trimmed.length >= 3 &&
+                    trimmed[0].isLetter() &&
+                    trimmed[1] == ':' &&
+                    (trimmed[2] == '\\' || trimmed[2] == '/')
+                ) {
+                    return "file:///${trimmed.replace('\\', '/')}"
+                }
+                if (trimmed.startsWith("/")) {
+                    return "file://$trimmed"
+                }
+                if (trimmed.contains('.') && !trimmed.startsWith(".") && !trimmed.endsWith(".")) {
+                    return "https://$trimmed"
+                }
             }
-            if (!trimmed.contains(' ') && trimmed.contains('.')) {
-                return "https://$trimmed"
-            }
-            val encodedQuery = trimmed.replace(" ", "+")
-            return "$searchPrefix$encodedQuery"
+
+            return "$searchPrefix${encodeQueryComponent(trimmed)}"
         }
 
         fun resolveTitleForUrl(url: String): String {
-            val lower = url.lowercase()
+            val trimmed = url.trim()
+            val lower = trimmed.lowercase()
             return when {
-                lower.contains("one.google.com/ai/activity") -> "AI credits activity"
-                lower.contains("github.com/t-crypt/berth") -> "T-Crypt/berth"
-                lower.contains("keep.google.com") -> "Google Keep"
-                lower.contains("gemini.google.com") -> "Overcoming Overwhelming Anxiety"
-                lower.startsWith("chrome://newtab") -> "New Tab"
-                lower.contains("google.com/search?q=") -> {
-                    val query = url.substringAfter("q=", "Search").replace('+', ' ')
-                    "$query - Google Search"
+                isNewTabUrl(trimmed) -> "New Tab"
+                lower == URL_BLANK -> "Blank Page"
+                lower.startsWith("about:") -> trimmed
+                lower.startsWith("data:") -> "Data Document"
+                lower.startsWith("file://") -> {
+                    trimmed.substringAfterLast('/').substringBefore('?').substringBefore('#')
+                        .ifBlank { trimmed }
                 }
-                else -> url.removePrefix("https://").removePrefix("http://").ifBlank { "New Tab" }
+                lower.contains("?q=") || lower.contains("&q=") -> {
+                    val rawQuery = trimmed.substringAfter("q=").substringBefore('&')
+                    val decoded = decodeQueryComponent(rawQuery).ifBlank { "Search" }
+                    "$decoded - Search"
+                }
+                else -> trimmed.removePrefix("https://").removePrefix("http://").trimEnd('/')
+                    .ifBlank { "New Tab" }
             }
         }
 
         fun resolveSubtitleForUrl(url: String): String {
-            return url
+            val trimmed = url.trim()
+            if (isNewTabUrl(trimmed)) return ""
+            return trimmed
                 .removePrefix("https://")
                 .removePrefix("http://")
                 .trimEnd('/')
         }
 
-        fun resolveIconForUrl(url: String): String {
-            val lower = url.lowercase()
+        fun resolveSchemeBadgeForUrl(url: String): String {
+            val lower = url.trim().lowercase()
             return when {
-                lower.contains("one.google.com") -> "✦"
-                lower.contains("github.com") -> "</>"
-                lower.contains("keep.google.com") -> "[!]"
-                lower.contains("gemini.google.com") -> "★"
-                lower.startsWith("chrome://newtab") -> "[+]"
-                else -> "HTTPS"
+                isNewTabUrl(lower) -> "New Tab"
+                lower.startsWith("https://") -> "HTTPS"
+                lower.startsWith("http://") -> "HTTP"
+                lower.startsWith("file://") -> "FILE"
+                lower.startsWith("about:") -> "ABOUT"
+                lower.startsWith("data:") -> "DATA"
+                else -> "WEB"
             }
+        }
+
+        fun resolveIconForUrl(url: String): String? = null
+
+        private fun sanitizeFaviconUrl(rawFavicon: String?): String? {
+            val trimmed = rawFavicon?.trim()?.takeIf { it.isNotEmpty() } ?: return null
+            if (trimmed.equals("data:,", ignoreCase = true)) return null
+            if (trimmed.startsWith("data:", ignoreCase = true) && trimmed.substringAfter(',').isBlank()) return null
+            return trimmed
+        }
+
+        private fun encodeQueryComponent(input: String): String {
+            val bytes = input.encodeToByteArray()
+            val out = StringBuilder(bytes.size)
+            for (b in bytes) {
+                val code = b.toInt() and 0xFF
+                val ch = code.toChar()
+                when {
+                    ch in 'A'..'Z' || ch in 'a'..'z' || ch in '0'..'9' ||
+                        ch == '-' || ch == '_' || ch == '.' || ch == '~' -> out.append(ch)
+                    ch == ' ' -> out.append('+')
+                    else -> {
+                        val hex = code.toString(16).uppercase()
+                        out.append('%')
+                        if (hex.length < 2) out.append('0')
+                        out.append(hex)
+                    }
+                }
+            }
+            return out.toString()
+        }
+
+        private fun decodeQueryComponent(encoded: String): String {
+            val bytes = ArrayList<Byte>(encoded.length)
+            var i = 0
+            while (i < encoded.length) {
+                val ch = encoded[i]
+                if (ch == '+') {
+                    bytes.add(' '.code.toByte())
+                    i++
+                } else if (ch == '%' && i + 2 < encoded.length) {
+                    val parsed = encoded.substring(i + 1, i + 3).toIntOrNull(16)
+                    if (parsed != null) {
+                        bytes.add(parsed.toByte())
+                        i += 3
+                        continue
+                    }
+                    bytes.add(ch.code.toByte())
+                    i++
+                } else {
+                    for (b in ch.toString().encodeToByteArray()) {
+                        bytes.add(b)
+                    }
+                    i++
+                }
+            }
+            return bytes.toByteArray().decodeToString()
         }
     }
 }

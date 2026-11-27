@@ -23,9 +23,9 @@ import com.nexustools.genericui.enums.bootstrap.ShadowElevation
 import com.nexustools.genericui.enums.bootstrap.SpacingScale
 import com.nexustools.genericui.ext.engine.ui.UiStageHost
 import com.nexustools.genericui.ext.gamepad.GamepadButton
-import com.nexustools.genericui.ext.gamepad.dsl.gamepadNavigation
 import com.nexustools.genericui.ext.gamepad.ui.DefaultSpatialGamepadUiNavigationStrategy
 import com.nexustools.genericui.ext.gamepad.ui.GamepadUiNavigator
+import com.nexustools.genericui.ext.gamepad.ui.enableGamepadUiNavigation
 import com.nexustools.genericui.style.color.RgbaColor
 import kotlin.math.roundToInt
 
@@ -368,12 +368,12 @@ class DungeonCrawlerFragment(
         stageHost.rootContainer.addChild(rootStack)
         addChild(stageHost.rootContainer)
 
-        // Attach GamepadUiNavigator via :extensions:game:gamepad:dsl using our custom strategy
-        uiNavigator = gamepadNavigation {
-            gamepadManager = controller.gamepadManager
-            strategy = customFocusStrategy
+        // Attach GamepadUiNavigator via :extensions:game:gamepad using our custom strategy
+        uiNavigator = enableGamepadUiNavigation(
+            gamepadManager = controller.gamepadManager,
+            strategy = customFocusStrategy,
             autoStart = false
-        }
+        )
         uiNavigator.setFocusedComponent(actionMoveUpBtn)
     }
 

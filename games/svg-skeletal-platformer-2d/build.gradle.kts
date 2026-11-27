@@ -66,7 +66,6 @@ genericui {
         commonMain {
             implementation("com.nexustools.genericui.extensions.game.engine2d:dsl:0.1.0-SNAPSHOT")
             implementation("com.nexustools.genericui.extensions.game.engine:dsl:0.1.0-SNAPSHOT")
-            implementation("com.nexustools.genericui.extensions.game.gamepad:dsl:0.1.0-SNAPSHOT")
             implementation("com.nexustools.genericui.extensions.graphics.canvas2d:dsl:0.1.0-SNAPSHOT")
             implementation("com.nexustools.genericui.extensions.physics.box2d:dsl:0.1.0-SNAPSHOT")
         }

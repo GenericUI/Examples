@@ -10,13 +10,13 @@ import com.nexustools.genericui.component.system.PreferenceSerializable
 data class BrowserHistoryEntry(
     val url: String,
     val title: String,
-    val timestampIso: String
+    val sequenceNumber: Long = 0L
 ) : PreferenceSerializable {
 
     override fun toPreferenceMap(): Map<String, Any?> = linkedMapOf(
         "url" to url,
         "title" to title,
-        "timestampIso" to timestampIso
+        "sequenceNumber" to sequenceNumber
     )
 
     companion object {
@@ -29,7 +29,7 @@ data class BrowserHistoryEntry(
                 BrowserHistoryEntry(
                     url = fields["url"]?.asString("") ?: "",
                     title = fields["title"]?.asString("") ?: "",
-                    timestampIso = fields["timestampIso"]?.asString("2026-10-27T06:00:00Z") ?: "2026-10-27T06:00:00Z"
+                    sequenceNumber = fields["sequenceNumber"]?.asLong(0L) ?: 0L
                 )
             }
         }

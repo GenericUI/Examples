@@ -3,12 +3,13 @@ package com.nexustools.genericui.examples.browser
 import com.nexustools.genericui.component.system.PreferenceElement
 import com.nexustools.genericui.component.system.PreferenceObjectCodec
 import com.nexustools.genericui.component.system.PreferenceSerializable
+import com.nexustools.genericui.component.system.PreferenceStore
 import com.nexustools.genericui.io.ByteOrder
 import com.nexustools.genericui.io.ReadableByteBuffer
 import com.nexustools.genericui.io.WritableByteBuffer
 
 /**
- * Represents a bookmarked web page displayed on the Chrome bookmarks bar and New Tab speed-dial grid.
+ * Represents a user-saved web page bookmark displayed on the bookmarks bar and New Tab page.
  */
 data class BrowserBookmark(
     val id: String,
@@ -50,7 +51,7 @@ data class BrowserBookmark(
         fun fromElementMap(fields: Map<String, PreferenceElement>): BrowserBookmark = BrowserBookmark(
             id = fields["id"]?.asString("bm-default") ?: "bm-default",
             title = fields["title"]?.asString("Bookmark") ?: "Bookmark",
-            url = fields["url"]?.asString("https://one.google.com/ai/activity") ?: "https://one.google.com/ai/activity",
+            url = fields["url"]?.asString("") ?: "",
             iconLabel = fields["iconLabel"]?.asString("*") ?: "*"
         )
 
@@ -90,32 +91,42 @@ data class BrowserBookmark(
             }
         }
 
-        fun defaultBookmarks(): List<BrowserBookmark> = listOf(
-            BrowserBookmark(
-                id = "bm-ai-credits",
-                title = "AI credits activity",
-                url = "https://one.google.com/ai/activity",
-                iconLabel = "✦"
-            ),
-            BrowserBookmark(
-                id = "bm-github-berth",
-                title = "T-Crypt/berth",
-                url = "https://github.com/T-Crypt/berth",
-                iconLabel = "</>"
-            ),
-            BrowserBookmark(
-                id = "bm-keep",
-                title = "Google Keep",
-                url = "https://keep.google.com",
-                iconLabel = "[!]"
-            ),
-            BrowserBookmark(
-                id = "bm-gemini",
-                title = "Ask Gemini",
-                url = "https://gemini.google.com/app",
-                iconLabel = "★"
+        /**
+         * Loads persisted user bookmarks from [store] under [key], defaulting to an empty list.
+         */
+        fun loadListFrom(
+            store: PreferenceStore,
+            key: String = BrowserSessionState.BOOKMARKS_KEY
+        ): List<BrowserBookmark> {
+            registerFactory()
+            val elem = store.getElement(key) ?: return emptyList()
+            if (!elem.isArray) return emptyList()
+            return elem.arrayElements.mapNotNull { item ->
+                if (!item.isObject && !item.isMap) return@mapNotNull null
+                fromElementMap(item.mapEntries).takeIf { it.url.isNotBlank() }
+            }
+        }
+
+        /**
+         * Saves [bookmarks] to [store] under [key] and flushes immediately.
+         */
+        fun saveListTo(
+            store: PreferenceStore,
+            bookmarks: List<BrowserBookmark>,
+            key: String = BrowserSessionState.BOOKMARKS_KEY
+        ) {
+            registerFactory()
+            store.putElement(
+                key,
+                PreferenceElement.ofArray(bookmarks.map { PreferenceObjectCodec.toElement(it) })
             )
-        )
+            store.flush()
+        }
+
+        /**
+         * Returns the initial bookmark list for a fresh browser profile (empty).
+         */
+        fun defaultBookmarks(): List<BrowserBookmark> = emptyList()
 
         private fun writeUtf8Field(writable: WritableByteBuffer, text: String) {
             val bytes = text.encodeToByteArray()
